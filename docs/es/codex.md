@@ -1,6 +1,6 @@
 # Soporte de Codex
 
-mm-method 1.1.0 empaqueta las mismas skills en español e inglés para Codex y Claude Code. Solo contiene instrucciones. No agrega scripts de instalación, ganchos, servidores, conectores ni requisitos de autenticación.
+mm-method 1.1.0 empaqueta las mismas skills en español e inglés para Codex y Claude Code. Solo contiene instrucciones. No agrega scripts de instalación, ganchos, servidores, conectores ni requisitos de autenticación. El catálogo declara `policy.authentication` porque el formato lo exige; el plugin no tiene conectores, así que no hay nada que autenticar.
 
 ## Instalar e invocar
 
@@ -49,11 +49,11 @@ Estos comandos solo afectan a Codex. Claude Code mantiene su propia instalación
 
 ## Alcance de las pruebas
 
-Las pruebas del 25/10/2026 usaron Windows, Codex CLI 0.162.1 y Claude Code 2.1.296. Los dos comandos exactos de instalación pública de Codex funcionaron sobre `main` 1.0.1 antes de documentarlos. La 1.1.0 se instaló aparte desde la rama de trabajo; abrir un PR no publica una versión de rama. Los comandos de instalación por defecto siguen instalando la rama predeterminada hasta que el dueño una el PR.
+Las pruebas del 25/10/2026 usaron Windows, Codex CLI 0.162.1 y Claude Code 2.1.296. Los dos comandos exactos de instalación pública de Codex funcionaron sobre `main` 1.0.1 antes de documentarlos. La 1.1.0 se instaló aparte desde la rama de trabajo. Los comandos instalan la rama predeterminada del catálogo.
 
 La instalación local de 1.1.0 pasó en ambos clientes. Codex no tenía catálogo, registro de plugin ni caché de mm-method antes de la primera prueba; su configuración de usuario ajena al plugin no era un perfil nuevo. La instalación de Claude usó una carpeta de configuración separada y vacía. Las dos skills cargaron en ES y EN en sesiones nuevas: Codex usó los nombres completos ignorando la configuración del usuario; Claude usó la carpeta del plugin instalado en limpio, con herramientas restringidas y sin la configuración MCP externa. Los 22 archivos Markdown instalados coincidieron con la fuente compartida en cada cliente. La validación estricta de Claude pasó para el catálogo y el plugin, y el validador de skills pasó para ambos idiomas.
 
-Son pruebas de instalación y carga explícita, no una garantía de todos los flujos ni de activación automática. No se probaron la instalación por interfaz de escritorio/IDE, macOS, Linux, otras versiones de los clientes ni el costo en contexto de Codex. El PR registra los resultados de instalación desde Git y la revisión exacta probada; el agente no publica una release ni une el PR.
+Son pruebas de instalación y carga explícita, no una garantía de todos los flujos ni de activación automática. No se probaron la instalación por interfaz de escritorio/IDE, macOS, Linux, otras versiones de los clientes ni el costo en contexto de Codex.
 
 ## Fuentes
 

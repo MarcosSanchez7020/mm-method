@@ -1,6 +1,6 @@
 # Codex support
 
-mm-method 1.1.0 packages the same English and Spanish skills for Codex and Claude Code. It contains instructions only. It adds no installer scripts, hooks, servers, connectors or authentication requirements.
+mm-method 1.1.0 packages the same English and Spanish skills for Codex and Claude Code. It contains instructions only. It adds no installer scripts, hooks, servers, connectors or authentication requirements. The catalog declares `policy.authentication` because the format requires it; the plugin has no connectors, so there is nothing to authenticate.
 
 ## Install and invoke
 
@@ -49,11 +49,11 @@ These commands affect Codex only. Claude Code keeps its own installation and upd
 
 ## Test scope
 
-Tests on 2026-10-25 used Windows, Codex CLI 0.162.1 and Claude Code 2.1.296. The two exact public Codex installation commands succeeded on `main` 1.0.1 before being documented. Version 1.1.0 was installed separately from the working branch; a branch version is not published by opening a PR. The default installation commands continue to install the default branch until the owner merges it.
+Tests on 2026-10-25 used Windows, Codex CLI 0.162.1 and Claude Code 2.1.296. The two exact public Codex installation commands succeeded on `main` 1.0.1 before being documented. Version 1.1.0 was installed separately from the working branch. The commands install the catalog's default branch.
 
 The 1.1.0 local installation passed in both clients. Codex had no mm-method catalog, plugin registration or cache before the first test; its unrelated user configuration was not a new profile. Claude installation used an empty, separate configuration directory. The two skills loaded in ES and EN in fresh sessions: Codex used complete skill names with user configuration ignored; Claude used the clean installation's plugin directory with restricted tools and external MCP configuration excluded. All 22 installed Markdown files matched the shared source in each client. Claude strict validation passed for the catalog and plugin, and the skill validator passed for both languages.
 
-These are installation and explicit-loading tests, not a guarantee of every workflow or automatic activation. Desktop/IDE UI installation, macOS, Linux, other client versions and Codex context cost were not tested. The PR records the Git-backed installation results and the exact tested revision; no release or merge is performed by the agent.
+These are installation and explicit-loading tests, not a guarantee of every workflow or automatic activation. Desktop/IDE UI installation, macOS, Linux, other client versions and Codex context cost were not tested.
 
 ## Sources
 

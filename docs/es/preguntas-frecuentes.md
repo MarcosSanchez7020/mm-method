@@ -34,9 +34,11 @@ Pidiéndola: "trabajemos con la metodología", o nombrando la skill (`metodologi
 
 ## ¿Por qué hay dos skills con el mismo contenido?
 
+Una en español y otra en inglés.
+
 Los dos clientes usan las mismas carpetas del paquete; no hay una copia para Codex y otra para Claude. Las cifras siguientes son históricas, de mm-method 1.0.0 en Claude Code, no mediciones de 1.1.0 ni de Codex.
 
-Una en español y otra en inglés. Cada una tiene su descripción en su idioma, así que el agente usa la que corresponde a la conversación. Según dos corridas de `claude plugin details` con Claude Code 2.1.296, el 25/10/2026, juntas cuestan de ~456 a ~643 tokens de contexto por sesión, y cada una de ~1.300 a ~1.900 cuando se activa; la causa de la diferencia entre las dos corridas no se ha determinado (el comando y el detalle están en el [README](../../README.es.md#costo-en-contexto)).
+Cada una tiene su descripción en su idioma, así que el agente usa la que corresponde a la conversación. Según dos corridas de `claude plugin details` con Claude Code 2.1.296, el 25/10/2026, juntas cuestan de ~456 a ~643 tokens de contexto por sesión, y cada una de ~1.300 a ~1.900 cuando se activa; la causa de la diferencia entre las dos corridas no se ha determinado (el comando y el detalle están en el [README](../../README.es.md#costo-en-contexto)).
 
 ## ¿Ejecuta algo por su cuenta?
 

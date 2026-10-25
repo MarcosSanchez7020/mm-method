@@ -98,7 +98,7 @@ codex plugin add metodologia-agentes@mm-method
 
 Start a new session after installation. In the CLI, mention `$metodologia-agentes:agent-methodology` for English or `$metodologia-agentes:metodologia-agentes` for Spanish. Check the installation with `codex plugin list --marketplace mm-method --json`.
 
-Both installation commands ran successfully with Codex CLI 0.162.1 on 2026-10-25. See the [test scope and distribution details](docs/en/codex.md). A version on a PR branch is not published yet: the commands above install whatever is on the catalog's default branch.
+Both installation commands ran successfully with Codex CLI 0.162.1 on 2026-10-25. See the [test scope and distribution details](docs/en/codex.md). The commands install the catalog's default branch.
 
 ## Update
 
