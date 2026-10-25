@@ -101,6 +101,17 @@ Start a new session after installation. In the CLI, mention `$metodologia-agente
 
 Both installation commands ran successfully with Codex CLI 0.162.1 on 2026-10-25. See the [test scope and distribution details](docs/en/codex.md). The commands install the catalog's default branch.
 
+### Pinned version
+
+The commands above install the catalog's default branch, which changes with every merge. To install a published version, add the catalog with its tag; the tags are listed under [Tags](https://github.com/MarcosSanchez7020/mm-method/tags):
+
+```bash
+claude plugin marketplace add MarcosSanchez7020/mm-method@v1.2.0
+codex plugin marketplace add MarcosSanchez7020/mm-method --ref v1.2.0
+```
+
+Then install as above (`claude plugin install metodologia-agentes@mm-method` or `codex plugin add metodologia-agentes@mm-method`). Both commands were tested on 2026-10-25 with Claude Code 2.1.296 and Codex CLI 0.162.1, with new, empty configurations: each client recorded the tag, cloned its commit and installed 1.2.0. To move to another version, remove the catalog and add it again with the other tag; `marketplace update` on a pinned catalog was not tested.
+
 ## Update
 
 ### Claude Code

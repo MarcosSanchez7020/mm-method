@@ -12,6 +12,8 @@ codex plugin add metodologia-agentes@mm-method
 codex plugin list --marketplace mm-method --json
 ```
 
+Para instalar una versión publicada en lugar de la rama predeterminada, agrega el catálogo con su etiqueta: `codex plugin marketplace add MarcosSanchez7020/mm-method --ref v1.2.0`.
+
 Abre una sesión nueva. Usa los nombres completos que muestra el plugin:
 
 - Inglés: `$metodologia-agentes:agent-methodology`.
@@ -55,7 +57,11 @@ La instalación local de 1.1.0 pasó en ambos clientes. Codex no tenía catálog
 
 Son pruebas de instalación y carga explícita, no una garantía de todos los flujos ni de activación automática. No se probaron la instalación por interfaz de escritorio/IDE, macOS, Linux, otras versiones de los clientes ni el costo en contexto de Codex.
 
-Las pruebas de la 1.2.0, el 25/10/2026, usaron Windows, Codex CLI 0.162.1 y Claude Code 2.1.296, con el catálogo local de la rama de trabajo. La instalación pasó en los dos clientes con carpetas de configuración nuevas y vacías (`CLAUDE_CONFIG_DIR` y `CODEX_HOME`): los 25 archivos instalados, `LICENSE` incluido, coincidieron byte a byte con la fuente. En Claude, las dos skills cargaron en ES y EN en sesiones nuevas con `--plugin-dir`, `--restricted` y `--strict-mcp-config`. No se probaron la carga en una sesión de Codex ni la instalación de la 1.2.0 desde GitHub.
+Las pruebas de la 1.2.0, el 25/10/2026, usaron Windows, Codex CLI 0.162.1 y Claude Code 2.1.296, con el catálogo local de la rama de trabajo. La instalación pasó en los dos clientes con carpetas de configuración nuevas y vacías (`CLAUDE_CONFIG_DIR` y `CODEX_HOME`): los 25 archivos instalados, `LICENSE` incluido, coincidieron byte a byte con la fuente. En Claude, las dos skills cargaron en ES y EN en sesiones nuevas con `--plugin-dir`, `--restricted` y `--strict-mcp-config`.
+
+Después del merge, Codex CLI 0.162.1 instaló la 1.2.0 desde `main` (`5c76fc4`) con los dos comandos públicos, sin catálogo, registro ni caché previos de mm-method: los 25 archivos instalados, `LICENSE` incluida, coinciden con `main` normalizando los finales de línea, y las dos skills cargaron completas en ES y EN en sesiones nuevas de solo lectura, con `--ignore-user-config` y los nombres completos.
+
+La instalación fijada a `v1.2.0` se probó el 25/10/2026 desde GitHub, con Claude Code 2.1.296 (`marketplace add MarcosSanchez7020/mm-method@v1.2.0`) y Codex CLI 0.162.1 (`marketplace add MarcosSanchez7020/mm-method --ref v1.2.0`), cada uno con una carpeta de configuración nueva y vacía. Los dos registraron la referencia `v1.2.0`, clonaron el commit `5c76fc4` e instalaron la 1.2.0. Los 25 archivos instalados coinciden con los de la etiqueta, salvo los finales de línea, que Git para Windows convirtió a CRLF. No se probó `marketplace update` sobre un catálogo fijado.
 
 ## Fuentes
 
