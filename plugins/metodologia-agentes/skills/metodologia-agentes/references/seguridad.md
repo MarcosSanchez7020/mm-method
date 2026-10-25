@@ -23,7 +23,7 @@ La protección de `main`, los checks obligatorios, el escaneo de secretos y los 
 
 - Los workflows que leen el código o la descripción de un PR usan `pull_request`, no `pull_request_target`, y su token tiene el mínimo permiso que necesitan (por ejemplo, `permissions: contents: read`).
 - El texto de un PR entra a un script por una variable de entorno, nunca interpolado dentro del script, para que no pueda ejecutar comandos.
-- Un check que lee la descripción de un PR no autentica a nadie. Cuando una aprobación tiene que ser verificable, se exige con revisiones de GitHub (`CODEOWNERS` y revisión obligatoria en la protección de `main`), no con texto.
+- Un check que lee la descripción de un PR no autentica a nadie. Cuando una aprobación tiene que ser verificable, se exige con revisiones de GitHub, no con texto: `CODEOWNERS` sobre los archivos técnicos y sobre `/.github/` (el propio `CODEOWNERS` y los workflows), a nombre del dueño, y revisión obligatoria en la protección de `main`.
 
 ## Servidores y entornos
 

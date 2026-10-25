@@ -1,8 +1,9 @@
 {
   "name": "metodologia-agentes",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Metodología para proyectos de software hechos con agentes de IA, en español e inglés / A methodology for software projects built with AI agents, in Spanish and English.",
   "author": {
     "name": "Marcos Sánchez and Manuela García"
-  }
+  },
+  "license": "MIT"
 }

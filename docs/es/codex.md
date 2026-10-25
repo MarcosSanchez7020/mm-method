@@ -1,6 +1,6 @@
 # Soporte de Codex
 
-mm-method 1.1.0 empaqueta las mismas skills en español e inglés para Codex y Claude Code. Solo contiene instrucciones. No agrega scripts de instalación, ganchos, servidores, conectores ni requisitos de autenticación. El catálogo declara `policy.authentication` porque el formato lo exige; el plugin no tiene conectores, así que no hay nada que autenticar.
+mm-method 1.2.0 empaqueta las mismas skills en español e inglés para Codex y Claude Code. Solo contiene instrucciones. No agrega scripts de instalación, ganchos, servidores, conectores ni requisitos de autenticación. El catálogo declara `policy.authentication` porque el formato lo exige; el plugin no tiene conectores, así que no hay nada que autenticar.
 
 ## Instalar e invocar
 
@@ -25,7 +25,7 @@ El nombre corto sin prefijo no inyectó la skill completa en la sesión no inter
 
 El catálogo de Codex es `.agents/plugins/marketplace.json`; apunta a `plugins/metodologia-agentes/`. Esa carpeta contiene el `plugin.json` portable y el `.claude-plugin/plugin.json` existente. Claude conserva su `.claude-plugin/marketplace.json` en la raíz del repositorio. Los dos clientes usan las dos carpetas `skills/` existentes y sus diez referencias por idioma. No hacen falta enlaces simbólicos, copias generadas ni scripts de sincronización.
 
-Codex instaló el paquete en `~/.codex/plugins/cache/mm-method/metodologia-agentes/1.1.0/`. Es una caché de instalación, no otra fuente para editar. Cambia el repositorio y reinstala el paquete.
+Codex instala el paquete en `plugins/cache/mm-method/metodologia-agentes/<versión>/`, dentro de su carpeta de configuración (`~/.codex` por defecto). Es una caché de instalación, no otra fuente para editar. Cambia el repositorio y reinstala el paquete.
 
 Al adoptar la metodología en un proyecto, mantén las reglas compartidas en `CLAUDE.md`. Incluye el puente `AGENTS.md` de la [guía de adopción](adopcion.md#6-agentsmd-siempre-que-se-use-codex), aunque Codex sea el único agente. Instalar el plugin no crea esos archivos del proyecto ni configura las protecciones de GitHub.
 
@@ -54,6 +54,8 @@ Las pruebas del 25/10/2026 usaron Windows, Codex CLI 0.162.1 y Claude Code 2.1.2
 La instalación local de 1.1.0 pasó en ambos clientes. Codex no tenía catálogo, registro de plugin ni caché de mm-method antes de la primera prueba; su configuración de usuario ajena al plugin no era un perfil nuevo. La instalación de Claude usó una carpeta de configuración separada y vacía. Las dos skills cargaron en ES y EN en sesiones nuevas: Codex usó los nombres completos ignorando la configuración del usuario; Claude usó la carpeta del plugin instalado en limpio, con herramientas restringidas y sin la configuración MCP externa. Los 22 archivos Markdown instalados coincidieron con la fuente compartida en cada cliente. La validación estricta de Claude pasó para el catálogo y el plugin, y el validador de skills pasó para ambos idiomas.
 
 Son pruebas de instalación y carga explícita, no una garantía de todos los flujos ni de activación automática. No se probaron la instalación por interfaz de escritorio/IDE, macOS, Linux, otras versiones de los clientes ni el costo en contexto de Codex.
+
+Las pruebas de la 1.2.0, el 25/10/2026, usaron Windows, Codex CLI 0.162.1 y Claude Code 2.1.296, con el catálogo local de la rama de trabajo. La instalación pasó en los dos clientes con carpetas de configuración nuevas y vacías (`CLAUDE_CONFIG_DIR` y `CODEX_HOME`): los 25 archivos instalados, `LICENSE` incluido, coincidieron byte a byte con la fuente. En Claude, las dos skills cargaron en ES y EN en sesiones nuevas con `--plugin-dir`, `--restricted` y `--strict-mcp-config`. No se probaron la carga en una sesión de Codex ni la instalación de la 1.2.0 desde GitHub.
 
 ## Fuentes
 

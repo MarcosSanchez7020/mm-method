@@ -23,7 +23,7 @@ The protection of `main`, the required checks, secret scanning and the repositor
 
 - Workflows that read a PR's code or description use `pull_request`, not `pull_request_target`, and their token has the minimum permission they need (for example, `permissions: contents: read`).
 - The text of a PR enters a script through an environment variable, never interpolated inside the script, so that it cannot run commands.
-- A check that reads a PR's description authenticates nobody. When an approval has to be verifiable, require it with GitHub reviews (`CODEOWNERS` and required review in the protection of `main`), not with text.
+- A check that reads a PR's description authenticates nobody. When an approval has to be verifiable, require it with GitHub reviews, not with text: `CODEOWNERS` over the technical files and over `/.github/` (the `CODEOWNERS` file itself and the workflows) in the owner's name, and required review in the protection of `main`.
 
 ## Servers and environments
 

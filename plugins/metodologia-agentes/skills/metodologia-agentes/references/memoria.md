@@ -21,7 +21,7 @@ Nunca van en el repo secretos, claves, contraseñas, tokens, archivos `.env` ni 
 
 - **Se anota en el momento**: cada respuesta del dueño al registro, cada commit, push o PR a la bitácora, lo nuevo de un equipo al entorno. A más tardar, antes de cada commit.
 - **La memoria va con cada rama.** Al empezar, el agente hace `git fetch` y lee la memoria de `main` y la de su rama. Lo que pasa después del último commit de una rama (el push, el PR, el merge) se anota en la rama siguiente.
-- **La memoria local solo apunta al repo.** Si un computador tiene algo en su memoria local que no está en el repo, se pasa al repo en la primera sesión en ese equipo, sin dar por confirmado nada que no lo esté.
+- **La memoria local solo apunta al repo.** Si un computador tiene algo en su memoria local que no está en el repo, en la primera sesión en ese equipo se le muestra al dueño y se pasa al repo solo lo que es de este proyecto, sin secretos ni datos personales y sin dar por confirmado nada que no lo esté.
 - **Las herramientas de memoria son apoyo.** Si un plugin de memoria choca con lo escrito en el repo, gana el repo.
 
 ## Complemento opcional: claude-mem
@@ -30,7 +30,7 @@ claude-mem es un plugin de terceros (`thedotmack/claude-mem`, en GitHub) que gua
 
 - **El repo manda.** Lo que recuerde claude-mem es apoyo; si choca con `CLAUDE.md`, con la memoria del repo o con los documentos, gana el repo.
 - **No reemplaza el registro.** Las decisiones del dueño se citan del registro textual del repo, no de un recuerdo.
-- **Revisiones independientes.** Un chat revisor que no deba arrastrar lo que ya se sabe se abre con el plugin apagado (`claude plugin disable claude-mem@thedotmack`) y se vuelve a prender después (`claude plugin enable claude-mem@thedotmack`).
+- **Revisiones independientes.** Un chat revisor que no deba arrastrar lo que ya se sabe se abre, si el dueño lo decide, con el plugin apagado (`claude plugin disable claude-mem@thedotmack`) y se vuelve a prender después (`claude plugin enable claude-mem@thedotmack`).
 - **Uso semanal.** Su configuración (`~/.claude-mem/settings.json`) trae umbrales de uso semanal (`CLAUDE_MEM_QUOTA_THRESHOLD_SEVEN_DAY` y `CLAUDE_MEM_QUOTA_THRESHOLD_SEVEN_DAY_OPUS`) a partir de los cuales pausa su captura; conviene ajustarlos según cuánto margen se quiera dejar.
 - **Datos: dónde se guardan y a dónde van.** Guarda en el computador (en `~/.claude-mem`) lo que pasa en las sesiones y, según su propia documentación, envía las observaciones al proveedor de IA que se le configure para comprimirlas (Claude, OpenRouter o Gemini); una instalación local contacta también a cmem.ai una vez, al registrarse. Antes de prenderlo se revisa a qué proveedor van los datos y cómo los trata, y no se usa en sesiones que lean secretos o datos personales que no deban salir del computador.
 
@@ -50,7 +50,7 @@ Si se decide usarlo: `claude plugin marketplace add thedotmack/claude-mem` y `cl
   - en los commits, un trailer `Equipo: <nombre>`, puesto por un gancho local `prepare-commit-msg` que no se sube (el gancho está en `plantillas.md`, "Gancho de equipo");
   - en el changelog, "(Persona, Agente; <equipo>)";
   - en los PR, "Hecho desde: <equipo>".
-- En un equipo nuevo, el agente pregunta su nombre corto antes del primer commit e instala el gancho en ese clon.
+- En un equipo nuevo, el agente le pregunta al dueño si se instala el gancho y con qué nombre corto, le muestra el script antes y lo instala solo si el dueño dice que sí.
 - Cada equipo tiene su sección en la bitácora y en el entorno.
 
 ## Cuando un chat se cierra
@@ -58,7 +58,7 @@ Si se decide usarlo: `claude plugin marketplace add thedotmack/claude-mem` y `cl
 Por límite de uso, por contexto lleno o porque se terminó la tarea:
 
 1. Memoria al día en la rama, con su entrada en el changelog.
-2. Commit y push.
+2. Commit y push, si el dueño lo pidió o el proyecto lo acordó en `CLAUDE.md`.
 3. Un prompt para el chat siguiente, en un bloque de código, que empiece por leer `CLAUDE.md` y la memoria y diga dónde quedó el trabajo.
 
 Nunca se deja trabajo sin commit sin anotarlo en la bitácora.

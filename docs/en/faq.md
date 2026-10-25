@@ -30,15 +30,15 @@ The project's `CLAUDE.md` takes precedence. When adopting the methodology, the a
 
 ## How do I invoke it if it does not activate on its own?
 
-Ask for it: "let's work with the methodology", or name the skill (`metodologia-agentes` or `agent-methodology`). It activates on its own when the conversation is about what its description covers: organizing a project with agents, `CLAUDE.md`, project memory, decisions, the cycle of a module, PRs, two agents.
+Ask for it: "let's work with the methodology", or name the skill (`metodologia-agentes` or `agent-methodology`). In Codex, use the complete name, `$metodologia-agentes:<skill>`, because the short one did not load the skill in the test. In a project that adopted it, the agent may load it on its own from its description when the conversation is about what it covers; that activation is not guaranteed.
 
 ## Why are there two skills with the same content?
 
 One in Spanish and one in English.
 
-Both clients use the same package folders; there is no separate copy for Codex and Claude. The figures below are historical, for mm-method 1.0.0 in Claude Code, not measurements of 1.1.0 or Codex.
+Both clients use the same package folders; there is no separate copy for Codex and Claude. The figures below are for mm-method 1.2.0 in Claude Code, not for Codex.
 
-Each has its description in its own language, so the agent uses the one that matches the conversation. According to two runs of `claude plugin details` with Claude Code 2.1.296, on 25/10/2026, together they cost ~456 to ~643 tokens of context per session, and each one ~1,300 to ~1,900 when activated; the cause of the difference between the two runs has not been determined (the command and the details are in the [README](../../README.md#context-cost)).
+Each has its description in its own language, so the agent uses the one that matches the conversation. According to `claude plugin details` with Claude Code 2.1.296, on 25/10/2026, together they cost ~472 to ~693 tokens of context per session, and each one ~1,600 to ~2,500 when activated, depending on the Claude Code configuration; the cause of the difference has not been determined (the command, the details and the 1.0.0 figures are in the [README](../../README.md#context-cost)).
 
 ## Does it run anything on its own?
 

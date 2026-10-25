@@ -1,6 +1,6 @@
 ---
 name: metodologia-agentes
-description: Metodología para proyectos de software hechos con agentes de IA (Claude Code o Codex, solos o juntos) en los que una persona dueña toma las decisiones técnicas. Cubre cómo pedir decisiones en lista con la opción recomendada, la memoria del proyecto dentro del repositorio, planear antes de programar, pruebas independientes con oráculo propio, mutación, revisiones adversariales, ramas y PR con aprobación del dueño, y el cuidado del contexto y del uso. Úsala al arrancar u organizar un proyecto así, al escribir o actualizar CLAUDE.md, AGENTS.md o la memoria del proyecto, al coordinar dos agentes en el mismo repositorio, al pasarle decisiones al dueño, al planear, programar, revisar o cerrar un módulo o un PR, y cuando el usuario pida trabajar "con la metodología" aunque no la nombre. Versión en español; la versión en inglés es agent-methodology.
+description: Metodología para proyectos de software hechos con agentes de IA (Claude Code o Codex, solos o juntos) en los que una persona dueña toma las decisiones técnicas. Cubre cómo pedir decisiones en lista con la opción recomendada, la memoria del proyecto dentro del repositorio, planear antes de programar, pruebas independientes con oráculo propio, mutación, revisiones adversariales, ramas y PR con aprobación del dueño, y el cuidado del contexto y del uso. Úsala cuando el usuario la pida, también para arrancar un proyecto con ella, o cuando el `CLAUDE.md` o el `AGENTS.md` del proyecto diga que la adoptó; en un proyecto así, también al escribir o actualizar `CLAUDE.md`, `AGENTS.md` o la memoria del proyecto, al coordinar dos agentes en el mismo repositorio, al pasarle decisiones al dueño y al planear, programar, revisar o cerrar un módulo o un PR. Versión en español; la versión en inglés es agent-methodology.
 ---
 
 # Metodología de proyectos con agentes
@@ -12,6 +12,8 @@ La idea de fondo: el agente hace el trabajo pesado, pero nada importante pasa si
 ## Claude Code y Codex
 
 Los dos clientes usan esta misma carpeta de la skill. Sigue las instrucciones explícitas del usuario y las reglas aplicables del proyecto; esta skill no amplía la tarea ni autoriza acciones ajenas a ella. Usa solo las herramientas disponibles en el cliente actual. Los comandos y plugins opcionales propios de Claude son ejemplos para Claude Code, no comandos ni dependencias de Codex.
+
+Aplica esta metodología solo si el usuario la pidió o si el `CLAUDE.md` o el `AGENTS.md` del proyecto dice que la adoptó. Si no, no apliques sus reglas ni sus pasos de inicio y cierre; a lo sumo, ofrécela en una línea. Si el `CLAUDE.md` del proyecto dice otra cosa que esta skill, manda el proyecto.
 
 Mantén las reglas compartidas del proyecto en `CLAUDE.md`. Siempre que se use Codex, incluso solo, incluye un `AGENTS.md` que le indique leer `CLAUDE.md` y la carpeta de memoria del proyecto (`references/plantillas.md`). No supongas que Codex carga `CLAUDE.md` automáticamente. Lee la referencia de dos agentes solo cuando dos agentes trabajen en el repositorio.
 
@@ -35,7 +37,7 @@ Mantén las reglas compartidas del proyecto en `CLAUDE.md`. Siempre que se use C
 
 ## Al cerrar cada sesión
 
-Memoria al día, su entrada en el changelog, commit y push de la rama, y un prompt para el chat siguiente, en un bloque de código, con dónde quedó el trabajo. Si algo queda sin commit, se anota en la bitácora.
+Memoria al día y su entrada en el changelog; commit y push de la rama, si el dueño lo pidió o el proyecto lo acordó en `CLAUDE.md`; y un prompt para el chat siguiente, en un bloque de código, con dónde quedó el trabajo. Si algo queda sin commit, se anota en la bitácora.
 
 ## Cómo se ve una lista de decisiones
 

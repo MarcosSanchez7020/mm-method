@@ -30,15 +30,15 @@ El `CLAUDE.md` del proyecto manda. Al adoptar la metodología, el agente propone
 
 ## ¿Cómo la invoco si no se activa sola?
 
-Pidiéndola: "trabajemos con la metodología", o nombrando la skill (`metodologia-agentes` o `agent-methodology`). Se activa sola cuando la conversación trata de lo que cubre su descripción: organizar un proyecto con agentes, `CLAUDE.md`, la memoria del proyecto, decisiones, el ciclo de un módulo, PR, dos agentes.
+Pidiéndola: "trabajemos con la metodología", o nombrando la skill (`metodologia-agentes` o `agent-methodology`). En Codex se usa el nombre completo, `$metodologia-agentes:<skill>`, porque el corto no cargó la skill en la prueba. En un proyecto que la adoptó, el agente puede cargarla sola por su descripción cuando la conversación trata de lo que cubre; esa activación no está garantizada.
 
 ## ¿Por qué hay dos skills con el mismo contenido?
 
 Una en español y otra en inglés.
 
-Los dos clientes usan las mismas carpetas del paquete; no hay una copia para Codex y otra para Claude. Las cifras siguientes son históricas, de mm-method 1.0.0 en Claude Code, no mediciones de 1.1.0 ni de Codex.
+Los dos clientes usan las mismas carpetas del paquete; no hay una copia para Codex y otra para Claude. Las cifras siguientes son de mm-method 1.2.0 en Claude Code, no de Codex.
 
-Cada una tiene su descripción en su idioma, así que el agente usa la que corresponde a la conversación. Según dos corridas de `claude plugin details` con Claude Code 2.1.296, el 25/10/2026, juntas cuestan de ~456 a ~643 tokens de contexto por sesión, y cada una de ~1.300 a ~1.900 cuando se activa; la causa de la diferencia entre las dos corridas no se ha determinado (el comando y el detalle están en el [README](../../README.es.md#costo-en-contexto)).
+Cada una tiene su descripción en su idioma, así que el agente usa la que corresponde a la conversación. Según `claude plugin details` con Claude Code 2.1.296, el 25/10/2026, juntas cuestan de ~472 a ~693 tokens de contexto por sesión, y cada una de ~1.600 a ~2.500 cuando se activa, según la configuración de Claude Code; la causa de la diferencia no se ha determinado (el comando, el detalle y las cifras de la 1.0.0 están en el [README](../../README.es.md#costo-en-contexto)).
 
 ## ¿Ejecuta algo por su cuenta?
 

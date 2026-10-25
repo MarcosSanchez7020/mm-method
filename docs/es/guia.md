@@ -46,7 +46,7 @@ Quién decide qué se escribe en el `CLAUDE.md` del proyecto. Si no está escrit
 
 1. **Arranque.** El agente lee `CLAUDE.md`, `AGENTS.md` siempre que se use Codex, y la carpeta de memoria de `main` y de su rama. Corre `git fetch --prune`, `git worktree list` y `git status`. Así sabe qué se decidió, en qué rama está cada agente y qué quedó sin commit.
 2. **Trabajo.** Sigue el ciclo del módulo en el que va ([sección 6](#6-el-ciclo-de-un-módulo)). Cada respuesta del dueño se copia al registro en el momento en que llega.
-3. **Cierre.** Por límite de uso, por contexto lleno o porque se terminó la tarea: memoria al día, changelog, commit, push y un prompt para el chat siguiente, en un bloque de código, con dónde quedó todo.
+3. **Cierre.** Por límite de uso, por contexto lleno o porque se terminó la tarea: memoria al día, changelog, commit y push si el dueño lo pidió o el proyecto lo acordó en `CLAUDE.md`, y un prompt para el chat siguiente, en un bloque de código, con dónde quedó todo.
 
 El cierre es lo que permite que el chat siguiente, en otro computador o con otro agente, siga sin preguntar lo que ya se sabía.
 
@@ -201,7 +201,7 @@ El contexto de un chat y el uso semanal de una cuenta se acaban. La metodología
 - los resultados de muchos agentes se resumen con un script, no se leen completos;
 - los reportes de los agentes son cortos (menos de 25 líneas) y con esquema;
 - en tareas que no son programar, el agente trabaja casi solo y pide permiso antes de lanzar más de 6 agentes;
-- cerca del límite de uso, el agente avisa y propone cómo seguir, con todo en commit.
+- cerca del límite de uso, el agente avisa y propone cómo seguir, con todo en commit si el dueño lo pidió o el proyecto lo acordó en `CLAUDE.md`.
 
 ## 11. Qué se configura
 
@@ -240,4 +240,4 @@ Todo esto se acuerda con el dueño y se escribe en el `CLAUDE.md` del proyecto:
 - La skill instruye; no obliga. Lo que de verdad hace cumplir las reglas es el `CLAUDE.md` del proyecto, la protección de `main`, los checks del PR y la disciplina del equipo.
 - Depende de que el modelo siga las instrucciones. Por eso las reglas importantes también van en `CLAUDE.md`, que Claude Code carga en cada sesión y que `AGENTS.md` indica leer a Codex.
 - No trae hooks, comandos ni servidores.
-- Se activa por su descripción. Si no se activa, se puede pedir explícitamente ("trabajemos con la metodología").
+- Se activa por su descripción en los proyectos que la adoptaron, sin garantía; en Codex, ver [codex.md](codex.md). Si no se activa, se puede pedir explícitamente ("trabajemos con la metodología").

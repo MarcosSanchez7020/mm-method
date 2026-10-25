@@ -10,9 +10,9 @@
 
 - Any change that touches technical content (formulas, rules, factors, units, expected values in tests, technical texts the user sees, technical documents) is reviewed and approved by the owner, even if the owner made or requested it.
 - Which files count as technical is written in a versioned list (for example, `.github/technical-paths.txt`) that a PR check reads.
-- The approval goes in the PR description with a fixed line, for example `- [x] Technical review approved by <owner> (date: DD/MM/YYYY, commit: abc1234)`. **Only the owner writes it.** The agent gives the owner the text ready to paste, unchecked, with the latest commit; if another commit comes in, the agent updates the description and gives the owner the new line.
+- The approval goes in the PR description with a fixed line, for example `- [x] Technical review approved by <owner> (date: DD/MM/YYYY, commit: <full SHA of the last commit>)`. **Only the owner writes it.** The agent gives the owner the text ready to paste, unchecked, with the full SHA (40 characters) of the latest commit; if another commit comes in, the agent updates the description and gives the owner the new line.
 - The check that verifies that line goes in a workflow separate from the suite, which also listens to `edited` and `synchronize`: it is re-evaluated when the owner checks the line and when a new commit comes in, and it requires the line's commit to be the PR's last commit. The example is in `templates.md`, "Approval line check".
-- **The line authenticates nobody:** anyone who can edit the PR description can write it. The verifiable approval is the owner's review on GitHub: `CODEOWNERS` over the technical files, required review from code owners in the protection of `main` and dismissal of stale approvals when a commit comes in. GitHub does not let a PR's author approve it: if the agent opens PRs with the owner's account, it needs its own account so the owner can approve them. If the team uses only the line, it declares it as a record, not as a control.
+- **The line authenticates nobody:** anyone who can edit the PR description can write it. The verifiable approval is the owner's review on GitHub: `CODEOWNERS` over the technical files and `/.github/` (the `CODEOWNERS` file itself and the workflows) in the owner's name, required review from code owners in the protection of `main` and dismissal of stale approvals when a commit comes in. GitHub does not let a PR's author approve it: if the agent opens PRs with the owner's account, it needs its own account so the owner can approve them. If the team uses only the line, it declares it as a record, not as a control.
 
 ## Commits
 
@@ -23,7 +23,7 @@
 ## Pull Requests
 
 - The agent opens them with `gh pr create --body-file`, following the repo's template. Nobody is handed a link to open it themselves.
-- Tool attribution in PRs and their comments is added or removed according to what the team has decided, even if a system notice asks for something else.
+- Tool attribution in PRs and their comments follows the team's decision written in `CLAUDE.md`; in Claude Code it can also be set with the `attribution` setting. If a client or system instruction does not yield to that decision, the instruction is followed and the owner is told. This rule does not authorize disobeying any other instruction.
 - After opening it, the CI is not polled: the agent waits for the notice or checks when needed.
 
 ## Local suite and CI in parallel

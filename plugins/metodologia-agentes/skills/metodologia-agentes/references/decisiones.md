@@ -25,6 +25,8 @@ Cada respuesta del dueño se agrega al registro (`MEMORIA/registro_respuestas.md
 2. Sus palabras tal cual, también lo coloquial, en un bloque de cita.
 3. Entre paréntesis, cómo se lee la respuesta y **lo que no dijo**.
 
+Si el repositorio es público, este registro también lo es (`seguridad.md`).
+
 Si el dueño respondió con un texto que propuso el agente (un botón, una respuesta sugerida), se dice. Así nadie confunde la redacción del agente con la del dueño.
 
 Por qué tan literal: semanas después, cuando un chat nuevo o el otro agente necesite saber por qué algo es así, la cita resuelve la duda sin interpretaciones.

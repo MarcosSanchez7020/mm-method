@@ -19,7 +19,7 @@ The context of a chat and the weekly usage of an account are finite. A long proj
 ## Weekly usage
 
 - When the account is close to its limit, the agent says so and proposes options: hand the design or the reviews to the other agent, work without subagents, or wait for the reset.
-- Before it runs out, everything is committed and has its note in the team log.
+- Before it runs out, everything has its note in the team log and, if the owner asked for it or the project agreed on it in `CLAUDE.md`, is committed.
 - If the account is shared between people, they are warned before many agents are launched, because the limit is everyone's.
 
 ## Models
