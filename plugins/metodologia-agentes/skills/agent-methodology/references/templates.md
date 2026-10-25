@@ -184,12 +184,19 @@ jobs:
 It marks the commits made from a computer other than the main one. Git hooks belong to the whole clone: the main folder and its worktrees share them. So it is installed once per computer, from the main folder of the clone, and, if the owner decides so, by the person or the agent of that folder, never by the worktree agent, which does not write in the other's folder.
 
 ```sh
-name=$(cat <<'NAME'
-<machine-name>
-NAME
-)
-git config machine.name "$name"
-hook=$(git rev-parse --git-path hooks/prepare-commit-msg)
+(
+printf '%s' 'Machine name (one line): '
+if IFS= read -r name; then
+  name=${name%"$(printf '\r')"}
+else
+  name=
+fi
+if [ -z "$name" ]; then
+  printf '%s\n' 'Type a non-empty name and finish with Enter.' >&2
+  exit 1
+fi
+git config --local machine.name "$name" || exit 1
+hook=$(git rev-parse --git-path hooks/prepare-commit-msg) || exit 1
 if [ -e "$hook" ] || [ -L "$hook" ]; then
   echo "$hook exists: add the last two lines of the hook below to it by hand."
 else
@@ -202,11 +209,39 @@ git interpret-trailers --in-place --if-exists doNothing --trailer "Machine: $nam
 EOF
   chmod +x "$hook"
 fi
+)
 ```
 
-- The name goes on its own line, between `<<'NAME'` and `NAME`, and is stored as is, apostrophes, quotes or `$` included, in the clone's Git configuration (`git config machine.name`), which the main folder and its worktrees share. The only word that does not work as a name is `NAME`: it closes the block early and the name ends up empty. The hook reads it on each commit and never interprets it as code; to change it, repeat the first five lines of the script with the new name.
+- Run the whole block: pasted into a terminal open in the clone's main folder, or saved to a file and run with `sh <file>`. When it asks for the name, type it on one line and finish with Enter, with no quotes or escapes; if an agent runs it, the agent passes the name on standard input. The name arrives as data and never goes into the code: apostrophes, quotes, `$` and any other character are stored as is in the clone's Git configuration (`git config --local machine.name`), which the main folder and its worktrees share. It accepts LF and CRLF line endings. If several lines arrive on standard input, only the first is used and the rest are not run; in a terminal, whatever is pasted after the name goes to the terminal as commands, like any text pasted into it. An empty line, or end of input before the line break, makes the block fail without changing the configuration or installing the hook. The parentheses run it separately, so an `exit` does not close the terminal.
 - `git rev-parse --git-path` gives the real path of the hook. In a worktree, `.git` is a file and not a folder, so `.git/hooks/` does not work as a fixed path.
 - If the clone uses `core.hooksPath`, the path comes from that setting. If it is relative, Git resolves it in the working folder where the hook runs, so each worktree looks for its own copy; in that case, version the hook in that folder or use an absolute path.
 - If a `prepare-commit-msg` hook already exists, or a link with that name even if it is broken, it is not replaced: the last two lines are added to it by hand.
-- The hook adds `Machine: <machine-name>` as a commit trailer, and `git log --grep "Machine: <machine-name>"` finds what was done from that computer.
-- Tested with Git 2.55 and Git Bash 5.3 on Windows: a name with spaces, `$(...)`, backticks, double quotes, `$HOME`, an apostrophe or an apostrophe that tries to close the text and inject a command stays literal in the configuration and in the trailer, and runs nothing; with no name configured, the commit has no trailer; an existing hook is not overwritten; a commit made in a worktree carries the trailer; and outside a repository the script fails without creating anything. The broken-link case was not tested: Windows does not allow creating symbolic links without privileges.
+- The hook adds `Machine: <name>` as a commit trailer. The two blocks below change the name without reinstalling the hook and find what was done from that computer, without putting the name in the command.
+- Tested with Git 2.55 on Windows, with Git for Windows `sh` and `bash` (that `sh` is bash in POSIX mode), running the block as a file and pasted: the name arrives on standard input and stays literal in the configuration and in the trailer, running nothing, with spaces, apostrophes, an apostrophe followed by a command, double quotes, `$(...)`, backticks, `$HOME`, Unicode, backslashes (also at the end), a leading dash, regular-expression characters, `NOMBRE`, `NAME`, CRLF and the text that closed the previous version's here-doc; with several lines in a file, only the first is used. An empty line (LF or CRLF), empty input or a line without a line break fail without changing the configuration or creating the hook, as do running it outside a repository or when the configuration cannot be written. Changing the name does not touch the hook; the search finds only that name's commits, as literal text; an existing hook is not overwritten; with no name configured, the commit has no trailer; a commit made in a worktree carries the trailer, and merge and squash commits do not. Not tested: the broken link (Windows does not allow creating symbolic links without privileges), Linux, macOS, dash and other shells.
+
+To change the name, without reinstalling the hook:
+
+```sh
+(
+printf '%s' 'Machine name (one line): '
+if IFS= read -r name; then
+  name=${name%"$(printf '\r')"}
+else
+  name=
+fi
+if [ -z "$name" ]; then
+  printf '%s\n' 'Type a non-empty name and finish with Enter.' >&2
+  exit 1
+fi
+git config --local machine.name "$name" || exit 1
+)
+```
+
+To find the commits made from this computer, the name is read from the configuration and searched as literal text:
+
+```sh
+(
+name=$(git config --get machine.name) || exit 1
+git log --fixed-strings --grep "Machine: $name"
+)
+```

@@ -107,7 +107,7 @@ An agent's local memory stays on one computer and the other agent does not see i
 - what happens after the last commit of a branch (the push, the PR, the merge) is noted on the next branch;
 - if a memory plugin conflicts with the repo, the repo wins.
 
-With several people or several computers, every commit made outside the main computer carries a `Machine: <machine-name>` line, added by a local Git hook. That way `git log --grep "Machine: <machine-name>"` finds what was done from there.
+With several people or several computers, every commit made outside the main computer carries a `Machine: <machine-name>` line, added by a local Git hook. The search for what was done from there, without putting the name in the command, is in the skill's `references/templates.md`, "Machine hook".
 
 ## 6. The cycle of a module
 

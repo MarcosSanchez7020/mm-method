@@ -118,15 +118,22 @@ The list of files that require technical review (for example, `.github/technical
 
 ## 9. Several computers (optional)
 
-On every computer other than the main one, a local hook marks the commits with the machine name. It is installed once per computer, from the main folder of the clone, because worktrees share the clone's hooks; the worktree agent does not install it. The script stores the name in the clone's Git configuration, which the hook reads on each commit, resolves the real path of the hook and does not overwrite an existing one, or a link with that name even if it is broken:
+On every computer other than the main one, a local hook marks the commits with the machine name. It is installed once per computer, from the main folder of the clone, because worktrees share the clone's hooks; the worktree agent does not install it. The script asks for the name and stores it, as data, in the clone's Git configuration, which the hook reads on each commit; it resolves the real path of the hook and does not overwrite an existing one, or a link with that name even if it is broken. Run the whole block and, when it asks for the name, type it on one line, with no quotes:
 
 ```sh
-name=$(cat <<'NAME'
-<machine-name>
-NAME
-)
-git config machine.name "$name"
-hook=$(git rev-parse --git-path hooks/prepare-commit-msg)
+(
+printf '%s' 'Machine name (one line): '
+if IFS= read -r name; then
+  name=${name%"$(printf '\r')"}
+else
+  name=
+fi
+if [ -z "$name" ]; then
+  printf '%s\n' 'Type a non-empty name and finish with Enter.' >&2
+  exit 1
+fi
+git config --local machine.name "$name" || exit 1
+hook=$(git rev-parse --git-path hooks/prepare-commit-msg) || exit 1
 if [ -e "$hook" ] || [ -L "$hook" ]; then
   echo "$hook exists: add the last two lines of the hook below to it by hand."
 else
@@ -139,9 +146,10 @@ git interpret-trailers --in-place --if-exists doNothing --trailer "Machine: $nam
 EOF
   chmod +x "$hook"
 fi
+)
 ```
 
-The details (worktrees, `core.hooksPath` and what to do if a hook already exists) are in the skill's `references/templates.md`, "Machine hook". Then `git log --grep "Machine: <machine-name>"` finds what was done from that computer.
+The details (worktrees, `core.hooksPath`, what to do if a hook already exists, how to change the name and how to find what was done from that computer) are in the skill's `references/templates.md`, "Machine hook".
 
 ## 10. The first work session
 
