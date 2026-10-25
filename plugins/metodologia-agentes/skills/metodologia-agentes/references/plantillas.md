@@ -55,6 +55,17 @@ Toda regla del equipo que deba valer siempre se escribe en este archivo, con su 
 - La rutina después de cada merge.
 ```
 
+## `AGENTS.md` siempre que se use Codex
+
+Usa este puente aunque Codex sea el único agente. Ajusta la ruta de memoria al proyecto; mantén las reglas compartidas en `CLAUDE.md`.
+
+```markdown
+# Instrucciones del proyecto
+
+Antes de trabajar, lee y sigue `CLAUDE.md` y la memoria del proyecto en `MEMORIA/`.
+Las reglas compartidas viven en `CLAUDE.md`; no las dupliques aquí.
+```
+
 ## `MEMORIA/README.md`
 
 ```markdown

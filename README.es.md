@@ -2,7 +2,7 @@
 
 [English](README.md) · **Español**
 
-Una metodología de trabajo, empaquetada como plugin de Claude Code, para proyectos de software hechos con agentes de IA en los que una persona (el dueño) toma las decisiones técnicas. Funciona con Claude Code solo o junto con un segundo agente, como Codex, en el mismo repositorio.
+Una metodología de trabajo, empaquetada como plugin de Claude Code y Codex, para proyectos de software hechos con agentes de IA en los que una persona (el dueño) toma las decisiones técnicas. Funciona con Claude Code o Codex, solos o juntos en el mismo repositorio.
 
 No es una librería ni una herramienta que automatice algo: es un conjunto de instrucciones que el agente sigue. Lo que la hace cumplir en un proyecto es el `CLAUDE.md` del proyecto, la protección de `main` y la disciplina del equipo. La skill le enseña al agente cómo trabajar y le da los esqueletos para montarlo.
 
@@ -36,19 +36,22 @@ La metodología responde a cada uno con una regla concreta y con el porqué de e
 ```
 mm-method/                            catálogo de plugins (este repositorio)
 ├── .claude-plugin/marketplace.json
+├── .agents/plugins/marketplace.json
 ├── plugins/metodologia-agentes/
 │   ├── .claude-plugin/plugin.json
+│   ├── plugin.json
 │   └── skills/
 │       ├── metodologia-agentes/       la skill en español
 │       │   ├── SKILL.md
 │       │   └── references/            10 referencias que se leen solo cuando hacen falta
 │       └── agent-methodology/         la misma skill en inglés
 ├── docs/es/  ·  docs/en/              la documentación
+├── AGENTS.md  ·  CLAUDE.md
 ├── CHANGELOG.md
 └── README.md (inglés)  ·  README.es.md (español)
 ```
 
-Las dos skills tienen el mismo contenido. Cada una tiene su descripción en su idioma, así que el agente usa la que corresponde a la conversación.
+Los dos clientes leen las mismas carpetas de skills, sin copias por cliente. Las dos skills tienen contenido equivalente en sus respectivos idiomas. Cada una tiene su descripción en su idioma, así que el agente usa la que corresponde a la conversación.
 
 | Referencia | De qué trata |
 |---|---|
@@ -64,6 +67,8 @@ Las dos skills tienen el mismo contenido. Cada una tiene su descripción en su i
 | `seguridad.md` | Secretos, protecciones, contenido de afuera, CI y servidores |
 
 ## Instalar
+
+### Claude Code
 
 Necesitas Claude Code con soporte de plugins. El repositorio es su propio catálogo:
 
@@ -82,7 +87,22 @@ Para comprobar que quedó instalada:
 claude plugin list
 ```
 
+### Codex
+
+Con Codex CLI y soporte de plugins:
+
+```bash
+codex plugin marketplace add MarcosSanchez7020/mm-method
+codex plugin add metodologia-agentes@mm-method
+```
+
+Abre una sesión nueva después de instalar. En la CLI, menciona `$metodologia-agentes:metodologia-agentes` para español o `$metodologia-agentes:agent-methodology` para inglés. Comprueba la instalación con `codex plugin list --marketplace mm-method --json`.
+
+Los dos comandos de instalación se ejecutaron con éxito con Codex CLI 0.162.1 el 25/10/2026. Consulta el [alcance de las pruebas y la distribución](docs/es/codex.md). Los comandos instalan la rama predeterminada del catálogo.
+
 ## Actualizar
+
+### Claude Code
 
 ```bash
 claude plugin marketplace update mm-method
@@ -91,7 +111,13 @@ claude plugin update metodologia-agentes@mm-method
 
 Los cambios se aplican al reiniciar Claude Code. Qué cambió en cada versión está en el [CHANGELOG](CHANGELOG.md).
 
+### Codex
+
+La actualización del catálogo y la reinstalación del plugin se describen en la [guía de Codex](docs/es/codex.md).
+
 ## Desinstalar
+
+### Claude Code
 
 Con el mismo alcance que usaste al instalar; sin `--scope`, `uninstall` usa `user`:
 
@@ -104,6 +130,15 @@ Cambia `user` por `project` o `local` si la instalaste así. Quita el catálogo 
 ```bash
 claude plugin marketplace remove mm-method
 ```
+
+### Codex
+
+```bash
+codex plugin remove metodologia-agentes@mm-method
+codex plugin marketplace remove mm-method
+```
+
+Quita el catálogo solo si ya no lo necesitas. Estos comandos afectan a la instalación de Codex.
 
 ## Arranque rápido
 
@@ -122,6 +157,7 @@ Para adoptarla en un proyecto, sigue la [guía de adopción](docs/es/adopcion.md
 - [Guía completa](docs/es/guia.md): cómo funciona cada parte y por qué.
 - [Guía de adopción](docs/es/adopcion.md): de cero a un proyecto montado, paso a paso.
 - [Preguntas frecuentes](docs/es/preguntas-frecuentes.md).
+- [Codex: distribución, instalación y alcance de las pruebas](docs/es/codex.md).
 
 ## Costo en contexto
 
@@ -139,13 +175,15 @@ claude --plugin-dir plugins/metodologia-agentes plugin details metodologia-agent
 
 La herramienta advierte que son estimaciones y que pueden diferir del uso real. Una revisión independiente corrió el mismo comando, con la misma versión de Claude Code y el mismo día, y obtuvo ~456 tokens fijos y ~1.300 por activación. La causa de la diferencia no se ha determinado: tómalas como un rango (de ~456 a ~643 fijos y de ~1.300 a ~1.900 por activación), no como una cifra exacta.
 
+Las cifras anteriores corresponden a mm-method 1.0.0 en Claude Code; no miden esta versión ni el consumo en Codex.
+
 ## Límites
 
 - La skill instruye; no obliga. Si el `CLAUDE.md` del proyecto dice otra cosa, manda el proyecto.
 - No trae hooks, comandos ni servidores: no ejecuta nada por su cuenta.
 - No incluye ni instala otros plugins. claude-mem se sugiere como complemento opcional, con sus ajustes, en la referencia `memoria.md`.
 - La protección de `main`, los checks obligatorios y la plantilla del PR se configuran en el repositorio del proyecto; la guía de adopción dice cómo, pero la skill no los crea sola.
-- Está pensada para Claude Code. Con otro agente, la parte que le toca está en `AGENTS.md`, que apunta a las mismas reglas.
+- Con Codex, incluso como único agente, el proyecto necesita un `AGENTS.md` que indique leer las reglas compartidas en `CLAUDE.md`. La [guía de adopción](docs/es/adopcion.md) incluye ese puente.
 
 ## Seguridad
 
@@ -157,4 +195,4 @@ La herramienta advierte que son estimaciones y que pueden diferir del uso real. 
 
 ## Versión y licencia
 
-Versión 1.0.0 (ver [CHANGELOG](CHANGELOG.md)). Licencia: MIT ([LICENSE](LICENSE)).
+Versión 1.1.0 (ver [CHANGELOG](CHANGELOG.md)). Licencia: MIT ([LICENSE](LICENSE)).

@@ -4,17 +4,30 @@ De cero a un proyecto que trabaja con la metodología. Los pasos 2 a 6 los puede
 
 ## Antes de empezar
 
-- Claude Code con soporte de plugins (`claude plugin --help` lista los comandos).
+- Claude Code o Codex con soporte de plugins (`claude plugin --help` o `codex plugin --help` lista los comandos).
 - Git, y el repositorio del proyecto en GitHub.
 - Opcional: la CLI de GitHub (`gh`), para que el agente abra los PR.
 - Opcional: un segundo agente (por ejemplo, Codex) si van a trabajar dos.
 
 ## 1. Instalar la skill
 
+Elige tu cliente; si usas ambos, instala el plugin en cada uno.
+
+Claude Code:
+
 ```bash
 claude plugin marketplace add MarcosSanchez7020/mm-method
 claude plugin install metodologia-agentes@mm-method
 ```
+
+Codex:
+
+```bash
+codex plugin marketplace add MarcosSanchez7020/mm-method
+codex plugin add metodologia-agentes@mm-method
+```
+
+Abre una sesión nueva. Consulta la [guía de Codex](codex.md) para las versiones probadas y los límites.
 
 ## 2. Pedirle al agente que monte el proyecto
 
@@ -55,11 +68,11 @@ Con cuatro archivos: `README.md`, `bitacora_equipos.md`, `entorno_equipos.md` y 
 
 Con una sección "[Sin publicar]" por rama. Cada cambio, por pequeño que sea, lleva fecha, archivo, qué cambió y quién.
 
-## 6. `AGENTS.md`, si hay un segundo agente
+## 6. `AGENTS.md` siempre que se use Codex
 
-Un archivo corto que apunta a `CLAUDE.md` y a `MEMORIA/`, con lo que es propio de ese agente: su carpeta, su puerto y cómo firma en el changelog.
+Incluso si Codex es el único agente, crea un `AGENTS.md` que indique leer `CLAUDE.md` y `MEMORIA/`. El esqueleto está en `references/plantillas.md`. Las reglas compartidas permanecen en `CLAUDE.md`; no se duplican. Si ya existe `AGENTS.md`, integra el puente conservando sus instrucciones.
 
-El worktree del segundo agente, desde la carpeta principal:
+Solo si trabajan dos agentes, crea el worktree del segundo desde la carpeta principal:
 
 ```bash
 git fetch --prune
@@ -132,11 +145,11 @@ Lee CLAUDE.md y MEMORIA/. Después: git fetch --prune, git worktree list y git s
 
 ## Lista de comprobación
 
-- [ ] La skill instalada (`claude plugin list`).
+- [ ] La skill instalada en el cliente elegido (`claude plugin list` o `codex plugin list --marketplace mm-method --json`).
 - [ ] `CLAUDE.md` con sus ocho secciones y las respuestas del dueño.
 - [ ] `MEMORIA/` con sus cuatro archivos.
 - [ ] `CHANGELOG.md` con "[Sin publicar]".
-- [ ] `AGENTS.md` y el worktree, si hay un segundo agente.
+- [ ] `AGENTS.md` si se usa Codex, incluso solo; worktree separado si hay un segundo agente.
 - [ ] `main` protegida y solo merge commits.
 - [ ] La plantilla del PR con la línea de aprobación.
 - [ ] `CODEOWNERS` y revisión obligatoria de los dueños de código, si la aprobación tiene que ser autenticada.

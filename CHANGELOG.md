@@ -4,6 +4,16 @@ Formato: una sección por versión, la más reciente arriba. Versionado semánti
 
 Format: one section per version, newest first. Semantic versioning: major when a rule changes meaning, minor when something is added, patch for wording fixes.
 
+## 1.1.0
+
+- Soporte de Codex: catálogo propio y manifiesto portable junto al manifiesto de Claude Code, con una única fuente de skills por idioma.
+- Aclaraciones equivalentes ES/EN para Codex solo o con Claude Code; puente `AGENTS.md` a las reglas compartidas en `CLAUDE.md`.
+- Instalación de Codex documentada después de ejecutar sus comandos; ambos README y guías actualizados. El paquete sigue siendo solo instrucciones, sin scripts de instalación, ganchos, servidores ni conexiones adicionales.
+
+- Codex support: a dedicated catalog and a portable manifest alongside the Claude Code manifest, with one skill source per language.
+- Equivalent EN/ES clarifications for Codex alone or with Claude Code; an `AGENTS.md` bridge to shared rules in `CLAUDE.md`.
+- Codex installation documented after executing its commands; both READMEs and guides updated. The package remains instructions only, without installation scripts, hooks, servers or additional connections.
+
 ## 1.0.1
 
 - El README en inglés pasa a ser `README.md`, el que GitHub muestra por defecto; el español pasa a `README.es.md`. Sin cambios en las skills.

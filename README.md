@@ -2,7 +2,7 @@
 
 **English** · [Español](README.es.md)
 
-A working methodology, packaged as a Claude Code plugin, for software projects built with AI agents in which one person (the owner) makes the technical decisions. It works with Claude Code alone or together with a second agent, such as Codex, in the same repository.
+A working methodology, packaged as a Claude Code and Codex plugin, for software projects built with AI agents in which one person (the owner) makes the technical decisions. It works with Claude Code or Codex, alone or together in the same repository.
 
 It is not a library or a tool that automates anything: it is a set of instructions that the agent follows. What makes it hold in a project is the project's `CLAUDE.md`, the protection of `main` and the team's discipline. The skill teaches the agent how to work and gives it the skeletons to set it up.
 
@@ -36,19 +36,22 @@ The methodology answers each one with a concrete rule and the reason for that ru
 ```
 mm-method/                            plugin catalog (this repository)
 ├── .claude-plugin/marketplace.json
+├── .agents/plugins/marketplace.json
 ├── plugins/metodologia-agentes/
 │   ├── .claude-plugin/plugin.json
+│   ├── plugin.json
 │   └── skills/
 │       ├── metodologia-agentes/       the skill in Spanish
 │       │   ├── SKILL.md
 │       │   └── references/            10 references, read only when needed
 │       └── agent-methodology/         the same skill in English
 ├── docs/es/  ·  docs/en/              the documentation
+├── AGENTS.md  ·  CLAUDE.md
 ├── CHANGELOG.md
 └── README.md (English)  ·  README.es.md (Español)
 ```
 
-Both skills have the same content. Each has its description in its own language, so the agent uses the one that matches the conversation.
+Both clients read the same skill folders, without copies per client. The two skills have equivalent content in their respective languages. Each has its description in its own language, so the agent uses the one that matches the conversation.
 
 | Reference | What it covers |
 |---|---|
@@ -64,6 +67,8 @@ Both skills have the same content. Each has its description in its own language,
 | `security.md` | Secrets, protections, outside content, CI and servers |
 
 ## Install
+
+### Claude Code
 
 You need Claude Code with plugin support. The repository is its own catalog:
 
@@ -82,7 +87,22 @@ To check that it is installed:
 claude plugin list
 ```
 
+### Codex
+
+With Codex CLI and plugin support:
+
+```bash
+codex plugin marketplace add MarcosSanchez7020/mm-method
+codex plugin add metodologia-agentes@mm-method
+```
+
+Start a new session after installation. In the CLI, mention `$metodologia-agentes:agent-methodology` for English or `$metodologia-agentes:metodologia-agentes` for Spanish. Check the installation with `codex plugin list --marketplace mm-method --json`.
+
+Both installation commands ran successfully with Codex CLI 0.162.1 on 2026-10-25. See the [test scope and distribution details](docs/en/codex.md). The commands install the catalog's default branch.
+
 ## Update
+
+### Claude Code
 
 ```bash
 claude plugin marketplace update mm-method
@@ -91,7 +111,13 @@ claude plugin update metodologia-agentes@mm-method
 
 Changes apply when Claude Code is restarted. What changed in each version is in the [CHANGELOG](CHANGELOG.md).
 
+### Codex
+
+Catalog refresh and plugin reinstallation are described in the [Codex guide](docs/en/codex.md).
+
 ## Uninstall
+
+### Claude Code
 
 With the same scope you used to install; without `--scope`, `uninstall` uses `user`:
 
@@ -104,6 +130,15 @@ Change `user` to `project` or `local` if you installed it that way. Remove the c
 ```bash
 claude plugin marketplace remove mm-method
 ```
+
+### Codex
+
+```bash
+codex plugin remove metodologia-agentes@mm-method
+codex plugin marketplace remove mm-method
+```
+
+Remove the catalog only if you no longer need it. These commands affect the Codex installation.
 
 ## Quick start
 
@@ -122,6 +157,7 @@ To adopt it in a project, follow the [adoption guide](docs/en/adoption.md).
 - [Complete guide](docs/en/guide.md): how each part works and why.
 - [Adoption guide](docs/en/adoption.md): from zero to a set-up project, step by step.
 - [Frequently asked questions](docs/en/faq.md).
+- [Codex: distribution, installation and test scope](docs/en/codex.md).
 
 ## Context cost
 
@@ -139,13 +175,15 @@ claude --plugin-dir plugins/metodologia-agentes plugin details metodologia-agent
 
 The tool warns that these are estimates and may differ from actual usage. An independent review ran the same command, with the same Claude Code version on the same day, and got ~456 always-on tokens and ~1,300 per activation. The cause of the difference has not been determined: take them as a range (~456 to ~643 always-on and ~1,300 to ~1,900 per activation), not as an exact figure.
 
+The figures above concern mm-method 1.0.0 in Claude Code; they do not measure this version or Codex usage.
+
 ## Limits
 
 - The skill instructs; it does not enforce. If the project's `CLAUDE.md` says otherwise, the project prevails.
 - It ships no hooks, commands or servers: it runs nothing on its own.
 - It does not include or install other plugins. claude-mem is suggested as an optional complement, with its adjustments, in the `memory.md` reference.
 - The protection of `main`, the required checks and the PR template are configured in the project's repository; the adoption guide says how, but the skill does not create them by itself.
-- It is designed for Claude Code. With another agent, the part that applies to it is in `AGENTS.md`, which points to the same rules.
+- With Codex, even as the only agent, the project needs an `AGENTS.md` that instructs it to read the shared rules in `CLAUDE.md`. The [adoption guide](docs/en/adoption.md) includes that bridge.
 
 ## Security
 
@@ -157,4 +195,4 @@ The tool warns that these are estimates and may differ from actual usage. An ind
 
 ## Version and license
 
-Version 1.0.0 (see [CHANGELOG](CHANGELOG.md)). License: MIT ([LICENSE](LICENSE)).
+Version 1.1.0 (see [CHANGELOG](CHANGELOG.md)). License: MIT ([LICENSE](LICENSE)).
