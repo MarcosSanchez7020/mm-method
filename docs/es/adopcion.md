@@ -1,0 +1,144 @@
+# Guía de adopción
+
+De cero a un proyecto que trabaja con la metodología. Los pasos 2 a 6 los puede hacer el agente; los pasos 7 y 8 son configuración de GitHub y los hace una persona con permisos de administración del repositorio.
+
+## Antes de empezar
+
+- Claude Code con soporte de plugins (`claude plugin --help` lista los comandos).
+- Git, y el repositorio del proyecto en GitHub.
+- Opcional: la CLI de GitHub (`gh`), para que el agente abra los PR.
+- Opcional: un segundo agente (por ejemplo, Codex) si van a trabajar dos.
+
+## 1. Instalar la skill
+
+```bash
+claude plugin marketplace add MarcosSanchez7020/mm-method
+claude plugin install metodologia-agentes@mm-method
+```
+
+## 2. Pedirle al agente que monte el proyecto
+
+En una sesión nueva, dentro del repositorio del proyecto:
+
+```text
+Vamos a trabajar este repo con la metodología. Antes de crear archivos, pásame en lista las decisiones que necesitas para el CLAUDE.md: quién decide qué, la palabra para programar, idioma y trato, quién revisa por defecto, qué archivos exigen mi revisión técnica, qué agentes y modelos usamos y el presupuesto de CI.
+```
+
+El agente responde con una lista numerada. Con tus respuestas escribe los archivos de los pasos 3 a 6 y anota tus respuestas en el registro.
+
+## 3. `CLAUDE.md`
+
+El esqueleto está en `references/plantillas.md` de la skill. Las secciones que no pueden faltar:
+
+| Sección | Qué lleva |
+|---|---|
+| Fuente de verdad | Qué documentos mandan y dónde está la fuente técnica original |
+| Lo que no se negocia | Los principios de la metodología y las reglas propias del producto |
+| El equipo | Quién es dueño de qué y quién decide qué |
+| Cómo trabajar con el equipo | Palabra para programar, decisiones en lista, idioma, revisiones, modelos |
+| Cómo se trabaja cada módulo | Los seis pasos del ciclo, ajustados al proyecto |
+| Memoria en el repo | Qué va en `MEMORIA/` y cuándo se anota |
+| Agentes | Carpetas, ramas, mensajes, archivos compartidos, PR (solo si hay dos) |
+| Repositorio | `main` protegida, revisión técnica, changelog, CI, rutina después del merge |
+
+Si el proyecto ya tiene un `CLAUDE.md`, el agente propone dónde encaja cada sección y te pasa en lista lo que choca.
+
+## 4. La carpeta de memoria
+
+```bash
+mkdir MEMORIA
+```
+
+Con cuatro archivos: `README.md`, `bitacora_equipos.md`, `entorno_equipos.md` y `registro_respuestas.md`. Los esqueletos están en `references/plantillas.md`. Nunca van ahí secretos ni datos personales de terceros.
+
+## 5. `CHANGELOG.md`
+
+Con una sección "[Sin publicar]" por rama. Cada cambio, por pequeño que sea, lleva fecha, archivo, qué cambió y quién.
+
+## 6. `AGENTS.md`, si hay un segundo agente
+
+Un archivo corto que apunta a `CLAUDE.md` y a `MEMORIA/`, con lo que es propio de ese agente: su carpeta, su puerto y cómo firma en el changelog.
+
+El worktree del segundo agente, desde la carpeta principal:
+
+```bash
+git fetch --prune
+git worktree add --no-track -b <rama-del-agente> .worktrees/<agente> origin/main
+```
+
+Y `.worktrees/` en el `.gitignore`.
+
+## 7. Proteger `main`
+
+En GitHub, como administrador del repositorio:
+
+1. **Settings → Branches** (o **Settings → Rules → Rulesets**): una regla para `main` que exija PR antes de unir, exija los checks de la CI en verde y bloquee los force-push.
+2. **Settings → General → Pull Requests:** dejar activo "Allow merge commits" y desactivar "Allow squash merging" y "Allow rebase merging", para que cada merge conserve los commits de la rama.
+3. **La aprobación que GitHub autentica:** un archivo `.github/CODEOWNERS` que ponga los archivos técnicos a nombre del dueño y, en la regla de `main`, "Require review from Code Owners" y "Dismiss stale pull request approvals when new commits are pushed". La línea de la descripción del PR no autentica a nadie. GitHub no deja que el autor de un PR lo apruebe: si el agente abre los PR con la cuenta del dueño, el agente necesita su propia cuenta.
+
+## 8. La plantilla del PR y la CI
+
+`.github/pull_request_template.md`, con al menos:
+
+```markdown
+## Qué cambia
+
+## Pruebas
+- [ ] Suite local: <resultado>
+- [ ] CI: <resultado>
+
+## Revisión técnica
+- [ ] Revisión técnica aprobada por <dueño> (fecha: DD/MM/AAAA, commit: abc1234)
+```
+
+La línea de aprobación la marca solo el dueño.
+
+En los workflows de la CI que corren en cada PR, esto cancela la corrida anterior cuando entra un commit nuevo, para no pagar dos veces:
+
+```yaml
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+```
+
+La lista de archivos que exigen revisión técnica (por ejemplo, `.github/technical-paths.txt`) la puede usar un check aparte que compruebe la línea de aprobación y su commit. Ese check va en su propio workflow, que escucha también `edited`, para reevaluarse cuando el dueño marca la línea y cuando entra un commit nuevo; la suite de pruebas no escucha `edited`. El ejemplo está en `references/plantillas.md` de la skill, "Check de la línea de aprobación". La parte que limita el check a los PR que tocan archivos de la lista depende de cada repositorio y la skill no la trae.
+
+## 9. Varios computadores (opcional)
+
+En cada computador que no sea el principal, un gancho local marca los commits con el nombre del equipo. Se instala una vez por computador, desde la carpeta principal del clon, porque los worktrees comparten los ganchos del clon; el agente del worktree no lo instala. El script resuelve la ruta real del gancho y no pisa uno que ya exista:
+
+```sh
+hook=$(git rev-parse --git-path hooks/prepare-commit-msg)
+if [ -e "$hook" ]; then
+  echo "Ya existe $hook: agrégale a mano la línea de git interpret-trailers de abajo."
+else
+  mkdir -p "$(dirname "$hook")"
+  cat > "$hook" <<'EOF'
+#!/bin/sh
+case "$2" in merge|squash) exit 0 ;; esac
+git interpret-trailers --in-place --if-exists doNothing --trailer "Equipo: <nombre-del-equipo>" "$1"
+EOF
+  chmod +x "$hook"
+fi
+```
+
+Los detalles (worktrees, `core.hooksPath` y qué hacer si ya hay un gancho) están en `references/plantillas.md` de la skill, "Gancho de equipo". Después, `git log --grep "Equipo: <nombre-del-equipo>"` encuentra lo que se hizo desde ese computador.
+
+## 10. La primera sesión de trabajo
+
+```text
+Lee CLAUDE.md y MEMORIA/. Después: git fetch --prune, git worktree list y git status. Vamos a planear <el módulo>: lee la fuente original y pásame lo que dice, lo que hace hoy el código y las decisiones en lista. No programes hasta que te diga "<palabra>".
+```
+
+## Lista de comprobación
+
+- [ ] La skill instalada (`claude plugin list`).
+- [ ] `CLAUDE.md` con sus ocho secciones y las respuestas del dueño.
+- [ ] `MEMORIA/` con sus cuatro archivos.
+- [ ] `CHANGELOG.md` con "[Sin publicar]".
+- [ ] `AGENTS.md` y el worktree, si hay un segundo agente.
+- [ ] `main` protegida y solo merge commits.
+- [ ] La plantilla del PR con la línea de aprobación.
+- [ ] `CODEOWNERS` y revisión obligatoria de los dueños de código, si la aprobación tiene que ser autenticada.
+- [ ] La CI corriendo en cada PR, con cancelación de la corrida anterior.
+- [ ] El gancho de equipo en los computadores que no son el principal.

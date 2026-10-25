@@ -1,0 +1,21 @@
+{
+  "name": "mm-method",
+  "owner": {
+    "name": "Marcos Sánchez and Manuela García"
+  },
+  "metadata": {
+    "description": "Metodología para proyectos de software hechos con agentes de IA / A methodology for software projects built with AI agents.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "metodologia-agentes",
+      "description": "Metodología para proyectos de software hechos con agentes de IA, en español e inglés / A methodology for software projects built with AI agents, in Spanish and English.",
+      "version": "1.0.0",
+      "source": "./plugins/metodologia-agentes",
+      "author": {
+        "name": "Marcos Sánchez and Manuela García"
+      }
+    }
+  ]
+}
