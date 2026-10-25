@@ -101,6 +101,17 @@ Abre una sesión nueva después de instalar. En la CLI, menciona `$metodologia-a
 
 Los dos comandos de instalación se ejecutaron con éxito con Codex CLI 0.162.1 el 25/10/2026. Consulta el [alcance de las pruebas y la distribución](docs/es/codex.md). Los comandos instalan la rama predeterminada del catálogo.
 
+### Versión fija
+
+Los comandos anteriores instalan la rama predeterminada del catálogo, que cambia con cada merge. Para instalar una versión publicada, agrega el catálogo con su etiqueta; las etiquetas están en [Tags](https://github.com/MarcosSanchez7020/mm-method/tags):
+
+```bash
+claude plugin marketplace add MarcosSanchez7020/mm-method@v1.2.0
+codex plugin marketplace add MarcosSanchez7020/mm-method --ref v1.2.0
+```
+
+Después se instala igual que arriba (`claude plugin install metodologia-agentes@mm-method` o `codex plugin add metodologia-agentes@mm-method`). Los dos comandos se probaron el 25/10/2026 con Claude Code 2.1.296 y Codex CLI 0.162.1, con configuraciones nuevas y vacías: cada cliente registró la etiqueta, clonó su commit e instaló la 1.2.0. Para pasar a otra versión, quita el catálogo y vuelve a agregarlo con la otra etiqueta; `marketplace update` sobre un catálogo fijado no se probó.
+
 ## Actualizar
 
 ### Claude Code
