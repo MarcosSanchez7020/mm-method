@@ -4,6 +4,12 @@ Formato: una sección por versión, la más reciente arriba. Versionado semánti
 
 Format: one section per version, newest first. Semantic versioning: major when a rule changes meaning, minor when something is added, patch for wording fixes.
 
+## 1.2.1
+
+- El instalador del gancho de equipo lee el nombre con un here-doc citado: un apóstrofo u otro carácter del nombre ya no rompe el script ni ejecuta nada al instalar.
+
+- The machine hook installer reads the name with a quoted here-doc: an apostrophe or any other character in the name no longer breaks the script or runs anything at install time.
+
 ## 1.2.0
 
 - La skill se aplica solo si el usuario la pide o si el `CLAUDE.md` o el `AGENTS.md` del proyecto dice que la adoptó; la plantilla de `CLAUDE.md` trae la línea de adopción.

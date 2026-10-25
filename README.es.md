@@ -207,4 +207,4 @@ Con la 1.0.0, el mismo día, dos corridas del mismo comando dieron ~643 y ~456 t
 
 ## Versión y licencia
 
-Versión 1.2.0 (ver [CHANGELOG](CHANGELOG.md)). Licencia: MIT ([LICENSE](LICENSE)).
+Versión 1.2.1 (ver [CHANGELOG](CHANGELOG.md)). Licencia: MIT ([LICENSE](LICENSE)).

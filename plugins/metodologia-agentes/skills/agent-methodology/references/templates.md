@@ -184,7 +184,11 @@ jobs:
 It marks the commits made from a computer other than the main one. Git hooks belong to the whole clone: the main folder and its worktrees share them. So it is installed once per computer, from the main folder of the clone, and, if the owner decides so, by the person or the agent of that folder, never by the worktree agent, which does not write in the other's folder.
 
 ```sh
-git config machine.name '<machine-name>'
+name=$(cat <<'NAME'
+<machine-name>
+NAME
+)
+git config machine.name "$name"
 hook=$(git rev-parse --git-path hooks/prepare-commit-msg)
 if [ -e "$hook" ] || [ -L "$hook" ]; then
   echo "$hook exists: add the last two lines of the hook below to it by hand."
@@ -200,9 +204,9 @@ EOF
 fi
 ```
 
-- The name is stored in the clone's Git configuration (`git config machine.name`), which the main folder and its worktrees share. The hook reads it on each commit and never interprets it as code; to change it, `git config machine.name '<other>'` is enough.
+- The name goes on its own line, between `<<'NAME'` and `NAME`, and is stored as is, apostrophes, quotes or `$` included, in the clone's Git configuration (`git config machine.name`), which the main folder and its worktrees share. The only word that does not work as a name is `NAME`: it closes the block early and the name ends up empty. The hook reads it on each commit and never interprets it as code; to change it, repeat the first five lines of the script with the new name.
 - `git rev-parse --git-path` gives the real path of the hook. In a worktree, `.git` is a file and not a folder, so `.git/hooks/` does not work as a fixed path.
 - If the clone uses `core.hooksPath`, the path comes from that setting. If it is relative, Git resolves it in the working folder where the hook runs, so each worktree looks for its own copy; in that case, version the hook in that folder or use an absolute path.
 - If a `prepare-commit-msg` hook already exists, or a link with that name even if it is broken, it is not replaced: the last two lines are added to it by hand.
 - The hook adds `Machine: <machine-name>` as a commit trailer, and `git log --grep "Machine: <machine-name>"` finds what was done from that computer.
-- Tested with Git 2.55 and Git Bash 5.3 on Windows: a name with spaces, `$(...)`, backticks, double quotes or `$HOME` stays literal in the trailer and runs nothing; with no name configured, the commit has no trailer; an existing hook is not overwritten; a commit made in a worktree carries the trailer; and outside a repository the script fails without creating anything. The broken-link case was not tested: Windows does not allow creating symbolic links without privileges.
+- Tested with Git 2.55 and Git Bash 5.3 on Windows: a name with spaces, `$(...)`, backticks, double quotes, `$HOME`, an apostrophe or an apostrophe that tries to close the text and inject a command stays literal in the configuration and in the trailer, and runs nothing; with no name configured, the commit has no trailer; an existing hook is not overwritten; a commit made in a worktree carries the trailer; and outside a repository the script fails without creating anything. The broken-link case was not tested: Windows does not allow creating symbolic links without privileges.

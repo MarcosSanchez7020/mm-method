@@ -121,7 +121,11 @@ The list of files that require technical review (for example, `.github/technical
 On every computer other than the main one, a local hook marks the commits with the machine name. It is installed once per computer, from the main folder of the clone, because worktrees share the clone's hooks; the worktree agent does not install it. The script stores the name in the clone's Git configuration, which the hook reads on each commit, resolves the real path of the hook and does not overwrite an existing one, or a link with that name even if it is broken:
 
 ```sh
-git config machine.name '<machine-name>'
+name=$(cat <<'NAME'
+<machine-name>
+NAME
+)
+git config machine.name "$name"
 hook=$(git rev-parse --git-path hooks/prepare-commit-msg)
 if [ -e "$hook" ] || [ -L "$hook" ]; then
   echo "$hook exists: add the last two lines of the hook below to it by hand."

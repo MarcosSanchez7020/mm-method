@@ -184,7 +184,11 @@ jobs:
 Marca los commits hechos desde un computador que no es el principal. Los ganchos de Git son de todo el clon: los comparten la carpeta principal y sus worktrees. Por eso se instala una sola vez por computador, desde la carpeta principal del clon, y lo instala, si el dueño lo decide, la persona o el agente de esa carpeta, nunca el agente del worktree, que no escribe en la carpeta del otro.
 
 ```sh
-git config equipo.nombre '<nombre-del-equipo>'
+nombre=$(cat <<'NOMBRE'
+<nombre-del-equipo>
+NOMBRE
+)
+git config equipo.nombre "$nombre"
 hook=$(git rev-parse --git-path hooks/prepare-commit-msg)
 if [ -e "$hook" ] || [ -L "$hook" ]; then
   echo "Ya existe $hook: agrégale a mano las dos últimas líneas del gancho de abajo."
@@ -200,9 +204,9 @@ EOF
 fi
 ```
 
-- El nombre se guarda en la configuración de Git del clon (`git config equipo.nombre`), que comparten la carpeta principal y sus worktrees. El gancho lo lee al hacer cada commit y nunca lo interpreta como código; para cambiarlo basta `git config equipo.nombre '<otro>'`.
+- El nombre va en su propio renglón, entre `<<'NOMBRE'` y `NOMBRE`, y se guarda tal cual, con apóstrofos, comillas o `$` incluidos, en la configuración de Git del clon (`git config equipo.nombre`), que comparten la carpeta principal y sus worktrees. La única palabra que no sirve como nombre es `NOMBRE`: cierra el bloque antes de tiempo y el nombre queda vacío. El gancho lo lee al hacer cada commit y nunca lo interpreta como código; para cambiarlo, se repiten las cinco primeras líneas del script con el nombre nuevo.
 - `git rev-parse --git-path` da la ruta real del gancho. En un worktree, `.git` es un archivo y no una carpeta, así que `.git/hooks/` no sirve como ruta fija.
 - Si el clon usa `core.hooksPath`, la ruta sale de esa configuración. Si es relativa, Git la resuelve en la carpeta de trabajo donde corre el gancho, así que cada worktree busca su propia copia; en ese caso conviene versionar el gancho en esa carpeta o usar una ruta absoluta.
 - Si ya existe un gancho `prepare-commit-msg`, o un enlace con ese nombre aunque esté roto, no se reemplaza: se le agregan a mano las dos últimas líneas.
 - El gancho agrega `Equipo: <nombre-del-equipo>` como trailer del commit, y `git log --grep "Equipo: <nombre-del-equipo>"` encuentra lo que se hizo desde ese computador.
-- Probado con Git 2.55 y Git Bash 5.3 sobre Windows: un nombre con espacios, con `$(...)`, con comillas invertidas, con comillas dobles o con `$HOME` queda literal en el trailer y no ejecuta nada; sin nombre configurado, el commit sale sin trailer; un gancho que ya existe no se pisa; un commit hecho en un worktree lleva el trailer, y fuera de un repositorio el script falla sin crear nada. El caso del enlace roto no se probó: Windows no deja crear enlaces simbólicos sin privilegios.
+- Probado con Git 2.55 y Git Bash 5.3 sobre Windows: un nombre con espacios, con `$(...)`, con comillas invertidas, con comillas dobles, con `$HOME`, con un apóstrofo o con un apóstrofo que intenta cerrar el texto y meter una orden queda literal en la configuración y en el trailer, y no ejecuta nada; sin nombre configurado, el commit sale sin trailer; un gancho que ya existe no se pisa; un commit hecho en un worktree lleva el trailer, y fuera de un repositorio el script falla sin crear nada. El caso del enlace roto no se probó: Windows no deja crear enlaces simbólicos sin privilegios.

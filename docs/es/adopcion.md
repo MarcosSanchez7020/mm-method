@@ -121,7 +121,11 @@ La lista de archivos que exigen revisión técnica (por ejemplo, `.github/techni
 En cada computador que no sea el principal, un gancho local marca los commits con el nombre del equipo. Se instala una vez por computador, desde la carpeta principal del clon, porque los worktrees comparten los ganchos del clon; el agente del worktree no lo instala. El script guarda el nombre en la configuración de Git del clon, que el gancho lee en cada commit, resuelve la ruta real del gancho y no pisa uno que ya exista, ni un enlace con ese nombre aunque esté roto:
 
 ```sh
-git config equipo.nombre '<nombre-del-equipo>'
+nombre=$(cat <<'NOMBRE'
+<nombre-del-equipo>
+NOMBRE
+)
+git config equipo.nombre "$nombre"
 hook=$(git rev-parse --git-path hooks/prepare-commit-msg)
 if [ -e "$hook" ] || [ -L "$hook" ]; then
   echo "Ya existe $hook: agrégale a mano las dos últimas líneas del gancho de abajo."
