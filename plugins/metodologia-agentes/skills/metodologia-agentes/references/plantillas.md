@@ -161,7 +161,7 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           pattern='^- \[x\] Revisión técnica aprobada por [^()]+ \(fecha: [0-9]{2}/[0-9]{2}/[0-9]{4}, commit: ([0-9a-f]{40})\)$'
-          checked='^[[:space:]]*[-*+][[:space:]]+\[[xX]\][[:space:]]+Revisión técnica aprobada'
+          checked='\[[xX]\][[:space:]]+Revisión técnica aprobada'
           body=$(printf '%s\n' "$BODY" | tr -d '\r')
           lines=$(printf '%s\n' "$body" | grep -E "$pattern" || true)
           count=$(printf '%s' "$lines" | grep -c . || true)
@@ -174,11 +174,11 @@ jobs:
 ```
 
 - **Este check no autentica a nadie.** Comprueba el formato de la línea y que su commit sea el último del PR, pero cualquiera que pueda editar la descripción, también el autor del PR, puede escribirla. La aprobación que GitHub sí verifica es una revisión: un archivo `.github/CODEOWNERS` con los archivos técnicos y `/.github/` (el propio `CODEOWNERS` y los workflows) a nombre del dueño y, en la protección de `main`, revisión obligatoria de los dueños de código y descarte de las aprobaciones cuando entra un commit nuevo (`repositorio.md`). Si el equipo se queda solo con la línea, la declara como registro, no como control de acceso.
-- Acepta exactamente una línea de aprobación marcada y bien formada, comparada completa de principio a fin (también con finales de línea CRLF), con el SHA completo de 40 caracteres, y exige que ese SHA sea igual al último commit del PR. Falla si hay otra línea de aprobación marcada, bien o mal formada (también con sangría, con `*` o con `[X]`), si se agrega texto después de la línea en el mismo renglón o si el nombre tiene paréntesis.
+- Acepta exactamente una línea de aprobación marcada y bien formada, comparada completa de principio a fin (también con finales de línea CRLF), con el SHA completo de 40 caracteres, y exige que ese SHA sea igual al último commit del PR. Falla si hay otra línea de aprobación marcada, bien o mal formada: cuenta como marcada cualquier renglón con `[x]` o `[X]` seguido de "Revisión técnica aprobada", lleve antes sangría, `-`, `*`, un número o una cita. También falla si se agrega texto después de la línea en el mismo renglón o si el nombre tiene paréntesis.
 - Revisa texto, no Markdown: una línea dentro de un comentario HTML o de un bloque de código también cuenta. La fecha solo se valida como DD/MM/AAAA de dígitos, no como fecha real.
 - La descripción entra por una variable de entorno y no dentro del script, para que un texto del PR no pueda ejecutar comandos.
 - Así como está, aplica a todos los PR. Limitarlo a los que tocan archivos de la lista técnica exige consultar los archivos del PR en la API de GitHub; esa parte depende de cada repositorio y no está aquí.
-- Probado en Git Bash 5.3 sobre Windows con `bash --noprofile --norc -eo pipefail`, como corre GitHub Actions un paso con `shell: bash`, en diecinueve casos: la línea válida; sin marcar; el SHA abreviado; otro SHA; otro SHA con el mismo prefijo; texto agregado al final del renglón; un nombre con paréntesis; dos líneas válidas; una válida junto a otra marcada sin fecha, con sangría, con `*` o con `[X]`; finales de línea CRLF; un intento de inyección; la descripción vacía; el SHA en mayúsculas; la línea dentro de un comentario HTML; una fecha imposible, y texto en el renglón siguiente. El workflow completo no se ha corrido en GitHub.
+- Probado en Git Bash 5.3 sobre Windows con `bash --noprofile --norc -eo pipefail`, como corre GitHub Actions un paso con `shell: bash`, en veintiún casos: la línea válida; sin marcar; el SHA abreviado; otro SHA; otro SHA con el mismo prefijo; texto agregado al final del renglón; un nombre con paréntesis; dos líneas válidas; una válida junto a otra marcada sin fecha, con sangría, con `*`, con `[X]`, numerada o en una cita; finales de línea CRLF; un intento de inyección; la descripción vacía; el SHA en mayúsculas; la línea dentro de un comentario HTML; una fecha imposible, y texto en el renglón siguiente. El workflow completo no se ha corrido en GitHub.
 ## Gancho de equipo
 
 Marca los commits hechos desde un computador que no es el principal. Los ganchos de Git son de todo el clon: los comparten la carpeta principal y sus worktrees. Por eso se instala una sola vez por computador, desde la carpeta principal del clon, y lo instala, si el dueño lo decide, la persona o el agente de esa carpeta, nunca el agente del worktree, que no escribe en la carpeta del otro.

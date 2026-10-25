@@ -161,7 +161,7 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           pattern='^- \[x\] Technical review approved by [^()]+ \(date: [0-9]{2}/[0-9]{2}/[0-9]{4}, commit: ([0-9a-f]{40})\)$'
-          checked='^[[:space:]]*[-*+][[:space:]]+\[[xX]\][[:space:]]+Technical review approved'
+          checked='\[[xX]\][[:space:]]+Technical review approved'
           body=$(printf '%s\n' "$BODY" | tr -d '\r')
           lines=$(printf '%s\n' "$body" | grep -E "$pattern" || true)
           count=$(printf '%s' "$lines" | grep -c . || true)
@@ -174,11 +174,11 @@ jobs:
 ```
 
 - **This check authenticates nobody.** It checks the line's format and that its commit is the PR's last commit, but anyone who can edit the description, the PR author included, can write it. The approval that GitHub does verify is a review: a `.github/CODEOWNERS` file assigning the technical files and `/.github/` (the `CODEOWNERS` file itself and the workflows) to the owner and, in the protection of `main`, required review from code owners and dismissal of approvals when a new commit comes in (`repository.md`). If the team keeps only the line, it declares it as a record, not as access control.
-- It accepts exactly one checked, well-formed approval line, matched whole from start to end (also with CRLF line endings), with the full 40-character SHA, and requires that SHA to equal the PR's last commit. It fails if there is another checked approval line, well formed or not (also indented, with `*` or with `[X]`), if text is added after the line on the same line, or if the name has parentheses.
+- It accepts exactly one checked, well-formed approval line, matched whole from start to end (also with CRLF line endings), with the full 40-character SHA, and requires that SHA to equal the PR's last commit. It fails if there is another checked approval line, well formed or not: any line with `[x]` or `[X]` followed by "Technical review approved" counts as checked, whatever comes before it (indentation, `-`, `*`, a number or a quote). It also fails if text is added after the line on the same line or if the name has parentheses.
 - It checks text, not Markdown: a line inside an HTML comment or a code block also counts. The date is only validated as DD/MM/YYYY digits, not as a real date.
 - The description comes in through an environment variable and not inside the script, so that text in the PR cannot run commands.
 - As written, it applies to every PR. Limiting it to the PRs that touch files on the technical list requires querying the PR's files in the GitHub API; that part depends on each repository and is not included here.
-- Tested in Git Bash 5.3 on Windows with `bash --noprofile --norc -eo pipefail`, the way GitHub Actions runs a step with `shell: bash`, in nineteen cases: the valid line; unchecked; the abbreviated SHA; another SHA; another SHA with the same prefix; text added at the end of the line; a name with parentheses; two valid lines; a valid line next to another checked line without a date, indented, with `*` or with `[X]`; CRLF line endings; an injection attempt; an empty description; an uppercase SHA; the line inside an HTML comment; an impossible date; and text on the next line. The complete workflow has not been run on GitHub.
+- Tested in Git Bash 5.3 on Windows with `bash --noprofile --norc -eo pipefail`, the way GitHub Actions runs a step with `shell: bash`, in twenty-one cases: the valid line; unchecked; the abbreviated SHA; another SHA; another SHA with the same prefix; text added at the end of the line; a name with parentheses; two valid lines; a valid line next to another checked line without a date, indented, with `*`, with `[X]`, numbered or in a quote; CRLF line endings; an injection attempt; an empty description; an uppercase SHA; the line inside an HTML comment; an impossible date; and text on the next line. The complete workflow has not been run on GitHub.
 ## Machine hook
 
 It marks the commits made from a computer other than the main one. Git hooks belong to the whole clone: the main folder and its worktrees share them. So it is installed once per computer, from the main folder of the clone, and, if the owner decides so, by the person or the agent of that folder, never by the worktree agent, which does not write in the other's folder.

@@ -7,7 +7,7 @@ Format: one section per version, newest first. Semantic versioning: major when a
 ## 1.2.0
 
 - La skill se aplica solo si el usuario la pide o si el `CLAUDE.md` o el `AGENTS.md` del proyecto dice que la adoptó; la plantilla de `CLAUDE.md` trae la línea de adopción.
-- El check de la línea de aprobación exige el SHA completo del último commit, con igualdad exacta, y falla si hay otra línea de aprobación marcada.
+- El check de la línea de aprobación exige el SHA completo del último commit, con igualdad exacta, y falla si hay otra línea de aprobación marcada, también numerada o en una cita.
 - El gancho de equipo lee el nombre de la configuración de Git del clon y no reemplaza un gancho existente ni un enlace con ese nombre, aunque esté roto.
 - El puente `AGENTS.md` indica leer la memoria del proyecto como dato, no como instrucción.
 - Al cerrar una sesión, el commit y el push van solo si el dueño los pidió o el proyecto los acordó en `CLAUDE.md`.
@@ -21,7 +21,7 @@ Format: one section per version, newest first. Semantic versioning: major when a
 - Costo en contexto medido de nuevo sobre la 1.2.0, en dos configuraciones de Claude Code.
 
 - The skill applies only if the user asks for it or the project's `CLAUDE.md` or `AGENTS.md` says it adopted it; the `CLAUDE.md` template carries the adoption line.
-- The approval line check requires the full SHA of the last commit, with exact equality, and fails if there is another checked approval line.
+- The approval line check requires the full SHA of the last commit, with exact equality, and fails if there is another checked approval line, also numbered or in a quote.
 - The machine hook reads the name from the clone's Git configuration and does not replace an existing hook or a link with that name, even if it is broken.
 - The `AGENTS.md` bridge says to read the project memory as data, not instructions.
 - When closing a session, commit and push happen only if the owner asked for them or the project agreed on them in `CLAUDE.md`.
