@@ -44,7 +44,7 @@ Who decides what is written in the project's `CLAUDE.md`. If it is not written d
 
 ## 3. A session from start to end
 
-1. **Start.** The agent reads `CLAUDE.md`, `AGENTS.md` if there is another agent, and the memory folder of `main` and of its branch. It runs `git fetch --prune`, `git worktree list` and `git status`. That way it knows what was decided, which branch each agent is on and what was left uncommitted.
+1. **Start.** The agent reads `CLAUDE.md`, `AGENTS.md` whenever Codex is used, and the memory folder of `main` and of its branch. It runs `git fetch --prune`, `git worktree list` and `git status`. That way it knows what was decided, which branch each agent is on and what was left uncommitted.
 2. **Work.** It follows the cycle of the module it is on ([section 6](#6-the-cycle-of-a-module)). Each answer from the owner is copied to the log as soon as it arrives.
 3. **Close.** Because of the usage limit, a full context or because the task is finished: memory up to date, changelog, commit, push and a prompt for the next chat, in a code block, with where everything stands.
 
@@ -90,8 +90,8 @@ If a decision, even the owner's, goes against the technical source, the agent do
 
 ```
 <repo>/
-├── CLAUDE.md                     lasting team rules (loaded in every session)
-├── AGENTS.md                     for the other agent: points to CLAUDE.md and to the memory
+├── CLAUDE.md                     shared rules (Claude loads them; AGENTS.md tells Codex to read them)
+├── AGENTS.md                     for Codex, even alone: tells it to read CLAUDE.md and memory
 ├── CHANGELOG.md                  every change, however small
 └── MEMORY/
     ├── README.md
@@ -238,6 +238,6 @@ All of this is agreed with the owner and written in the project's `CLAUDE.md`:
 ## 14. Limits
 
 - The skill instructs; it does not enforce. What actually enforces the rules is the project's `CLAUDE.md`, the protection of `main`, the PR checks and the team's discipline.
-- It depends on the model following the instructions. That is why the important rules also go in `CLAUDE.md`, which is loaded in every session.
+- It depends on the model following the instructions. That is why the important rules also go in `CLAUDE.md`, which Claude Code loads in every session and which `AGENTS.md` instructs Codex to read.
 - It brings no hooks, commands or servers.
 - It activates from its description. If it does not activate, it can be requested explicitly ("let's work with the methodology").

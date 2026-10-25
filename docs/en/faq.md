@@ -2,7 +2,7 @@
 
 ## Does it work without a second agent?
 
-Yes. Everything in the methodology works with Claude Code alone. The `two-agents.md` reference is only read when there are two agents in the same repository.
+Yes. Everything in the methodology works with Claude Code or Codex as the only agent. With Codex, include `AGENTS.md` even when there is no second agent. The `two-agents.md` reference is only read when there are two agents in the same repository.
 
 ## Does it work if there is no separate "technical owner"?
 
@@ -34,6 +34,8 @@ Ask for it: "let's work with the methodology", or name the skill (`metodologia-a
 
 ## Why are there two skills with the same content?
 
+Both clients use the same package folders; there is no separate copy for Codex and Claude. The figures below are historical, for mm-method 1.0.0 in Claude Code, not measurements of 1.1.0 or Codex.
+
 One in Spanish and one in English. Each has its description in its own language, so the agent uses the one that matches the conversation. According to two runs of `claude plugin details` with Claude Code 2.1.296, on 25/10/2026, together they cost ~456 to ~643 tokens of context per session, and each one ~1,300 to ~1,900 when activated; the cause of the difference between the two runs has not been determined (the command and the details are in the [README](../../README.md#context-cost)).
 
 ## Does it run anything on its own?
@@ -45,6 +47,8 @@ No. It has no hooks, commands or servers. It is instructions for the agent.
 The methodology forbids putting them in the repository, in memory and in the changelog, and forbids the agent from handling tokens or passwords: if a panel with credentials has to be touched, a person does it.
 
 ## How is it updated?
+
+In Codex, follow the [installation and update guide](codex.md). In Claude Code:
 
 ```bash
 claude plugin marketplace update mm-method

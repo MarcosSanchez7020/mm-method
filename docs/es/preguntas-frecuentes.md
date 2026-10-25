@@ -2,7 +2,7 @@
 
 ## ¿Sirve sin un segundo agente?
 
-Sí. Todo lo de la metodología funciona con Claude Code solo. La referencia `dos-agentes.md` solo se lee cuando hay dos agentes en el mismo repositorio.
+Sí. Todo lo de la metodología funciona con Claude Code o Codex como único agente. Con Codex se incluye `AGENTS.md` aunque no haya segundo agente. La referencia `dos-agentes.md` solo se lee cuando hay dos agentes en el mismo repositorio.
 
 ## ¿Sirve si no hay un "dueño técnico" aparte?
 
@@ -34,6 +34,8 @@ Pidiéndola: "trabajemos con la metodología", o nombrando la skill (`metodologi
 
 ## ¿Por qué hay dos skills con el mismo contenido?
 
+Los dos clientes usan las mismas carpetas del paquete; no hay una copia para Codex y otra para Claude. Las cifras siguientes son históricas, de mm-method 1.0.0 en Claude Code, no mediciones de 1.1.0 ni de Codex.
+
 Una en español y otra en inglés. Cada una tiene su descripción en su idioma, así que el agente usa la que corresponde a la conversación. Según dos corridas de `claude plugin details` con Claude Code 2.1.296, el 25/10/2026, juntas cuestan de ~456 a ~643 tokens de contexto por sesión, y cada una de ~1.300 a ~1.900 cuando se activa; la causa de la diferencia entre las dos corridas no se ha determinado (el comando y el detalle están en el [README](../../README.es.md#costo-en-contexto)).
 
 ## ¿Ejecuta algo por su cuenta?
@@ -45,6 +47,8 @@ No. No trae hooks, comandos ni servidores. Son instrucciones para el agente.
 La metodología prohíbe ponerlos en el repositorio, en la memoria y en el changelog, y prohíbe que el agente maneje tokens o contraseñas: si hay que tocar un panel con credenciales, lo hace una persona.
 
 ## ¿Cómo se actualiza?
+
+En Codex, sigue la [guía de instalación y actualización](codex.md). En Claude Code:
 
 ```bash
 claude plugin marketplace update mm-method

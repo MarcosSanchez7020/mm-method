@@ -1,6 +1,6 @@
 ---
 name: agent-methodology
-description: Methodology for software projects built with AI agents (Claude Code alone, or together with another agent such as Codex) in which a person who is the owner makes the technical decisions. Covers how to ask for decisions in a list with the recommended option, project memory inside the repository, planning before coding, independent tests with their own oracle, mutation, adversarial reviews, branches and PRs with the owner's approval, and care of context and usage. Use it when starting or organizing such a project, when writing or updating CLAUDE.md, AGENTS.md or the project memory, when coordinating two agents in the same repository, when passing decisions to the owner, when planning, coding, reviewing or closing a module or a PR, and when the user asks to work "with the methodology" even without naming it. English version; the Spanish version is metodologia-agentes.
+description: Methodology for software projects built with AI agents (Claude Code or Codex, alone or together) in which a person who is the owner makes the technical decisions. Covers how to ask for decisions in a list with the recommended option, project memory inside the repository, planning before coding, independent tests with their own oracle, mutation, adversarial reviews, branches and PRs with the owner's approval, and care of context and usage. Use it when starting or organizing such a project, when writing or updating CLAUDE.md, AGENTS.md or the project memory, when coordinating two agents in the same repository, when passing decisions to the owner, when planning, coding, reviewing or closing a module or a PR, and when the user asks to work "with the methodology" even without naming it. English version; the Spanish version is metodologia-agentes.
 ---
 
 # Methodology for projects with agents
@@ -8,6 +8,12 @@ description: Methodology for software projects built with AI agents (Claude Code
 A way of working for projects in which one or two agents plan, code and review, and a person (the owner) decides. It fits best when the product has to comply with a technical source (a code, a specification, a standard) and when the work lasts weeks and goes through several chats and several computers.
 
 The underlying idea: the agent does the heavy work, but nothing important happens without the owner deciding it, nothing is lost between chats and nothing is taken as true without being verified.
+
+## Claude Code and Codex
+
+Both clients use this same skill folder. Follow the user's explicit instructions and the project's applicable rules; this skill does not expand the task or authorize unrelated actions. Use only tools available in the current client. Claude-specific commands and optional plugins are examples for Claude Code, not Codex commands or dependencies.
+
+Keep shared project rules in `CLAUDE.md`. Whenever Codex is used, even alone, provide an `AGENTS.md` that instructs it to read `CLAUDE.md` and the project's memory folder (`references/templates.md`). Do not assume Codex loads `CLAUDE.md` automatically. Read the two-agent reference only when two agents work in the repository.
 
 ## What is not negotiable
 
@@ -22,7 +28,7 @@ The underlying idea: the agent does the heavy work, but nothing important happen
 
 ## At the start of each session
 
-1. Read `CLAUDE.md` (and `AGENTS.md` if there is another agent) and the memory folder, the one on `main` and the one on the branch being worked on.
+1. Read `CLAUDE.md` (and `AGENTS.md` whenever Codex is used) and the memory folder, the one on `main` and the one on the branch being worked on.
 2. `git fetch --prune`, `git worktree list` and `git status`: see which branch each agent is on and what is uncommitted.
 3. Identify who is working (`git config user.name`); if it is not clear, ask before writing in the changelog or making a commit.
 4. Continue only with what falls to this agent.
@@ -65,7 +71,7 @@ Read only the reference for the task in front of you:
 
 ## Adopting it in a new project
 
-1. Write with the owner a `CLAUDE.md` with: the project's source of truth, what is not negotiable, who decides what, how the team works, each module's cycle and the repository rules. The skeleton is in `references/templates.md`.
+1. Write with the owner a `CLAUDE.md` with: the project's source of truth, what is not negotiable, who decides what, how the team works, each module's cycle and the repository rules. The skeleton is in `references/templates.md`. If Codex is used, also create the `AGENTS.md` bridge shown there.
 2. Create the memory folder with its `README.md`, the team log, the machines file and the owner's answers.
 3. Create `CHANGELOG.md` with its "[Unreleased]" section.
 4. Protect `main` and create the PR template with the owner's approval line.

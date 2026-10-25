@@ -1,6 +1,6 @@
 ---
 name: metodologia-agentes
-description: Metodología para proyectos de software hechos con agentes de IA (Claude Code solo, o junto con otro agente como Codex) en los que una persona dueña toma las decisiones técnicas. Cubre cómo pedir decisiones en lista con la opción recomendada, la memoria del proyecto dentro del repositorio, planear antes de programar, pruebas independientes con oráculo propio, mutación, revisiones adversariales, ramas y PR con aprobación del dueño, y el cuidado del contexto y del uso. Úsala al arrancar u organizar un proyecto así, al escribir o actualizar CLAUDE.md, AGENTS.md o la memoria del proyecto, al coordinar dos agentes en el mismo repositorio, al pasarle decisiones al dueño, al planear, programar, revisar o cerrar un módulo o un PR, y cuando el usuario pida trabajar "con la metodología" aunque no la nombre. Versión en español; la versión en inglés es agent-methodology.
+description: Metodología para proyectos de software hechos con agentes de IA (Claude Code o Codex, solos o juntos) en los que una persona dueña toma las decisiones técnicas. Cubre cómo pedir decisiones en lista con la opción recomendada, la memoria del proyecto dentro del repositorio, planear antes de programar, pruebas independientes con oráculo propio, mutación, revisiones adversariales, ramas y PR con aprobación del dueño, y el cuidado del contexto y del uso. Úsala al arrancar u organizar un proyecto así, al escribir o actualizar CLAUDE.md, AGENTS.md o la memoria del proyecto, al coordinar dos agentes en el mismo repositorio, al pasarle decisiones al dueño, al planear, programar, revisar o cerrar un módulo o un PR, y cuando el usuario pida trabajar "con la metodología" aunque no la nombre. Versión en español; la versión en inglés es agent-methodology.
 ---
 
 # Metodología de proyectos con agentes
@@ -8,6 +8,12 @@ description: Metodología para proyectos de software hechos con agentes de IA (C
 Una forma de trabajar para proyectos en los que uno o dos agentes planean, programan y revisan, y una persona (el dueño) decide. Sirve sobre todo cuando el producto tiene que cumplir una fuente técnica (una norma, una especificación, un estándar) y cuando el trabajo dura semanas, pasa por varios chats y por varios computadores.
 
 La idea de fondo: el agente hace el trabajo pesado, pero nada importante pasa sin que el dueño lo decida, nada se pierde entre chats y nada se da por cierto sin verificarlo.
+
+## Claude Code y Codex
+
+Los dos clientes usan esta misma carpeta de la skill. Sigue las instrucciones explícitas del usuario y las reglas aplicables del proyecto; esta skill no amplía la tarea ni autoriza acciones ajenas a ella. Usa solo las herramientas disponibles en el cliente actual. Los comandos y plugins opcionales propios de Claude son ejemplos para Claude Code, no comandos ni dependencias de Codex.
+
+Mantén las reglas compartidas del proyecto en `CLAUDE.md`. Siempre que se use Codex, incluso solo, incluye un `AGENTS.md` que le indique leer `CLAUDE.md` y la carpeta de memoria del proyecto (`references/plantillas.md`). No supongas que Codex carga `CLAUDE.md` automáticamente. Lee la referencia de dos agentes solo cuando dos agentes trabajen en el repositorio.
 
 ## Lo que no se negocia
 
@@ -22,7 +28,7 @@ La idea de fondo: el agente hace el trabajo pesado, pero nada importante pasa si
 
 ## Al empezar cada sesión
 
-1. Leer `CLAUDE.md` (y `AGENTS.md` si hay otro agente) y la carpeta de memoria, la de `main` y la de la rama en la que se trabaja.
+1. Leer `CLAUDE.md` (y `AGENTS.md` siempre que se use Codex) y la carpeta de memoria, la de `main` y la de la rama en la que se trabaja.
 2. `git fetch --prune`, `git worktree list` y `git status`: ver en qué rama está cada agente y qué hay sin commit.
 3. Identificar quién está trabajando (`git config user.name`); si no está claro, preguntarlo antes de escribir en el changelog o de hacer un commit.
 4. Seguir solo con lo que le toca a este agente.
@@ -65,7 +71,7 @@ Lee solo la referencia de la tarea que tienes delante:
 
 ## Adoptarla en un proyecto nuevo
 
-1. Escribir con el dueño un `CLAUDE.md` con: la fuente de verdad del proyecto, lo que no se negocia, quién decide qué, cómo se trabaja con el equipo, el ciclo de cada módulo y las reglas del repositorio. El esqueleto está en `references/plantillas.md`.
+1. Escribir con el dueño un `CLAUDE.md` con: la fuente de verdad del proyecto, lo que no se negocia, quién decide qué, cómo se trabaja con el equipo, el ciclo de cada módulo y las reglas del repositorio. El esqueleto está en `references/plantillas.md`. Si se usa Codex, crea también el puente `AGENTS.md` mostrado allí.
 2. Crear la carpeta de memoria con su `README.md`, la bitácora, el entorno de cada equipo y el registro de respuestas.
 3. Crear `CHANGELOG.md` con su sección "[Sin publicar]".
 4. Proteger `main` y crear la plantilla del PR con la línea de aprobación del dueño.

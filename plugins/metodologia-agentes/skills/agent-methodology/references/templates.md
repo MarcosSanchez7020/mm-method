@@ -55,6 +55,17 @@ Any team rule that must always hold is written in this file, with its changelog 
 - The routine after each merge.
 ```
 
+## `AGENTS.md` whenever Codex is used
+
+Use this bridge even if Codex is the only agent. Adapt the memory path to the project; keep the shared rules in `CLAUDE.md`.
+
+```markdown
+# Project instructions
+
+Before working, read and follow `CLAUDE.md` and the project memory in `MEMORY/`.
+The shared rules live in `CLAUDE.md`; do not duplicate them here.
+```
+
 ## `MEMORY/README.md`
 
 ```markdown

@@ -4,17 +4,30 @@ From zero to a project that works with the methodology. Steps 2 to 6 can be done
 
 ## Before you start
 
-- Claude Code with plugin support (`claude plugin --help` lists the commands).
+- Claude Code or Codex with plugin support (`claude plugin --help` or `codex plugin --help` lists the commands).
 - Git, and the project repository on GitHub.
 - Optional: the GitHub CLI (`gh`), so the agent can open the PRs.
 - Optional: a second agent (for example, Codex) if two will work on the project.
 
 ## 1. Install the skill
 
+Choose your client; if you use both, install the plugin in each one.
+
+Claude Code:
+
 ```bash
 claude plugin marketplace add MarcosSanchez7020/mm-method
 claude plugin install metodologia-agentes@mm-method
 ```
+
+Codex:
+
+```bash
+codex plugin marketplace add MarcosSanchez7020/mm-method
+codex plugin add metodologia-agentes@mm-method
+```
+
+Start a new session. See the [Codex guide](codex.md) for tested versions and limitations.
 
 ## 2. Ask the agent to set up the project
 
@@ -55,11 +68,11 @@ With four files: `README.md`, `team_log.md`, `machines.md` and `owner_answers.md
 
 With one "[Unreleased]" section per branch. Every change, however small, carries a date, the file, what changed and who made it.
 
-## 6. `AGENTS.md`, if there is a second agent
+## 6. `AGENTS.md` whenever Codex is used
 
-A short file that points to `CLAUDE.md` and to `MEMORY/`, with what is specific to that agent: its folder, its port and how it signs in the changelog.
+Even if Codex is the only agent, create an `AGENTS.md` that instructs it to read `CLAUDE.md` and `MEMORY/`. The skeleton is in `references/templates.md`. Shared rules stay in `CLAUDE.md`; do not duplicate them. If `AGENTS.md` already exists, integrate the bridge while preserving its instructions.
 
-The second agent's worktree, from the main folder:
+Only if two agents work together, create the second agent's worktree from the main folder:
 
 ```bash
 git fetch --prune
@@ -132,11 +145,11 @@ Read CLAUDE.md and MEMORY/. Then: git fetch --prune, git worktree list and git s
 
 ## Checklist
 
-- [ ] The skill installed (`claude plugin list`).
+- [ ] The skill installed in the chosen client (`claude plugin list` or `codex plugin list --marketplace mm-method --json`).
 - [ ] `CLAUDE.md` with its eight sections and the owner's answers.
 - [ ] `MEMORY/` with its four files.
 - [ ] `CHANGELOG.md` with "[Unreleased]".
-- [ ] `AGENTS.md` and the worktree, if there is a second agent.
+- [ ] `AGENTS.md` if Codex is used, even alone; a separate worktree if there is a second agent.
 - [ ] `main` protected and merge commits only.
 - [ ] The PR template with the approval line.
 - [ ] `CODEOWNERS` and required code owner review, if the approval has to be authenticated.
