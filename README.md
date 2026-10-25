@@ -1,160 +1,160 @@
 # mm-method
 
-**Español** · [English](README.en.md)
+**English** · [Español](README.es.md)
 
-Una metodología de trabajo, empaquetada como plugin de Claude Code, para proyectos de software hechos con agentes de IA en los que una persona (el dueño) toma las decisiones técnicas. Funciona con Claude Code solo o junto con un segundo agente, como Codex, en el mismo repositorio.
+A working methodology, packaged as a Claude Code plugin, for software projects built with AI agents in which one person (the owner) makes the technical decisions. It works with Claude Code alone or together with a second agent, such as Codex, in the same repository.
 
-No es una librería ni una herramienta que automatice algo: es un conjunto de instrucciones que el agente sigue. Lo que la hace cumplir en un proyecto es el `CLAUDE.md` del proyecto, la protección de `main` y la disciplina del equipo. La skill le enseña al agente cómo trabajar y le da los esqueletos para montarlo.
+It is not a library or a tool that automates anything: it is a set of instructions that the agent follows. What makes it hold in a project is the project's `CLAUDE.md`, the protection of `main` and the team's discipline. The skill teaches the agent how to work and gives it the skeletons to set it up.
 
-## El problema que resuelve
+## The problem it solves
 
-Un agente de código es rápido y capaz, pero en un proyecto que dura semanas aparecen los mismos problemas:
+A coding agent is fast and capable, but in a project that lasts weeks the same problems show up:
 
-- toma decisiones técnicas que no le tocaban, o las toma en silencio;
-- lo que se decidió en un chat no llega al siguiente, ni a otro computador, ni al otro agente;
-- programa antes de que esté claro qué hay que programar;
-- escribe pruebas que copian lo que da el código, y por eso siempre pasan;
-- dos agentes en el mismo repo se pisan las ramas y los archivos;
-- se gastan el contexto y el uso semanal sin que nadie lo note.
+- it makes technical decisions that were not up to it, or makes them silently;
+- what was decided in one chat does not reach the next one, or another computer, or the other agent;
+- it codes before it is clear what needs to be coded;
+- it writes tests that copy what the code returns, and so they always pass;
+- two agents in the same repo step on each other's branches and files;
+- context and weekly usage are spent without anyone noticing.
 
-La metodología responde a cada uno con una regla concreta y con el porqué de esa regla.
+The methodology answers each one with a concrete rule and the reason for that rule.
 
-## Los principios
+## The principles
 
-| # | Principio | Por qué |
+| # | Principle | Why |
 |---|---|---|
-| 1 | La fuente técnica prima (la norma, la especificación) | Si el producto tiene que cumplir algo, ninguna decisión, ni del dueño ni del agente, la contradice en silencio. |
-| 2 | Supuestos y limitaciones a la vista | El usuario del producto y el dueño saben siempre qué se supuso y qué no se revisa. |
-| 3 | El dueño decide; el agente propone | Las decisiones se piden en lista numerada, con la opción recomendada en negrilla, y se registran textuales. |
-| 4 | Primero se planea, después se programa | No se escribe código del producto sin la palabra del dueño. |
-| 5 | Nada inventado | Ni datos, ni resultados, ni capacidades; los valores esperados de una prueba no se copian del código. |
-| 6 | La memoria vive en el repositorio | Viaja con Git a otros chats, computadores y agentes. |
-| 7 | Sin relleno | En la interfaz, los textos, los documentos y el código. |
+| 1 | The technical source prevails (the standard, the specification) | If the product has to comply with something, no decision, neither the owner's nor the agent's, contradicts it silently. |
+| 2 | Assumptions and limitations in plain sight | The product's user and the owner always know what was assumed and what is not checked. |
+| 3 | The owner decides; the agent proposes | Decisions are requested in a numbered list, with the recommended option in bold, and are recorded verbatim. |
+| 4 | First plan, then code | No product code is written without the owner's word. |
+| 5 | Nothing made up | No data, results or capabilities; a test's expected values are not copied from the code. |
+| 6 | Memory lives in the repository | It travels with Git to other chats, computers and agents. |
+| 7 | No filler | In the interface, the texts, the documents and the code. |
 
-## Qué trae
+## What it includes
 
 ```
-mm-method/                            catálogo de plugins (este repositorio)
+mm-method/                            plugin catalog (this repository)
 ├── .claude-plugin/marketplace.json
 ├── plugins/metodologia-agentes/
 │   ├── .claude-plugin/plugin.json
 │   └── skills/
-│       ├── metodologia-agentes/       la skill en español
+│       ├── metodologia-agentes/       the skill in Spanish
 │       │   ├── SKILL.md
-│       │   └── references/            10 referencias que se leen solo cuando hacen falta
-│       └── agent-methodology/         la misma skill en inglés
-├── docs/es/  ·  docs/en/              la documentación
+│       │   └── references/            10 references, read only when needed
+│       └── agent-methodology/         the same skill in English
+├── docs/es/  ·  docs/en/              the documentation
 ├── CHANGELOG.md
-└── README.md  ·  README.en.md
+└── README.md (English)  ·  README.es.md (Español)
 ```
 
-Las dos skills tienen el mismo contenido. Cada una tiene su descripción en su idioma, así que el agente usa la que corresponde a la conversación.
+Both skills have the same content. Each has its description in its own language, so the agent uses the one that matches the conversation.
 
-| Referencia | De qué trata |
+| Reference | What it covers |
 |---|---|
-| `decisiones.md` | Cómo se piden, se registran y se escriben las decisiones |
-| `memoria.md` | La memoria en el repo, el changelog, varias personas y varios computadores |
-| `ciclo.md` | El ciclo de un módulo, de la planeación al PR |
-| `pruebas-y-revisiones.md` | Pruebas independientes, mutación y revisiones adversariales |
-| `dos-agentes.md` | Dos agentes en el mismo repositorio |
-| `repositorio.md` | Ramas, PR, changelog, CI y la rutina después del merge |
-| `costos.md` | Contexto, uso y tamaño de los workflows |
-| `estilo.md` | Sin relleno |
-| `plantillas.md` | Esqueletos de `CLAUDE.md`, la memoria, el changelog y los prompts |
-| `seguridad.md` | Secretos, protecciones, contenido de afuera, CI y servidores |
+| `decisions.md` | How decisions are requested, recorded and written down |
+| `memory.md` | Memory in the repo, the changelog, several people and several computers |
+| `cycle.md` | The cycle of a module, from planning to the PR |
+| `testing-and-reviews.md` | Independent tests, mutation and adversarial reviews |
+| `two-agents.md` | Two agents in the same repository |
+| `repository.md` | Branches, PRs, changelog, CI and the routine after the merge |
+| `costs.md` | Context, usage and workflow size |
+| `style.md` | No filler |
+| `templates.md` | Skeletons for `CLAUDE.md`, the memory, the changelog and the prompts |
+| `security.md` | Secrets, protections, outside content, CI and servers |
 
-## Instalar
+## Install
 
-Necesitas Claude Code con soporte de plugins. El repositorio es su propio catálogo:
+You need Claude Code with plugin support. The repository is its own catalog:
 
 ```bash
 claude plugin marketplace add MarcosSanchez7020/mm-method
 claude plugin install metodologia-agentes@mm-method
 ```
 
-El alcance por defecto es `user`: la skill queda disponible en todos tus proyectos. Para dejarla solo en un proyecto, usa `--scope project` (se guarda en la configuración del proyecto) o `--scope local`.
+The default scope is `user`: the skill is available in all your projects. To keep it in one project only, use `--scope project` (it is saved in the project's configuration) or `--scope local`.
 
-Dentro de Claude Code también sirve: `/plugin marketplace add MarcosSanchez7020/mm-method` y después `/plugin install metodologia-agentes@mm-method`.
+Inside Claude Code this also works: `/plugin marketplace add MarcosSanchez7020/mm-method` and then `/plugin install metodologia-agentes@mm-method`.
 
-Para comprobar que quedó instalada:
+To check that it is installed:
 
 ```bash
 claude plugin list
 ```
 
-## Actualizar
+## Update
 
 ```bash
 claude plugin marketplace update mm-method
 claude plugin update metodologia-agentes@mm-method
 ```
 
-Los cambios se aplican al reiniciar Claude Code. Qué cambió en cada versión está en el [CHANGELOG](CHANGELOG.md).
+Changes apply when Claude Code is restarted. What changed in each version is in the [CHANGELOG](CHANGELOG.md).
 
-## Desinstalar
+## Uninstall
 
-Con el mismo alcance que usaste al instalar; sin `--scope`, `uninstall` usa `user`:
+With the same scope you used to install; without `--scope`, `uninstall` uses `user`:
 
 ```bash
 claude plugin uninstall metodologia-agentes@mm-method --scope user
 ```
 
-Cambia `user` por `project` o `local` si la instalaste así. Quita el catálogo solo cuando ninguna otra instalación ni otro plugin lo use; sin `--scope`, `marketplace remove` lo quita de todos los alcances:
+Change `user` to `project` or `local` if you installed it that way. Remove the catalog only when no other installation or plugin uses it; without `--scope`, `marketplace remove` removes it from every scope:
 
 ```bash
 claude plugin marketplace remove mm-method
 ```
 
-## Arranque rápido
+## Quick start
 
-La skill se activa sola cuando la conversación trata de lo que cubre. También se puede pedir explícitamente:
+The skill activates on its own when the conversation is about what it covers. It can also be requested explicitly:
 
-- "Vamos a montar este repo con la metodología: escribamos el `CLAUDE.md` y la carpeta de memoria."
-- "Antes de programar esto, pásame las decisiones en lista."
-- "Planea el módulo de facturación con la metodología; no programes hasta que te diga."
-- "Voy a trabajar con Codex en este mismo repo. ¿Cómo nos organizamos?"
-- "Cierra el chat: deja la memoria al día y dame el prompt para el siguiente."
+- "Let's set up this repo with the methodology: let's write the `CLAUDE.md` and the memory folder."
+- "Before coding this, give me the decisions as a list."
+- "Plan the invoicing module with the methodology; don't write code until I tell you."
+- "I'm going to work with Codex in this same repo. How do we organize?"
+- "Close the chat: bring the memory up to date and give me the prompt for the next one."
 
-Para adoptarla en un proyecto, sigue la [guía de adopción](docs/es/adopcion.md).
+To adopt it in a project, follow the [adoption guide](docs/en/adoption.md).
 
-## Documentación
+## Documentation
 
-- [Guía completa](docs/es/guia.md): cómo funciona cada parte y por qué.
-- [Guía de adopción](docs/es/adopcion.md): de cero a un proyecto montado, paso a paso.
-- [Preguntas frecuentes](docs/es/preguntas-frecuentes.md).
+- [Complete guide](docs/en/guide.md): how each part works and why.
+- [Adoption guide](docs/en/adoption.md): from zero to a set-up project, step by step.
+- [Frequently asked questions](docs/en/faq.md).
 
-## Costo en contexto
+## Context cost
 
-Estimación de `claude plugin details` con Claude Code 2.1.296, el 25/10/2026, sobre la versión 1.0.0, desde la raíz de este repositorio:
+Estimate from `claude plugin details` with Claude Code 2.1.296, on 25/10/2026, for version 1.0.0, from the root of this repository:
 
 ```bash
 claude --plugin-dir plugins/metodologia-agentes plugin details metodologia-agentes
 ```
 
-| Qué | Tokens aproximados |
+| What | Approximate tokens |
 |---|---|
-| Las dos descripciones, cargadas en cada sesión | ~643 |
-| Una skill al activarse (su `SKILL.md`) | ~1.900 |
-| Cada referencia, solo si el agente la lee | depende de la referencia |
+| The two descriptions, loaded in every session | ~643 |
+| One skill when activated (its `SKILL.md`) | ~1,900 |
+| Each reference, only if the agent reads it | depends on the reference |
 
-La herramienta advierte que son estimaciones y que pueden diferir del uso real. Una revisión independiente corrió el mismo comando, con la misma versión de Claude Code y el mismo día, y obtuvo ~456 tokens fijos y ~1.300 por activación. La causa de la diferencia no se ha determinado: tómalas como un rango (de ~456 a ~643 fijos y de ~1.300 a ~1.900 por activación), no como una cifra exacta.
+The tool warns that these are estimates and may differ from actual usage. An independent review ran the same command, with the same Claude Code version on the same day, and got ~456 always-on tokens and ~1,300 per activation. The cause of the difference has not been determined: take them as a range (~456 to ~643 always-on and ~1,300 to ~1,900 per activation), not as an exact figure.
 
-## Límites
+## Limits
 
-- La skill instruye; no obliga. Si el `CLAUDE.md` del proyecto dice otra cosa, manda el proyecto.
-- No trae hooks, comandos ni servidores: no ejecuta nada por su cuenta.
-- No incluye ni instala otros plugins. claude-mem se sugiere como complemento opcional, con sus ajustes, en la referencia `memoria.md`.
-- La protección de `main`, los checks obligatorios y la plantilla del PR se configuran en el repositorio del proyecto; la guía de adopción dice cómo, pero la skill no los crea sola.
-- Está pensada para Claude Code. Con otro agente, la parte que le toca está en `AGENTS.md`, que apunta a las mismas reglas.
+- The skill instructs; it does not enforce. If the project's `CLAUDE.md` says otherwise, the project prevails.
+- It ships no hooks, commands or servers: it runs nothing on its own.
+- It does not include or install other plugins. claude-mem is suggested as an optional complement, with its adjustments, in the `memory.md` reference.
+- The protection of `main`, the required checks and the PR template are configured in the project's repository; the adoption guide says how, but the skill does not create them by itself.
+- It is designed for Claude Code. With another agent, the part that applies to it is in `AGENTS.md`, which points to the same rules.
 
-## Seguridad
+## Security
 
-- **Qué instala.** Solo texto: dos skills en Markdown. No trae hooks, comandos, agentes, servidores MCP ni LSP, ni código que corra al instalarlo (`claude plugin details`: 2 skills, 0 agentes, 0 hooks, 0 servidores MCP, 0 LSP).
-- **Los ejemplos de código** de la documentación (el check de aprobación y el gancho de equipo) solo corren si alguien los copia y los ejecuta. Léelos antes, como cualquier código de terceros.
-- **Lo que manda la metodología:** no subir secretos ni datos personales, no desactivar protecciones, tratar como dato (no como instrucción) lo que llega de afuera, CI con `pull_request` y permisos mínimos, y servidores locales en `127.0.0.1`. Todo está en la referencia `seguridad.md` de la skill.
-- **Repositorio público, memoria pública.** Si adoptas la metodología en un repo público, su carpeta de memoria, el registro de las respuestas del dueño y el changelog también son públicos.
-- **claude-mem** es opcional y de terceros: guarda datos de las sesiones en el computador y los envía al proveedor de IA que se le configure. Revísalo antes de instalarlo.
+- **What it installs.** Text only: two skills in Markdown. It ships no hooks, commands, agents, MCP or LSP servers, and no code that runs on installation (`claude plugin details`: 2 skills, 0 agents, 0 hooks, 0 MCP servers, 0 LSP).
+- **The code examples** in the documentation (the approval check and the machine hook) only run if someone copies and runs them. Read them first, like any third-party code.
+- **What the methodology requires:** no secrets or personal data in the repo, no disabling protections, treating outside content as data (not instructions), CI with `pull_request` and minimum permissions, and local servers on `127.0.0.1`. It is all in the skill's `security.md` reference.
+- **Public repository, public memory.** If you adopt the methodology in a public repo, its memory folder, the owner's recorded answers and the changelog are public too.
+- **claude-mem** is optional and third-party: it stores session data on the computer and sends it to the AI provider configured for it. Review it before installing it.
 
-## Versión y licencia
+## Version and license
 
-Versión 1.0.0 (ver [CHANGELOG](CHANGELOG.md)). Licencia: MIT ([LICENSE](LICENSE)).
+Version 1.0.0 (see [CHANGELOG](CHANGELOG.md)). License: MIT ([LICENSE](LICENSE)).
