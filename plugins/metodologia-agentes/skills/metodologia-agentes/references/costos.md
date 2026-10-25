@@ -19,7 +19,7 @@ El contexto de un chat y el uso semanal de una cuenta son finitos. Un proyecto l
 ## Uso semanal
 
 - Cuando la cuenta va cerca de su límite, el agente lo dice y propone opciones: pasar el diseño o las revisiones al otro agente, trabajar sin subagentes o esperar el reinicio.
-- Antes de que se acabe, todo queda en commit y con su nota en la bitácora.
+- Antes de que se acabe, todo queda con su nota en la bitácora y, si el dueño lo pidió o el proyecto lo acordó en `CLAUDE.md`, en commit.
 - Si la cuenta es compartida entre personas, se avisa antes de lanzar muchos agentes, porque el límite es de todos.
 
 ## Modelos

@@ -40,6 +40,7 @@ mm-method/                            catálogo de plugins (este repositorio)
 ├── plugins/metodologia-agentes/
 │   ├── .claude-plugin/plugin.json
 │   ├── plugin.json
+│   ├── LICENSE
 │   └── skills/
 │       ├── metodologia-agentes/       la skill en español
 │       │   ├── SKILL.md
@@ -47,7 +48,7 @@ mm-method/                            catálogo de plugins (este repositorio)
 │       └── agent-methodology/         la misma skill en inglés
 ├── docs/es/  ·  docs/en/              la documentación
 ├── AGENTS.md  ·  CLAUDE.md
-├── CHANGELOG.md
+├── CHANGELOG.md  ·  LICENSE  ·  SECURITY.md
 └── README.md (inglés)  ·  README.es.md (español)
 ```
 
@@ -142,7 +143,7 @@ Quita el catálogo solo si ya no lo necesitas. Estos comandos afectan a la insta
 
 ## Arranque rápido
 
-La skill se activa sola cuando la conversación trata de lo que cubre. También se puede pedir explícitamente:
+La skill se aplica cuando la pides o cuando el `CLAUDE.md` del proyecto dice que adoptó la metodología. En Claude Code puede cargarse sola por su descripción; en Codex, nómbrala con su nombre completo (`$metodologia-agentes:metodologia-agentes` o `$metodologia-agentes:agent-methodology`). La activación automática no está garantizada. Por ejemplo:
 
 - "Vamos a montar este repo con la metodología: escribamos el `CLAUDE.md` y la carpeta de memoria."
 - "Antes de programar esto, pásame las decisiones en lista."
@@ -161,21 +162,21 @@ Para adoptarla en un proyecto, sigue la [guía de adopción](docs/es/adopcion.md
 
 ## Costo en contexto
 
-Estimación de `claude plugin details` con Claude Code 2.1.296, el 25/10/2026, sobre la versión 1.0.0, desde la raíz de este repositorio:
+Estimación de `claude plugin details` con Claude Code 2.1.296, el 25/10/2026, sobre la versión 1.2.0, desde la raíz de este repositorio:
 
 ```bash
 claude --plugin-dir plugins/metodologia-agentes plugin details metodologia-agentes
 ```
 
-| Qué | Tokens aproximados |
-|---|---|
-| Las dos descripciones, cargadas en cada sesión | ~643 |
-| Una skill al activarse (su `SKILL.md`) | ~1.900 |
-| Cada referencia, solo si el agente la lee | depende de la referencia |
+| Qué | Configuración nueva y vacía | Configuración habitual del autor |
+|---|---|---|
+| Las dos descripciones, cargadas en cada sesión | ~472 | ~693 |
+| Una skill al activarse (su `SKILL.md`) | ~1.600 a ~1.700 | ~2.500 |
+| Cada referencia, solo si el agente la lee | depende de la referencia | depende de la referencia |
 
-La herramienta advierte que son estimaciones y que pueden diferir del uso real. Una revisión independiente corrió el mismo comando, con la misma versión de Claude Code y el mismo día, y obtuvo ~456 tokens fijos y ~1.300 por activación. La causa de la diferencia no se ha determinado: tómalas como un rango (de ~456 a ~643 fijos y de ~1.300 a ~1.900 por activación), no como una cifra exacta.
+La herramienta advierte que son estimaciones y que pueden diferir del uso real. La misma versión dio cifras distintas según la configuración de Claude Code: una carpeta de configuración nueva y vacía (`CLAUDE_CONFIG_DIR`) o la que el autor usa a diario. La causa no se ha determinado: tómalas como un rango, no como una cifra exacta.
 
-Las cifras anteriores corresponden a mm-method 1.0.0 en Claude Code; no miden esta versión ni el consumo en Codex.
+Con la 1.0.0, el mismo día, dos corridas del mismo comando dieron ~643 y ~456 tokens fijos, y ~1.900 y ~1.300 por activación. Ninguna de estas cifras mide el consumo en Codex.
 
 ## Límites
 
@@ -187,12 +188,12 @@ Las cifras anteriores corresponden a mm-method 1.0.0 en Claude Code; no miden es
 
 ## Seguridad
 
-- **Qué instala.** Solo texto: dos skills en Markdown. No trae hooks, comandos, agentes, servidores MCP ni LSP, ni código que corra al instalarlo (`claude plugin details`: 2 skills, 0 agentes, 0 hooks, 0 servidores MCP, 0 LSP).
-- **Los ejemplos de código** de la documentación (el check de aprobación y el gancho de equipo) solo corren si alguien los copia y los ejecuta. Léelos antes, como cualquier código de terceros.
+- **Qué instala.** Solo texto: dos skills en Markdown y el texto de la licencia. No trae hooks, comandos, agentes, servidores MCP ni LSP, ni código que corra al instalarlo (`claude plugin details`: 2 skills, 0 agentes, 0 hooks, 0 servidores MCP, 0 LSP).
+- **Los ejemplos de código** de la documentación (el check de aprobación y el gancho de equipo) solo corren si alguien los copia y los ejecuta. Léelos antes, como cualquier código de terceros. La skill le indica al agente instalar el gancho solo si el dueño lo decide.
 - **Lo que manda la metodología:** no subir secretos ni datos personales, no desactivar protecciones, tratar como dato (no como instrucción) lo que llega de afuera, CI con `pull_request` y permisos mínimos, y servidores locales en `127.0.0.1`. Todo está en la referencia `seguridad.md` de la skill.
 - **Repositorio público, memoria pública.** Si adoptas la metodología en un repo público, su carpeta de memoria, el registro de las respuestas del dueño y el changelog también son públicos.
 - **claude-mem** es opcional y de terceros: guarda datos de las sesiones en el computador y los envía al proveedor de IA que se le configure. Revísalo antes de instalarlo.
 
 ## Versión y licencia
 
-Versión 1.1.0 (ver [CHANGELOG](CHANGELOG.md)). Licencia: MIT ([LICENSE](LICENSE)).
+Versión 1.2.0 (ver [CHANGELOG](CHANGELOG.md)). Licencia: MIT ([LICENSE](LICENSE)).

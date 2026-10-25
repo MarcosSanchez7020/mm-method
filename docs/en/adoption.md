@@ -87,7 +87,7 @@ On GitHub, as repository administrator:
 
 1. **Settings → Branches** (or **Settings → Rules → Rulesets**): a rule for `main` that requires a PR before merging, requires the CI checks to be green and blocks force-pushes.
 2. **Settings → General → Pull Requests:** leave "Allow merge commits" enabled and disable "Allow squash merging" and "Allow rebase merging", so that each merge keeps the branch's commits.
-3. **The approval that GitHub authenticates:** a `.github/CODEOWNERS` file assigning the technical files to the owner and, in the rule for `main`, "Require review from Code Owners" and "Dismiss stale pull request approvals when new commits are pushed". The line in the PR description authenticates nobody. GitHub does not let a PR's author approve it: if the agent opens PRs with the owner's account, the agent needs its own account.
+3. **The approval that GitHub authenticates:** a `.github/CODEOWNERS` file assigning the technical files and `/.github/` (the `CODEOWNERS` file itself and the workflows) to the owner and, in the rule for `main`, "Require review from Code Owners" and "Dismiss stale pull request approvals when new commits are pushed". The line in the PR description authenticates nobody. GitHub does not let a PR's author approve it: if the agent opens PRs with the owner's account, the agent needs its own account.
 
 ## 8. The PR template and the CI
 
@@ -101,7 +101,7 @@ On GitHub, as repository administrator:
 - [ ] CI: <result>
 
 ## Technical review
-- [ ] Technical review approved by <owner> (date: DD/MM/YYYY, commit: abc1234)
+- [ ] Technical review approved by <owner> (date: DD/MM/YYYY, commit: <full SHA of the last commit>)
 ```
 
 Only the owner checks the approval line.
@@ -118,18 +118,20 @@ The list of files that require technical review (for example, `.github/technical
 
 ## 9. Several computers (optional)
 
-On every computer other than the main one, a local hook marks the commits with the machine name. It is installed once per computer, from the main folder of the clone, because worktrees share the clone's hooks; the worktree agent does not install it. The script resolves the real path of the hook and does not overwrite an existing one:
+On every computer other than the main one, a local hook marks the commits with the machine name. It is installed once per computer, from the main folder of the clone, because worktrees share the clone's hooks; the worktree agent does not install it. The script stores the name in the clone's Git configuration, which the hook reads on each commit, resolves the real path of the hook and does not overwrite an existing one, or a link with that name even if it is broken:
 
 ```sh
+git config machine.name '<machine-name>'
 hook=$(git rev-parse --git-path hooks/prepare-commit-msg)
-if [ -e "$hook" ]; then
-  echo "$hook exists: add the git interpret-trailers line below to it by hand."
+if [ -e "$hook" ] || [ -L "$hook" ]; then
+  echo "$hook exists: add the last two lines of the hook below to it by hand."
 else
   mkdir -p "$(dirname "$hook")"
   cat > "$hook" <<'EOF'
 #!/bin/sh
 case "$2" in merge|squash) exit 0 ;; esac
-git interpret-trailers --in-place --if-exists doNothing --trailer "Machine: <machine-name>" "$1"
+name=$(git config --get machine.name) || exit 0
+git interpret-trailers --in-place --if-exists doNothing --trailer "Machine: $name" "$1"
 EOF
   chmod +x "$hook"
 fi

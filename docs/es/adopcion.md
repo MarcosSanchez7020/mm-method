@@ -87,7 +87,7 @@ En GitHub, como administrador del repositorio:
 
 1. **Settings → Branches** (o **Settings → Rules → Rulesets**): una regla para `main` que exija PR antes de unir, exija los checks de la CI en verde y bloquee los force-push.
 2. **Settings → General → Pull Requests:** dejar activo "Allow merge commits" y desactivar "Allow squash merging" y "Allow rebase merging", para que cada merge conserve los commits de la rama.
-3. **La aprobación que GitHub autentica:** un archivo `.github/CODEOWNERS` que ponga los archivos técnicos a nombre del dueño y, en la regla de `main`, "Require review from Code Owners" y "Dismiss stale pull request approvals when new commits are pushed". La línea de la descripción del PR no autentica a nadie. GitHub no deja que el autor de un PR lo apruebe: si el agente abre los PR con la cuenta del dueño, el agente necesita su propia cuenta.
+3. **La aprobación que GitHub autentica:** un archivo `.github/CODEOWNERS` que ponga los archivos técnicos y `/.github/` (el propio `CODEOWNERS` y los workflows) a nombre del dueño y, en la regla de `main`, "Require review from Code Owners" y "Dismiss stale pull request approvals when new commits are pushed". La línea de la descripción del PR no autentica a nadie. GitHub no deja que el autor de un PR lo apruebe: si el agente abre los PR con la cuenta del dueño, el agente necesita su propia cuenta.
 
 ## 8. La plantilla del PR y la CI
 
@@ -101,7 +101,7 @@ En GitHub, como administrador del repositorio:
 - [ ] CI: <resultado>
 
 ## Revisión técnica
-- [ ] Revisión técnica aprobada por <dueño> (fecha: DD/MM/AAAA, commit: abc1234)
+- [ ] Revisión técnica aprobada por <dueño> (fecha: DD/MM/AAAA, commit: <SHA completo del último commit>)
 ```
 
 La línea de aprobación la marca solo el dueño.
@@ -118,18 +118,20 @@ La lista de archivos que exigen revisión técnica (por ejemplo, `.github/techni
 
 ## 9. Varios computadores (opcional)
 
-En cada computador que no sea el principal, un gancho local marca los commits con el nombre del equipo. Se instala una vez por computador, desde la carpeta principal del clon, porque los worktrees comparten los ganchos del clon; el agente del worktree no lo instala. El script resuelve la ruta real del gancho y no pisa uno que ya exista:
+En cada computador que no sea el principal, un gancho local marca los commits con el nombre del equipo. Se instala una vez por computador, desde la carpeta principal del clon, porque los worktrees comparten los ganchos del clon; el agente del worktree no lo instala. El script guarda el nombre en la configuración de Git del clon, que el gancho lee en cada commit, resuelve la ruta real del gancho y no pisa uno que ya exista, ni un enlace con ese nombre aunque esté roto:
 
 ```sh
+git config equipo.nombre '<nombre-del-equipo>'
 hook=$(git rev-parse --git-path hooks/prepare-commit-msg)
-if [ -e "$hook" ]; then
-  echo "Ya existe $hook: agrégale a mano la línea de git interpret-trailers de abajo."
+if [ -e "$hook" ] || [ -L "$hook" ]; then
+  echo "Ya existe $hook: agrégale a mano las dos últimas líneas del gancho de abajo."
 else
   mkdir -p "$(dirname "$hook")"
   cat > "$hook" <<'EOF'
 #!/bin/sh
 case "$2" in merge|squash) exit 0 ;; esac
-git interpret-trailers --in-place --if-exists doNothing --trailer "Equipo: <nombre-del-equipo>" "$1"
+nombre=$(git config --get equipo.nombre) || exit 0
+git interpret-trailers --in-place --if-exists doNothing --trailer "Equipo: $nombre" "$1"
 EOF
   chmod +x "$hook"
 fi

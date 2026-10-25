@@ -25,6 +25,8 @@ Each answer from the owner is added to the record (`MEMORY/owner_answers.md`) at
 2. The owner's words as spoken, colloquial parts included, in a quote block.
 3. In parentheses, how the answer is read and **what was not said**.
 
+If the repository is public, this record is public too (`security.md`).
+
 If the owner answered with a text the agent proposed (a button, a suggested reply), that is stated. That way nobody confuses the agent's wording with the owner's.
 
 Why so literal: weeks later, when a new chat or the other agent needs to know why something is the way it is, the quote settles the question without interpretation.
