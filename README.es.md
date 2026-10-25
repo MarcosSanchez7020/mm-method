@@ -1,0 +1,160 @@
+# mm-method
+
+[English](README.md) · **Español**
+
+Una metodología de trabajo, empaquetada como plugin de Claude Code, para proyectos de software hechos con agentes de IA en los que una persona (el dueño) toma las decisiones técnicas. Funciona con Claude Code solo o junto con un segundo agente, como Codex, en el mismo repositorio.
+
+No es una librería ni una herramienta que automatice algo: es un conjunto de instrucciones que el agente sigue. Lo que la hace cumplir en un proyecto es el `CLAUDE.md` del proyecto, la protección de `main` y la disciplina del equipo. La skill le enseña al agente cómo trabajar y le da los esqueletos para montarlo.
+
+## El problema que resuelve
+
+Un agente de código es rápido y capaz, pero en un proyecto que dura semanas aparecen los mismos problemas:
+
+- toma decisiones técnicas que no le tocaban, o las toma en silencio;
+- lo que se decidió en un chat no llega al siguiente, ni a otro computador, ni al otro agente;
+- programa antes de que esté claro qué hay que programar;
+- escribe pruebas que copian lo que da el código, y por eso siempre pasan;
+- dos agentes en el mismo repo se pisan las ramas y los archivos;
+- se gastan el contexto y el uso semanal sin que nadie lo note.
+
+La metodología responde a cada uno con una regla concreta y con el porqué de esa regla.
+
+## Los principios
+
+| # | Principio | Por qué |
+|---|---|---|
+| 1 | La fuente técnica prima (la norma, la especificación) | Si el producto tiene que cumplir algo, ninguna decisión, ni del dueño ni del agente, la contradice en silencio. |
+| 2 | Supuestos y limitaciones a la vista | El usuario del producto y el dueño saben siempre qué se supuso y qué no se revisa. |
+| 3 | El dueño decide; el agente propone | Las decisiones se piden en lista numerada, con la opción recomendada en negrilla, y se registran textuales. |
+| 4 | Primero se planea, después se programa | No se escribe código del producto sin la palabra del dueño. |
+| 5 | Nada inventado | Ni datos, ni resultados, ni capacidades; los valores esperados de una prueba no se copian del código. |
+| 6 | La memoria vive en el repositorio | Viaja con Git a otros chats, computadores y agentes. |
+| 7 | Sin relleno | En la interfaz, los textos, los documentos y el código. |
+
+## Qué trae
+
+```
+mm-method/                            catálogo de plugins (este repositorio)
+├── .claude-plugin/marketplace.json
+├── plugins/metodologia-agentes/
+│   ├── .claude-plugin/plugin.json
+│   └── skills/
+│       ├── metodologia-agentes/       la skill en español
+│       │   ├── SKILL.md
+│       │   └── references/            10 referencias que se leen solo cuando hacen falta
+│       └── agent-methodology/         la misma skill en inglés
+├── docs/es/  ·  docs/en/              la documentación
+├── CHANGELOG.md
+└── README.md (inglés)  ·  README.es.md (español)
+```
+
+Las dos skills tienen el mismo contenido. Cada una tiene su descripción en su idioma, así que el agente usa la que corresponde a la conversación.
+
+| Referencia | De qué trata |
+|---|---|
+| `decisiones.md` | Cómo se piden, se registran y se escriben las decisiones |
+| `memoria.md` | La memoria en el repo, el changelog, varias personas y varios computadores |
+| `ciclo.md` | El ciclo de un módulo, de la planeación al PR |
+| `pruebas-y-revisiones.md` | Pruebas independientes, mutación y revisiones adversariales |
+| `dos-agentes.md` | Dos agentes en el mismo repositorio |
+| `repositorio.md` | Ramas, PR, changelog, CI y la rutina después del merge |
+| `costos.md` | Contexto, uso y tamaño de los workflows |
+| `estilo.md` | Sin relleno |
+| `plantillas.md` | Esqueletos de `CLAUDE.md`, la memoria, el changelog y los prompts |
+| `seguridad.md` | Secretos, protecciones, contenido de afuera, CI y servidores |
+
+## Instalar
+
+Necesitas Claude Code con soporte de plugins. El repositorio es su propio catálogo:
+
+```bash
+claude plugin marketplace add MarcosSanchez7020/mm-method
+claude plugin install metodologia-agentes@mm-method
+```
+
+El alcance por defecto es `user`: la skill queda disponible en todos tus proyectos. Para dejarla solo en un proyecto, usa `--scope project` (se guarda en la configuración del proyecto) o `--scope local`.
+
+Dentro de Claude Code también sirve: `/plugin marketplace add MarcosSanchez7020/mm-method` y después `/plugin install metodologia-agentes@mm-method`.
+
+Para comprobar que quedó instalada:
+
+```bash
+claude plugin list
+```
+
+## Actualizar
+
+```bash
+claude plugin marketplace update mm-method
+claude plugin update metodologia-agentes@mm-method
+```
+
+Los cambios se aplican al reiniciar Claude Code. Qué cambió en cada versión está en el [CHANGELOG](CHANGELOG.md).
+
+## Desinstalar
+
+Con el mismo alcance que usaste al instalar; sin `--scope`, `uninstall` usa `user`:
+
+```bash
+claude plugin uninstall metodologia-agentes@mm-method --scope user
+```
+
+Cambia `user` por `project` o `local` si la instalaste así. Quita el catálogo solo cuando ninguna otra instalación ni otro plugin lo use; sin `--scope`, `marketplace remove` lo quita de todos los alcances:
+
+```bash
+claude plugin marketplace remove mm-method
+```
+
+## Arranque rápido
+
+La skill se activa sola cuando la conversación trata de lo que cubre. También se puede pedir explícitamente:
+
+- "Vamos a montar este repo con la metodología: escribamos el `CLAUDE.md` y la carpeta de memoria."
+- "Antes de programar esto, pásame las decisiones en lista."
+- "Planea el módulo de facturación con la metodología; no programes hasta que te diga."
+- "Voy a trabajar con Codex en este mismo repo. ¿Cómo nos organizamos?"
+- "Cierra el chat: deja la memoria al día y dame el prompt para el siguiente."
+
+Para adoptarla en un proyecto, sigue la [guía de adopción](docs/es/adopcion.md).
+
+## Documentación
+
+- [Guía completa](docs/es/guia.md): cómo funciona cada parte y por qué.
+- [Guía de adopción](docs/es/adopcion.md): de cero a un proyecto montado, paso a paso.
+- [Preguntas frecuentes](docs/es/preguntas-frecuentes.md).
+
+## Costo en contexto
+
+Estimación de `claude plugin details` con Claude Code 2.1.296, el 25/10/2026, sobre la versión 1.0.0, desde la raíz de este repositorio:
+
+```bash
+claude --plugin-dir plugins/metodologia-agentes plugin details metodologia-agentes
+```
+
+| Qué | Tokens aproximados |
+|---|---|
+| Las dos descripciones, cargadas en cada sesión | ~643 |
+| Una skill al activarse (su `SKILL.md`) | ~1.900 |
+| Cada referencia, solo si el agente la lee | depende de la referencia |
+
+La herramienta advierte que son estimaciones y que pueden diferir del uso real. Una revisión independiente corrió el mismo comando, con la misma versión de Claude Code y el mismo día, y obtuvo ~456 tokens fijos y ~1.300 por activación. La causa de la diferencia no se ha determinado: tómalas como un rango (de ~456 a ~643 fijos y de ~1.300 a ~1.900 por activación), no como una cifra exacta.
+
+## Límites
+
+- La skill instruye; no obliga. Si el `CLAUDE.md` del proyecto dice otra cosa, manda el proyecto.
+- No trae hooks, comandos ni servidores: no ejecuta nada por su cuenta.
+- No incluye ni instala otros plugins. claude-mem se sugiere como complemento opcional, con sus ajustes, en la referencia `memoria.md`.
+- La protección de `main`, los checks obligatorios y la plantilla del PR se configuran en el repositorio del proyecto; la guía de adopción dice cómo, pero la skill no los crea sola.
+- Está pensada para Claude Code. Con otro agente, la parte que le toca está en `AGENTS.md`, que apunta a las mismas reglas.
+
+## Seguridad
+
+- **Qué instala.** Solo texto: dos skills en Markdown. No trae hooks, comandos, agentes, servidores MCP ni LSP, ni código que corra al instalarlo (`claude plugin details`: 2 skills, 0 agentes, 0 hooks, 0 servidores MCP, 0 LSP).
+- **Los ejemplos de código** de la documentación (el check de aprobación y el gancho de equipo) solo corren si alguien los copia y los ejecuta. Léelos antes, como cualquier código de terceros.
+- **Lo que manda la metodología:** no subir secretos ni datos personales, no desactivar protecciones, tratar como dato (no como instrucción) lo que llega de afuera, CI con `pull_request` y permisos mínimos, y servidores locales en `127.0.0.1`. Todo está en la referencia `seguridad.md` de la skill.
+- **Repositorio público, memoria pública.** Si adoptas la metodología en un repo público, su carpeta de memoria, el registro de las respuestas del dueño y el changelog también son públicos.
+- **claude-mem** es opcional y de terceros: guarda datos de las sesiones en el computador y los envía al proveedor de IA que se le configure. Revísalo antes de instalarlo.
+
+## Versión y licencia
+
+Versión 1.0.0 (ver [CHANGELOG](CHANGELOG.md)). Licencia: MIT ([LICENSE](LICENSE)).

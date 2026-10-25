@@ -4,6 +4,12 @@ Formato: una sección por versión, la más reciente arriba. Versionado semánti
 
 Format: one section per version, newest first. Semantic versioning: major when a rule changes meaning, minor when something is added, patch for wording fixes.
 
+## 1.0.1
+
+- El README en inglés pasa a ser `README.md`, el que GitHub muestra por defecto; el español pasa a `README.es.md`. Sin cambios en las skills.
+
+- The English README becomes `README.md`, the one GitHub shows by default; the Spanish one moves to `README.es.md`. No changes to the skills.
+
 ## 1.0.0
 
 - Primera versión. Dos skills con el mismo contenido: `metodologia-agentes` (español) y `agent-methodology` (inglés), cada una con su `SKILL.md` y diez referencias.

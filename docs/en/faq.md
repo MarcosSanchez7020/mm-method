@@ -34,7 +34,7 @@ Ask for it: "let's work with the methodology", or name the skill (`metodologia-a
 
 ## Why are there two skills with the same content?
 
-One in Spanish and one in English. Each has its description in its own language, so the agent uses the one that matches the conversation. According to two runs of `claude plugin details` with Claude Code 2.1.296, on 25/10/2026, together they cost ~456 to ~643 tokens of context per session, and each one ~1,300 to ~1,900 when activated; the cause of the difference between the two runs has not been determined (the command and the details are in the [README](../../README.en.md#context-cost)).
+One in Spanish and one in English. Each has its description in its own language, so the agent uses the one that matches the conversation. According to two runs of `claude plugin details` with Claude Code 2.1.296, on 25/10/2026, together they cost ~456 to ~643 tokens of context per session, and each one ~1,300 to ~1,900 when activated; the cause of the difference between the two runs has not been determined (the command and the details are in the [README](../../README.md#context-cost)).
 
 ## Does it run anything on its own?
 
