@@ -1,6 +1,6 @@
 # Soporte de Codex
 
-mm-method 1.2.0 empaqueta las mismas skills en español e inglés para Codex y Claude Code. Solo contiene instrucciones. No agrega scripts de instalación, ganchos, servidores, conectores ni requisitos de autenticación. El catálogo declara `policy.authentication` porque el formato lo exige; el plugin no tiene conectores, así que no hay nada que autenticar.
+mm-method 1.2.1 empaqueta las mismas skills en español e inglés para Codex y Claude Code. Solo contiene instrucciones. No agrega scripts de instalación, ganchos, servidores, conectores ni requisitos de autenticación. El catálogo declara `policy.authentication` porque el formato lo exige; el plugin no tiene conectores, así que no hay nada que autenticar.
 
 ## Instalar e invocar
 

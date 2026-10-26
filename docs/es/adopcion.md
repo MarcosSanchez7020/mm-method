@@ -118,11 +118,22 @@ La lista de archivos que exigen revisión técnica (por ejemplo, `.github/techni
 
 ## 9. Varios computadores (opcional)
 
-En cada computador que no sea el principal, un gancho local marca los commits con el nombre del equipo. Se instala una vez por computador, desde la carpeta principal del clon, porque los worktrees comparten los ganchos del clon; el agente del worktree no lo instala. El script guarda el nombre en la configuración de Git del clon, que el gancho lee en cada commit, resuelve la ruta real del gancho y no pisa uno que ya exista, ni un enlace con ese nombre aunque esté roto:
+En cada computador que no sea el principal, un gancho local marca los commits con el nombre del equipo. Se instala una vez por computador, desde la carpeta principal del clon, porque los worktrees comparten los ganchos del clon; el agente del worktree no lo instala. El script pide el nombre y lo guarda, como dato, en la configuración de Git del clon, que el gancho lee en cada commit; resuelve la ruta real del gancho y no pisa uno que ya exista, ni un enlace con ese nombre aunque esté roto. Se corre el bloque completo y, cuando pide el nombre, se escribe en una línea, sin comillas:
 
 ```sh
-git config equipo.nombre '<nombre-del-equipo>'
-hook=$(git rev-parse --git-path hooks/prepare-commit-msg)
+(
+printf '%s' 'Nombre del equipo (una línea): '
+if IFS= read -r nombre; then
+  nombre=${nombre%"$(printf '\r')"}
+else
+  nombre=
+fi
+case $nombre in
+  *[![:space:]]*) ;;
+  *) printf '%s\n' 'Escribe un nombre que no esté vacío ni tenga solo espacios, y termina con Enter.' >&2; exit 1 ;;
+esac
+git config --local equipo.nombre "$nombre" || exit 1
+hook=$(git rev-parse --git-path hooks/prepare-commit-msg) || exit 1
 if [ -e "$hook" ] || [ -L "$hook" ]; then
   echo "Ya existe $hook: agrégale a mano las dos últimas líneas del gancho de abajo."
 else
@@ -135,9 +146,10 @@ git interpret-trailers --in-place --if-exists doNothing --trailer "Equipo: $nomb
 EOF
   chmod +x "$hook"
 fi
+)
 ```
 
-Los detalles (worktrees, `core.hooksPath` y qué hacer si ya hay un gancho) están en `references/plantillas.md` de la skill, "Gancho de equipo". Después, `git log --grep "Equipo: <nombre-del-equipo>"` encuentra lo que se hizo desde ese computador.
+Los detalles (worktrees, `core.hooksPath`, qué hacer si ya hay un gancho, cómo cambiar el nombre y cómo buscar lo que se hizo desde ese computador) están en `references/plantillas.md` de la skill, "Gancho de equipo".
 
 ## 10. La primera sesión de trabajo
 

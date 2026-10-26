@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "metodologia-agentes",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Metodología para proyectos de software hechos con agentes de IA, en español e inglés / A methodology for software projects built with AI agents, in Spanish and English.",
   "author": {
     "name": "Marcos Sánchez and Manuela García"

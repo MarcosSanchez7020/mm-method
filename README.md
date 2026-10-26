@@ -207,4 +207,4 @@ With 1.0.0, on the same day, two runs of the same command gave ~643 and ~456 alw
 
 ## Version and license
 
-Version 1.2.0 (see [CHANGELOG](CHANGELOG.md)). License: MIT ([LICENSE](LICENSE)).
+Version 1.2.1 (see [CHANGELOG](CHANGELOG.md)). License: MIT ([LICENSE](LICENSE)).

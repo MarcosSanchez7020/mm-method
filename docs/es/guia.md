@@ -107,7 +107,7 @@ La memoria local de un agente se queda en un computador y no la ve el otro agent
 - lo que pasa después del último commit de una rama (el push, el PR, el merge) se anota en la rama siguiente;
 - si un plugin de memoria choca con el repo, gana el repo.
 
-Con varias personas o varios computadores, cada commit hecho fuera del computador principal lleva una línea `Equipo: <nombre>`, puesta por un gancho local de Git. Así `git log --grep "Equipo: <nombre>"` encuentra lo que se hizo desde ahí.
+Con varias personas o varios computadores, cada commit hecho fuera del computador principal lleva una línea `Equipo: <nombre>`, puesta por un gancho local de Git. La búsqueda de lo que se hizo desde ahí, sin meter el nombre en el comando, está en `references/plantillas.md` de la skill, "Gancho de equipo".
 
 ## 6. El ciclo de un módulo
 

@@ -4,6 +4,14 @@ Formato: una sección por versión, la más reciente arriba. Versionado semánti
 
 Format: one section per version, newest first. Semantic versioning: major when a rule changes meaning, minor when something is added, patch for wording fixes.
 
+## 1.2.1
+
+- El instalador del gancho de equipo pide el nombre y lo lee como dato desde la entrada estándar, sin meterlo en el código: ningún carácter del nombre rompe el script ni ejecuta nada al instalar. El nombre es una línea con algo más que espacios; una línea vacía o con solo espacios, o un fin de entrada sin salto de línea, hacen fallar el bloque sin cambiar nada.
+- Bloques para cambiar el nombre sin reinstalar el gancho y para buscar los commits de un computador sin meter el nombre en el comando; la búsqueda compara como texto exacto el valor de cada trailer, no la confunden el asunto ni el cuerpo y rechaza un nombre vacío.
+
+- The machine hook installer asks for the name and reads it as data from standard input, without putting it in the code: no character in the name breaks the script or runs anything at install time. The name is one line with more than spaces; an empty or space-only line, or end of input without a line break, makes the block fail without changing anything.
+- Blocks to change the name without reinstalling the hook and to find a computer's commits without putting the name in the command; the search compares each trailer value as exact text, is not confused by the subject or body, and rejects an empty name.
+
 ## 1.2.0
 
 - La skill se aplica solo si el usuario la pide o si el `CLAUDE.md` o el `AGENTS.md` del proyecto dice que la adoptó; la plantilla de `CLAUDE.md` trae la línea de adopción.
