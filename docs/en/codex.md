@@ -12,7 +12,7 @@ codex plugin add metodologia-agentes@mm-method
 codex plugin list --marketplace mm-method --json
 ```
 
-To install a published version instead of the default branch, add the catalog with its tag: `codex plugin marketplace add MarcosSanchez7020/mm-method --ref v1.2.0`.
+To install a published version instead of the default branch, add the catalog with its tag: `codex plugin marketplace add MarcosSanchez7020/mm-method --ref v1.2.1`.
 
 Start a new session. Use the complete names shown by the plugin:
 
@@ -62,6 +62,8 @@ Tests of 1.2.0 on 2026-10-25 used Windows, Codex CLI 0.162.1 and Claude Code 2.1
 After the merge, Codex CLI 0.162.1 installed 1.2.0 from `main` (`5c76fc4`) with the two public commands, with no previous mm-method catalog, registration or cache: the 25 installed files, `LICENSE` included, match `main` with line endings normalized, and both skills loaded in full in ES and EN in fresh read-only sessions, with `--ignore-user-config` and the complete names.
 
 The installation pinned to `v1.2.0` was tested on 2026-10-25 from GitHub, with Claude Code 2.1.296 (`marketplace add MarcosSanchez7020/mm-method@v1.2.0`) and Codex CLI 0.162.1 (`marketplace add MarcosSanchez7020/mm-method --ref v1.2.0`), each with a new, empty configuration directory. Both recorded the `v1.2.0` ref, cloned commit `5c76fc4` and installed 1.2.0. The 25 installed files match the tag's files, except for line endings, which Git for Windows converted to CRLF. `marketplace update` on a pinned catalog was not tested.
+
+The installation pinned to `v1.2.1` was tested on 2026-10-25 the same way: both clients recorded the `v1.2.1` ref, cloned commit `d840a09` and installed 1.2.1, with the 25 files matching the tag's files except for line endings. In Claude, both skills loaded in ES and EN from that installation, with `--plugin-dir`, `--restricted` and `--strict-mcp-config`. Loading in a Codex session was not tested with this installation.
 
 ## Sources
 
