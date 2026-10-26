@@ -128,10 +128,10 @@ if IFS= read -r nombre; then
 else
   nombre=
 fi
-if [ -z "$nombre" ]; then
-  printf '%s\n' 'Escribe un nombre no vacío y termina con Enter.' >&2
-  exit 1
-fi
+case $nombre in
+  *[![:space:]]*) ;;
+  *) printf '%s\n' 'Escribe un nombre que no esté vacío ni tenga solo espacios, y termina con Enter.' >&2; exit 1 ;;
+esac
 git config --local equipo.nombre "$nombre" || exit 1
 hook=$(git rev-parse --git-path hooks/prepare-commit-msg) || exit 1
 if [ -e "$hook" ] || [ -L "$hook" ]; then

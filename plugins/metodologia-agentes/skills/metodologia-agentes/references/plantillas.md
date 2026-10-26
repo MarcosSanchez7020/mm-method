@@ -191,10 +191,10 @@ if IFS= read -r nombre; then
 else
   nombre=
 fi
-if [ -z "$nombre" ]; then
-  printf '%s\n' 'Escribe un nombre no vacío y termina con Enter.' >&2
-  exit 1
-fi
+case $nombre in
+  *[![:space:]]*) ;;
+  *) printf '%s\n' 'Escribe un nombre que no esté vacío ni tenga solo espacios, y termina con Enter.' >&2; exit 1 ;;
+esac
 git config --local equipo.nombre "$nombre" || exit 1
 hook=$(git rev-parse --git-path hooks/prepare-commit-msg) || exit 1
 if [ -e "$hook" ] || [ -L "$hook" ]; then
@@ -212,12 +212,12 @@ fi
 )
 ```
 
-- Se corre el bloque completo: pegado en una terminal abierta en la carpeta principal del clon, o guardado en un archivo y ejecutado con `sh <archivo>`. Cuando pide el nombre, se escribe en una línea y se termina con Enter, sin comillas ni escapes; si lo corre un agente, le pasa el nombre por la entrada estándar. El nombre llega como dato y nunca se mete en el código: apóstrofos, comillas, `$` y cualquier otro carácter se guardan tal cual en la configuración de Git del clon (`git config --local equipo.nombre`), que comparten la carpeta principal y sus worktrees. Acepta finales de línea LF y CRLF. Si por la entrada estándar llegan varias líneas, solo usa la primera y no ejecuta las demás; en una terminal, lo que se pegue después del nombre lo recibe la terminal como órdenes, como cualquier texto pegado en ella. Una línea vacía, o un fin de entrada antes del salto de línea, hace fallar el bloque sin cambiar la configuración ni instalar el gancho. Los paréntesis lo corren aparte, para que un `exit` no cierre la terminal.
+- Se corre el bloque completo: pegado en una terminal abierta en la carpeta principal del clon, o guardado en un archivo y ejecutado con `sh <archivo>`. Cuando pide el nombre, se escribe en una línea y se termina con Enter, sin comillas ni escapes; si lo corre un agente, le pasa el nombre por la entrada estándar. El nombre llega como dato y nunca se mete en el código: apóstrofos, comillas, `$` y cualquier otro carácter se guardan tal cual en la configuración de Git del clon (`git config --local equipo.nombre`), que comparten la carpeta principal y sus worktrees. Acepta finales de línea LF y CRLF. Si por la entrada estándar llegan varias líneas, solo usa la primera y no ejecuta las demás; en una terminal, lo que se pegue después del nombre lo recibe la terminal como órdenes, como cualquier texto pegado en ella. Una línea vacía o con solo espacios, o un fin de entrada antes del salto de línea, hace fallar el bloque sin cambiar la configuración ni instalar el gancho. Los paréntesis lo corren aparte, para que un `exit` no cierre la terminal.
 - `git rev-parse --git-path` da la ruta real del gancho. En un worktree, `.git` es un archivo y no una carpeta, así que `.git/hooks/` no sirve como ruta fija.
 - Si el clon usa `core.hooksPath`, la ruta sale de esa configuración. Si es relativa, Git la resuelve en la carpeta de trabajo donde corre el gancho, así que cada worktree busca su propia copia; en ese caso conviene versionar el gancho en esa carpeta o usar una ruta absoluta.
 - Si ya existe un gancho `prepare-commit-msg`, o un enlace con ese nombre aunque esté roto, no se reemplaza: se le agregan a mano las dos últimas líneas.
-- El gancho agrega `Equipo: <nombre>` como trailer del commit, salvo cuando Git le pasa el origen `merge` o `squash`: un commit de merge, o un `git commit` sin `-m` después de `git merge --squash`. Si ese commit se hace con `-m`, Git le pasa el origen `message` y el trailer sí se agrega. Los dos bloques de abajo cambian el nombre sin reinstalar el gancho y buscan lo que se hizo desde ese computador, sin meter el nombre en el comando.
-- Probado con Git 2.55 en Windows, con `sh` y `bash` de Git para Windows (ese `sh` es bash en modo POSIX), corriendo el bloque como archivo y pegado: el nombre llega por la entrada estándar y queda literal en la configuración y en el trailer, sin ejecutar nada, con espacios, apóstrofos, un apóstrofo seguido de una orden, comillas dobles, `$(...)`, comillas invertidas, `$HOME`, Unicode, barras inversas (también al final), un guion inicial, caracteres de expresión regular, `NOMBRE`, `NAME`, CRLF y el texto que cerraba el here-doc de la versión anterior; con varias líneas en un archivo, solo usa la primera. Una línea vacía (LF o CRLF), una entrada vacía o una línea sin salto fallan sin cambiar la configuración ni crear el gancho, igual que fuera de un repositorio o si no se puede escribir la configuración. Cambiar el nombre no toca el gancho; la búsqueda devuelve solo los commits cuyo trailer es exactamente ese nombre (con `PC` no salen los de `PC2`, y un nombre con espacios al inicio o al final encuentra su trailer); un gancho que ya existe no se pisa; sin nombre configurado, el commit sale sin trailer; un commit hecho en un worktree lleva el trailer; un commit de merge y un squash confirmado con el mensaje que prepara Git no lo llevan, y un squash confirmado con `-m` sí. No se probaron el enlace roto (Windows no deja crear enlaces simbólicos sin privilegios), Linux, macOS, dash ni otras shells.
+- El gancho agrega `Equipo: <nombre>` como trailer del commit, salvo cuando Git le pasa el origen `merge` o `squash`: en un commit de merge, o al confirmar un squash con el mensaje que Git prepara después de `git merge --squash`. Si ese mensaje se reemplaza con `-m` o `-F`, Git le pasa el origen `message` y el trailer sí se agrega. Los dos bloques de abajo cambian el nombre sin reinstalar el gancho y buscan lo que se hizo desde ese computador, sin meter el nombre en el comando.
+- Probado con Git 2.55 en Windows, con `sh` y `bash` de Git para Windows (ese `sh` es bash en modo POSIX), corriendo el bloque como archivo y pegado: el nombre llega por la entrada estándar y queda literal en la configuración y en el trailer, sin ejecutar nada, con espacios, apóstrofos, un apóstrofo seguido de una orden, comillas dobles, `$(...)`, comillas invertidas, `$HOME`, Unicode, barras inversas (también al final), un guion inicial, caracteres de expresión regular, `NOMBRE`, `NAME`, CRLF y el texto que cerraba el here-doc de la versión anterior; con varias líneas en un archivo, solo usa la primera. Una línea vacía (LF o CRLF), una línea con solo espacios, una entrada vacía o una línea sin salto fallan sin cambiar la configuración ni crear el gancho, igual que fuera de un repositorio o si no se puede escribir la configuración. Cambiar el nombre no toca el gancho; la búsqueda devuelve solo los commits cuyo trailer es exactamente ese nombre, comparado como texto: con `PC` no salen los de `PC2` ni los que lo mencionan en el asunto o el cuerpo, con `1` no salen `01`, `1.0` ni `1e0`, un nombre con espacios al inicio o al final encuentra su trailer, un byte 0x1F en el nombre o en el asunto no la confunde, sin coincidencias no muestra nada y un nombre vacío o con solo espacios se rechaza; un gancho que ya existe no se pisa; sin nombre configurado, el commit sale sin trailer; un commit hecho en un worktree lleva el trailer; un commit de merge y un squash confirmado con el mensaje que prepara Git no lo llevan, y un squash confirmado con `-m` o con `-F` sí. No se probaron el enlace roto (Windows no deja crear enlaces simbólicos sin privilegios), Linux, macOS, dash ni otras shells.
 
 Para cambiar el nombre, sin reinstalar el gancho:
 
@@ -229,22 +229,32 @@ if IFS= read -r nombre; then
 else
   nombre=
 fi
-if [ -z "$nombre" ]; then
-  printf '%s\n' 'Escribe un nombre no vacío y termina con Enter.' >&2
-  exit 1
-fi
+case $nombre in
+  *[![:space:]]*) ;;
+  *) printf '%s\n' 'Escribe un nombre que no esté vacío ni tenga solo espacios, y termina con Enter.' >&2; exit 1 ;;
+esac
 git config --local equipo.nombre "$nombre" || exit 1
 )
 ```
 
-Para buscar los commits hechos desde este computador, el nombre se lee de la configuración y se compara exactamente con el valor del trailer `Equipo` de cada commit: con `PC` no salen los de `PC2`. Como Git quita los espacios al inicio y al final del valor del trailer, el nombre se compara sin ellos. Muestra el hash corto y el asunto de cada commit:
+Para buscar los commits hechos desde este computador, el nombre se lee de la configuración y se compara, como texto exacto, con el valor de cada trailer `Equipo`; el asunto y el cuerpo no cuentan: con `PC` no salen los de `PC2`, ni con `1` los de `01`. Como Git quita los espacios al inicio y al final del valor del trailer, el nombre se compara sin ellos, y si queda vacío la búsqueda falla con un aviso. Muestra el hash corto y el asunto de cada commit:
 
 ```sh
 (
 nombre=$(git config --get equipo.nombre) || exit 1
 nombre=${nombre#"${nombre%%[![:space:]]*}"}
 nombre=${nombre%"${nombre##*[![:space:]]}"}
-git log --format='%h %s%x1f%(trailers:key=Equipo,valueonly,unfold,separator=%x1f)' |
-  NOMBRE_EQUIPO="$nombre" awk -F '\037' '{ for (i = 2; i <= NF; i++) if ($i == ENVIRON["NOMBRE_EQUIPO"]) { print $1; break } }'
+if [ -z "$nombre" ]; then
+  printf '%s\n' 'El nombre configurado está vacío o solo tiene espacios: cámbialo con el bloque anterior.' >&2
+  exit 1
+fi
+commits=$(git log --format='%H%n=%(trailers:key=Equipo,valueonly,unfold,separator=%x0a=)' |
+  while IFS= read -r linea; do
+    case $linea in
+      =*) [ "${linea#=}" = "$nombre" ] && [ "$commit" != "$visto" ] && { printf '%s\n' "$commit"; visto=$commit; } ;;
+      *) commit=$linea ;;
+    esac
+  done)
+[ -z "$commits" ] || printf '%s\n' "$commits" | git log --no-walk=unsorted --stdin --format='%h %s'
 )
 ```

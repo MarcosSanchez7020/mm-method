@@ -191,10 +191,10 @@ if IFS= read -r name; then
 else
   name=
 fi
-if [ -z "$name" ]; then
-  printf '%s\n' 'Type a non-empty name and finish with Enter.' >&2
-  exit 1
-fi
+case $name in
+  *[![:space:]]*) ;;
+  *) printf '%s\n' 'Type a name that is not empty or only spaces, and finish with Enter.' >&2; exit 1 ;;
+esac
 git config --local machine.name "$name" || exit 1
 hook=$(git rev-parse --git-path hooks/prepare-commit-msg) || exit 1
 if [ -e "$hook" ] || [ -L "$hook" ]; then
@@ -212,12 +212,12 @@ fi
 )
 ```
 
-- Run the whole block: pasted into a terminal open in the clone's main folder, or saved to a file and run with `sh <file>`. When it asks for the name, type it on one line and finish with Enter, with no quotes or escapes; if an agent runs it, the agent passes the name on standard input. The name arrives as data and never goes into the code: apostrophes, quotes, `$` and any other character are stored as is in the clone's Git configuration (`git config --local machine.name`), which the main folder and its worktrees share. It accepts LF and CRLF line endings. If several lines arrive on standard input, only the first is used and the rest are not run; in a terminal, whatever is pasted after the name goes to the terminal as commands, like any text pasted into it. An empty line, or end of input before the line break, makes the block fail without changing the configuration or installing the hook. The parentheses run it separately, so an `exit` does not close the terminal.
+- Run the whole block: pasted into a terminal open in the clone's main folder, or saved to a file and run with `sh <file>`. When it asks for the name, type it on one line and finish with Enter, with no quotes or escapes; if an agent runs it, the agent passes the name on standard input. The name arrives as data and never goes into the code: apostrophes, quotes, `$` and any other character are stored as is in the clone's Git configuration (`git config --local machine.name`), which the main folder and its worktrees share. It accepts LF and CRLF line endings. If several lines arrive on standard input, only the first is used and the rest are not run; in a terminal, whatever is pasted after the name goes to the terminal as commands, like any text pasted into it. An empty line or one with only spaces, or end of input before the line break, makes the block fail without changing the configuration or installing the hook. The parentheses run it separately, so an `exit` does not close the terminal.
 - `git rev-parse --git-path` gives the real path of the hook. In a worktree, `.git` is a file and not a folder, so `.git/hooks/` does not work as a fixed path.
 - If the clone uses `core.hooksPath`, the path comes from that setting. If it is relative, Git resolves it in the working folder where the hook runs, so each worktree looks for its own copy; in that case, version the hook in that folder or use an absolute path.
 - If a `prepare-commit-msg` hook already exists, or a link with that name even if it is broken, it is not replaced: the last two lines are added to it by hand.
-- The hook adds `Machine: <name>` as a commit trailer, except when Git passes it the `merge` or `squash` source: a merge commit, or a `git commit` without `-m` after `git merge --squash`. If that commit is made with `-m`, Git passes the `message` source and the trailer is added. The two blocks below change the name without reinstalling the hook and find what was done from that computer, without putting the name in the command.
-- Tested with Git 2.55 on Windows, with Git for Windows `sh` and `bash` (that `sh` is bash in POSIX mode), running the block as a file and pasted: the name arrives on standard input and stays literal in the configuration and in the trailer, running nothing, with spaces, apostrophes, an apostrophe followed by a command, double quotes, `$(...)`, backticks, `$HOME`, Unicode, backslashes (also at the end), a leading dash, regular-expression characters, `NOMBRE`, `NAME`, CRLF and the text that closed the previous version's here-doc; with several lines in a file, only the first is used. An empty line (LF or CRLF), empty input or a line without a line break fail without changing the configuration or creating the hook, as do running it outside a repository or when the configuration cannot be written. Changing the name does not touch the hook; the search returns only the commits whose trailer is exactly that name (with `PC`, the commits of `PC2` do not show up, and a name with spaces at the start or end finds its trailer); an existing hook is not overwritten; with no name configured, the commit has no trailer; a commit made in a worktree carries the trailer; a merge commit and a squash committed with the message Git prepares do not, and a squash committed with `-m` does. Not tested: the broken link (Windows does not allow creating symbolic links without privileges), Linux, macOS, dash and other shells.
+- The hook adds `Machine: <name>` as a commit trailer, except when Git passes it the `merge` or `squash` source: in a merge commit, or when a squash is committed with the message Git prepares after `git merge --squash`. If that message is replaced with `-m` or `-F`, Git passes the `message` source and the trailer is added. The two blocks below change the name without reinstalling the hook and find what was done from that computer, without putting the name in the command.
+- Tested with Git 2.55 on Windows, with Git for Windows `sh` and `bash` (that `sh` is bash in POSIX mode), running the block as a file and pasted: the name arrives on standard input and stays literal in the configuration and in the trailer, running nothing, with spaces, apostrophes, an apostrophe followed by a command, double quotes, `$(...)`, backticks, `$HOME`, Unicode, backslashes (also at the end), a leading dash, regular-expression characters, `NOMBRE`, `NAME`, CRLF and the text that closed the previous version's here-doc; with several lines in a file, only the first is used. An empty line (LF or CRLF), a line with only spaces, empty input or a line without a line break fail without changing the configuration or creating the hook, as do running it outside a repository or when the configuration cannot be written. Changing the name does not touch the hook; the search returns only the commits whose trailer is exactly that name, compared as text: with `PC`, the commits of `PC2` and those that mention it in the subject or body do not show up, with `1`, `01`, `1.0` and `1e0` do not show up, a name with spaces at the start or end finds its trailer, a 0x1F byte in the name or the subject does not confuse it, with no matches it shows nothing, and an empty or space-only name is rejected; an existing hook is not overwritten; with no name configured, the commit has no trailer; a commit made in a worktree carries the trailer; a merge commit and a squash committed with the message Git prepares do not, and a squash committed with `-m` or `-F` does. Not tested: the broken link (Windows does not allow creating symbolic links without privileges), Linux, macOS, dash and other shells.
 
 To change the name, without reinstalling the hook:
 
@@ -229,22 +229,32 @@ if IFS= read -r name; then
 else
   name=
 fi
-if [ -z "$name" ]; then
-  printf '%s\n' 'Type a non-empty name and finish with Enter.' >&2
-  exit 1
-fi
+case $name in
+  *[![:space:]]*) ;;
+  *) printf '%s\n' 'Type a name that is not empty or only spaces, and finish with Enter.' >&2; exit 1 ;;
+esac
 git config --local machine.name "$name" || exit 1
 )
 ```
 
-To find the commits made from this computer, the name is read from the configuration and compared exactly with the value of each commit's `Machine` trailer: with `PC`, the commits of `PC2` do not show up. Since Git removes spaces at the start and end of a trailer value, the name is compared without them. It shows the short hash and the subject of each commit:
+To find the commits made from this computer, the name is read from the configuration and compared, as exact text, with the value of each `Machine` trailer; the subject and body do not count: with `PC`, the commits of `PC2` do not show up, nor those of `01` with `1`. Since Git removes spaces at the start and end of a trailer value, the name is compared without them, and if it ends up empty the search fails with a message. It shows the short hash and the subject of each commit:
 
 ```sh
 (
 name=$(git config --get machine.name) || exit 1
 name=${name#"${name%%[![:space:]]*}"}
 name=${name%"${name##*[![:space:]]}"}
-git log --format='%h %s%x1f%(trailers:key=Machine,valueonly,unfold,separator=%x1f)' |
-  MACHINE_NAME="$name" awk -F '\037' '{ for (i = 2; i <= NF; i++) if ($i == ENVIRON["MACHINE_NAME"]) { print $1; break } }'
+if [ -z "$name" ]; then
+  printf '%s\n' 'The configured name is empty or only spaces: change it with the previous block.' >&2
+  exit 1
+fi
+commits=$(git log --format='%H%n=%(trailers:key=Machine,valueonly,unfold,separator=%x0a=)' |
+  while IFS= read -r line; do
+    case $line in
+      =*) [ "${line#=}" = "$name" ] && [ "$commit" != "$seen" ] && { printf '%s\n' "$commit"; seen=$commit; } ;;
+      *) commit=$line ;;
+    esac
+  done)
+[ -z "$commits" ] || printf '%s\n' "$commits" | git log --no-walk=unsorted --stdin --format='%h %s'
 )
 ```
