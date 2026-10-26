@@ -216,8 +216,8 @@ fi
 - `git rev-parse --git-path` gives the real path of the hook. In a worktree, `.git` is a file and not a folder, so `.git/hooks/` does not work as a fixed path.
 - If the clone uses `core.hooksPath`, the path comes from that setting. If it is relative, Git resolves it in the working folder where the hook runs, so each worktree looks for its own copy; in that case, version the hook in that folder or use an absolute path.
 - If a `prepare-commit-msg` hook already exists, or a link with that name even if it is broken, it is not replaced: the last two lines are added to it by hand.
-- The hook adds `Machine: <name>` as a commit trailer. The two blocks below change the name without reinstalling the hook and find what was done from that computer, without putting the name in the command.
-- Tested with Git 2.55 on Windows, with Git for Windows `sh` and `bash` (that `sh` is bash in POSIX mode), running the block as a file and pasted: the name arrives on standard input and stays literal in the configuration and in the trailer, running nothing, with spaces, apostrophes, an apostrophe followed by a command, double quotes, `$(...)`, backticks, `$HOME`, Unicode, backslashes (also at the end), a leading dash, regular-expression characters, `NOMBRE`, `NAME`, CRLF and the text that closed the previous version's here-doc; with several lines in a file, only the first is used. An empty line (LF or CRLF), empty input or a line without a line break fail without changing the configuration or creating the hook, as do running it outside a repository or when the configuration cannot be written. Changing the name does not touch the hook; the search finds only that name's commits, as literal text; an existing hook is not overwritten; with no name configured, the commit has no trailer; a commit made in a worktree carries the trailer, and merge and squash commits do not. Not tested: the broken link (Windows does not allow creating symbolic links without privileges), Linux, macOS, dash and other shells.
+- The hook adds `Machine: <name>` as a commit trailer, except when Git passes it the `merge` or `squash` source: a merge commit, or a `git commit` without `-m` after `git merge --squash`. If that commit is made with `-m`, Git passes the `message` source and the trailer is added. The two blocks below change the name without reinstalling the hook and find what was done from that computer, without putting the name in the command.
+- Tested with Git 2.55 on Windows, with Git for Windows `sh` and `bash` (that `sh` is bash in POSIX mode), running the block as a file and pasted: the name arrives on standard input and stays literal in the configuration and in the trailer, running nothing, with spaces, apostrophes, an apostrophe followed by a command, double quotes, `$(...)`, backticks, `$HOME`, Unicode, backslashes (also at the end), a leading dash, regular-expression characters, `NOMBRE`, `NAME`, CRLF and the text that closed the previous version's here-doc; with several lines in a file, only the first is used. An empty line (LF or CRLF), empty input or a line without a line break fail without changing the configuration or creating the hook, as do running it outside a repository or when the configuration cannot be written. Changing the name does not touch the hook; the search returns only the commits whose trailer is exactly that name (with `PC`, the commits of `PC2` do not show up, and a name with spaces at the start or end finds its trailer); an existing hook is not overwritten; with no name configured, the commit has no trailer; a commit made in a worktree carries the trailer; a merge commit and a squash committed with the message Git prepares do not, and a squash committed with `-m` does. Not tested: the broken link (Windows does not allow creating symbolic links without privileges), Linux, macOS, dash and other shells.
 
 To change the name, without reinstalling the hook:
 
@@ -237,11 +237,14 @@ git config --local machine.name "$name" || exit 1
 )
 ```
 
-To find the commits made from this computer, the name is read from the configuration and searched as literal text:
+To find the commits made from this computer, the name is read from the configuration and compared exactly with the value of each commit's `Machine` trailer: with `PC`, the commits of `PC2` do not show up. Since Git removes spaces at the start and end of a trailer value, the name is compared without them. It shows the short hash and the subject of each commit:
 
 ```sh
 (
 name=$(git config --get machine.name) || exit 1
-git log --fixed-strings --grep "Machine: $name"
+name=${name#"${name%%[![:space:]]*}"}
+name=${name%"${name##*[![:space:]]}"}
+git log --format='%h %s%x1f%(trailers:key=Machine,valueonly,unfold,separator=%x1f)' |
+  MACHINE_NAME="$name" awk -F '\037' '{ for (i = 2; i <= NF; i++) if ($i == ENVIRON["MACHINE_NAME"]) { print $1; break } }'
 )
 ```

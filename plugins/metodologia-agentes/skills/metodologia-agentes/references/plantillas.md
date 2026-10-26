@@ -216,8 +216,8 @@ fi
 - `git rev-parse --git-path` da la ruta real del gancho. En un worktree, `.git` es un archivo y no una carpeta, así que `.git/hooks/` no sirve como ruta fija.
 - Si el clon usa `core.hooksPath`, la ruta sale de esa configuración. Si es relativa, Git la resuelve en la carpeta de trabajo donde corre el gancho, así que cada worktree busca su propia copia; en ese caso conviene versionar el gancho en esa carpeta o usar una ruta absoluta.
 - Si ya existe un gancho `prepare-commit-msg`, o un enlace con ese nombre aunque esté roto, no se reemplaza: se le agregan a mano las dos últimas líneas.
-- El gancho agrega `Equipo: <nombre>` como trailer del commit. Los dos bloques de abajo cambian el nombre sin reinstalar el gancho y buscan lo que se hizo desde ese computador, sin meter el nombre en el comando.
-- Probado con Git 2.55 en Windows, con `sh` y `bash` de Git para Windows (ese `sh` es bash en modo POSIX), corriendo el bloque como archivo y pegado: el nombre llega por la entrada estándar y queda literal en la configuración y en el trailer, sin ejecutar nada, con espacios, apóstrofos, un apóstrofo seguido de una orden, comillas dobles, `$(...)`, comillas invertidas, `$HOME`, Unicode, barras inversas (también al final), un guion inicial, caracteres de expresión regular, `NOMBRE`, `NAME`, CRLF y el texto que cerraba el here-doc de la versión anterior; con varias líneas en un archivo, solo usa la primera. Una línea vacía (LF o CRLF), una entrada vacía o una línea sin salto fallan sin cambiar la configuración ni crear el gancho, igual que fuera de un repositorio o si no se puede escribir la configuración. Cambiar el nombre no toca el gancho; la búsqueda encuentra solo los commits de ese nombre, como texto literal; un gancho que ya existe no se pisa; sin nombre configurado, el commit sale sin trailer; un commit hecho en un worktree lleva el trailer, y los de merge y squash no. No se probaron el enlace roto (Windows no deja crear enlaces simbólicos sin privilegios), Linux, macOS, dash ni otras shells.
+- El gancho agrega `Equipo: <nombre>` como trailer del commit, salvo cuando Git le pasa el origen `merge` o `squash`: un commit de merge, o un `git commit` sin `-m` después de `git merge --squash`. Si ese commit se hace con `-m`, Git le pasa el origen `message` y el trailer sí se agrega. Los dos bloques de abajo cambian el nombre sin reinstalar el gancho y buscan lo que se hizo desde ese computador, sin meter el nombre en el comando.
+- Probado con Git 2.55 en Windows, con `sh` y `bash` de Git para Windows (ese `sh` es bash en modo POSIX), corriendo el bloque como archivo y pegado: el nombre llega por la entrada estándar y queda literal en la configuración y en el trailer, sin ejecutar nada, con espacios, apóstrofos, un apóstrofo seguido de una orden, comillas dobles, `$(...)`, comillas invertidas, `$HOME`, Unicode, barras inversas (también al final), un guion inicial, caracteres de expresión regular, `NOMBRE`, `NAME`, CRLF y el texto que cerraba el here-doc de la versión anterior; con varias líneas en un archivo, solo usa la primera. Una línea vacía (LF o CRLF), una entrada vacía o una línea sin salto fallan sin cambiar la configuración ni crear el gancho, igual que fuera de un repositorio o si no se puede escribir la configuración. Cambiar el nombre no toca el gancho; la búsqueda devuelve solo los commits cuyo trailer es exactamente ese nombre (con `PC` no salen los de `PC2`, y un nombre con espacios al inicio o al final encuentra su trailer); un gancho que ya existe no se pisa; sin nombre configurado, el commit sale sin trailer; un commit hecho en un worktree lleva el trailer; un commit de merge y un squash confirmado con el mensaje que prepara Git no lo llevan, y un squash confirmado con `-m` sí. No se probaron el enlace roto (Windows no deja crear enlaces simbólicos sin privilegios), Linux, macOS, dash ni otras shells.
 
 Para cambiar el nombre, sin reinstalar el gancho:
 
@@ -237,11 +237,14 @@ git config --local equipo.nombre "$nombre" || exit 1
 )
 ```
 
-Para buscar los commits hechos desde este computador, el nombre se lee de la configuración y se busca como texto literal:
+Para buscar los commits hechos desde este computador, el nombre se lee de la configuración y se compara exactamente con el valor del trailer `Equipo` de cada commit: con `PC` no salen los de `PC2`. Como Git quita los espacios al inicio y al final del valor del trailer, el nombre se compara sin ellos. Muestra el hash corto y el asunto de cada commit:
 
 ```sh
 (
 nombre=$(git config --get equipo.nombre) || exit 1
-git log --fixed-strings --grep "Equipo: $nombre"
+nombre=${nombre#"${nombre%%[![:space:]]*}"}
+nombre=${nombre%"${nombre##*[![:space:]]}"}
+git log --format='%h %s%x1f%(trailers:key=Equipo,valueonly,unfold,separator=%x1f)' |
+  NOMBRE_EQUIPO="$nombre" awk -F '\037' '{ for (i = 2; i <= NF; i++) if ($i == ENVIRON["NOMBRE_EQUIPO"]) { print $1; break } }'
 )
 ```
