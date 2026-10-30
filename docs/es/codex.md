@@ -12,7 +12,7 @@ codex plugin add metodologia-agentes@mm-method
 codex plugin list --marketplace mm-method --json
 ```
 
-Para instalar una versión publicada en lugar de la rama predeterminada, agrega el catálogo con su etiqueta: `codex plugin marketplace add MarcosSanchez7020/mm-method --ref v1.2.0`.
+Para instalar una versión publicada en lugar de la rama predeterminada, agrega el catálogo con su etiqueta: `codex plugin marketplace add MarcosSanchez7020/mm-method --ref v1.2.1`.
 
 Abre una sesión nueva. Usa los nombres completos que muestra el plugin:
 
@@ -62,6 +62,8 @@ Las pruebas de la 1.2.0, el 25/10/2026, usaron Windows, Codex CLI 0.162.1 y Clau
 Después del merge, Codex CLI 0.162.1 instaló la 1.2.0 desde `main` (`5c76fc4`) con los dos comandos públicos, sin catálogo, registro ni caché previos de mm-method: los 25 archivos instalados, `LICENSE` incluida, coinciden con `main` normalizando los finales de línea, y las dos skills cargaron completas en ES y EN en sesiones nuevas de solo lectura, con `--ignore-user-config` y los nombres completos.
 
 La instalación fijada a `v1.2.0` se probó el 25/10/2026 desde GitHub, con Claude Code 2.1.296 (`marketplace add MarcosSanchez7020/mm-method@v1.2.0`) y Codex CLI 0.162.1 (`marketplace add MarcosSanchez7020/mm-method --ref v1.2.0`), cada uno con una carpeta de configuración nueva y vacía. Los dos registraron la referencia `v1.2.0`, clonaron el commit `5c76fc4` e instalaron la 1.2.0. Los 25 archivos instalados coinciden con los de la etiqueta, salvo los finales de línea, que Git para Windows convirtió a CRLF. No se probó `marketplace update` sobre un catálogo fijado.
+
+La instalación fijada a `v1.2.1` se probó el 25/10/2026 de la misma forma: los dos clientes registraron la referencia `v1.2.1`, clonaron el commit `d840a09` e instalaron la 1.2.1, con los 25 archivos iguales a los de la etiqueta salvo los finales de línea. En Claude, las dos skills cargaron en ES y EN desde esa instalación, con `--plugin-dir`, `--restricted` y `--strict-mcp-config`. La carga en una sesión de Codex no se probó con esta instalación.
 
 ## Fuentes
 
