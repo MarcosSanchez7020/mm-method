@@ -4,6 +4,12 @@ Formato: una sección por versión, la más reciente arriba. Versionado semánti
 
 Format: one section per version, newest first. Semantic versioning: major when a rule changes meaning, minor when something is added, patch for wording fixes.
 
+## Sin publicar / Unreleased
+
+- README en los dos idiomas: bloque de instalación rápida con los dos comandos de Claude Code justo después de la introducción, para quien llega solo con el enlace; la sección «Instalar» no cambia. Solo documentación: los manifiestos siguen en 1.2.1.
+
+- README in both languages: a quick-install block with the two Claude Code commands right after the introduction, for someone who arrives with just the link; the "Install" section does not change. Documentation only: the manifests stay at 1.2.1.
+
 ## 1.2.1
 
 - El instalador del gancho de equipo pide el nombre y lo lee como dato desde la entrada estándar, sin meterlo en el código: ningún carácter del nombre rompe el script ni ejecuta nada al instalar. El nombre es una línea con algo más que espacios; una línea vacía o con solo espacios, o un fin de entrada sin salto de línea, hacen fallar el bloque sin cambiar nada.

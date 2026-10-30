@@ -6,6 +6,13 @@ Una metodología de trabajo, empaquetada como plugin de Claude Code y Codex, par
 
 No es una librería ni una herramienta que automatice algo: es un conjunto de instrucciones que el agente sigue. Lo que la hace cumplir en un proyecto es el `CLAUDE.md` del proyecto, la protección de `main` y la disciplina del equipo. La skill le enseña al agente cómo trabajar y le da los esqueletos para montarlo.
 
+**Instalación rápida** (Claude Code; los detalles, la comprobación y Codex están en [Instalar](#instalar)):
+
+```bash
+claude plugin marketplace add MarcosSanchez7020/mm-method
+claude plugin install metodologia-agentes@mm-method
+```
+
 ## El problema que resuelve
 
 Un agente de código es rápido y capaz, pero en un proyecto que dura semanas aparecen los mismos problemas:
