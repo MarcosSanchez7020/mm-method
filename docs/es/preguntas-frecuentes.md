@@ -2,7 +2,7 @@
 
 ## ¿Sirve sin un segundo agente?
 
-Sí. Todo lo de la metodología funciona con Claude Code o Codex como único agente. Con Codex se incluye `AGENTS.md` aunque no haya segundo agente. La referencia `dos-agentes.md` solo se lee cuando hay dos agentes en el mismo repositorio.
+Sí. Todo lo de la metodología funciona con Claude Code o Codex como único agente. Con Codex se incluye `AGENTS.md` aunque no haya segundo agente. La referencia `dos-agentes.md` solo se lee cuando hay dos agentes en el mismo repositorio. Lo que pierde un solo agente es la revisión independiente: como nadie revisa su propio trabajo, revisa un chat nuevo de solo lectura de ese agente, y queda anotado que no es del todo independiente.
 
 ## ¿Sirve si no hay un "dueño técnico" aparte?
 
@@ -10,7 +10,11 @@ Sí: el dueño es quien decide, aunque sea la misma persona que pide el trabajo.
 
 ## ¿No es demasiado proceso?
 
-Para un script de una tarde, sí. La metodología está pensada para trabajo que dura más que un chat. La [guía, sección 12](guia.md#12-proyectos-chicos-y-equipos-grandes), dice qué se puede recortar en un proyecto chico sin perder lo esencial y qué no conviene recortar.
+Para un script de una tarde, sí. La metodología está pensada para trabajo que dura más que un chat. La [guía, sección 13](guia.md#13-proyectos-chicos-y-equipos-grandes), dice qué se puede recortar en un proyecto chico sin perder lo esencial y qué no conviene recortar.
+
+## ¿Qué es el hub y cuándo hace falta?
+
+Un chat más, que coordina a los chats de trabajo cuando hay varios a la vez: lleva el tablero, junta en una sola lista numerada todo lo que el dueño tiene que decidir y les pasa a los chats sus respuestas con sus palabras textuales. Hace falta cuando el dueño ya no puede estar al día con todos los chats sin que se crucen decisiones; con uno o dos chats, el dueño hace de hub. Está en la referencia `hub.md` y en la [guía, sección 9](guia.md#9-el-mapa-el-hub-y-la-orquestación).
 
 ## ¿Por qué las decisiones en lista y no conversando?
 
@@ -61,4 +65,4 @@ Y reiniciar Claude Code. Los cambios de cada versión están en el [CHANGELOG](.
 
 ## ¿Puedo adaptarla?
 
-Sí, en el `CLAUDE.md` de cada proyecto: ahí se fija la palabra para programar, el idioma, quién revisa, qué modelos se usan y las excepciones. La skill da el método; el proyecto, sus valores.
+Sí, en el `CLAUDE.md` de cada proyecto: ahí se fija la palabra para programar, el idioma, quién revisa el trabajo de cada agente, qué modelos se usan en cada rol, los umbrales de contexto y de uso, si hay hub y las excepciones. La skill da el método; el proyecto, sus valores.

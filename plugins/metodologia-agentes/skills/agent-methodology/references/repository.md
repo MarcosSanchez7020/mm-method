@@ -10,7 +10,7 @@
 
 - Any change that touches technical content (formulas, rules, factors, units, expected values in tests, technical texts the user sees, technical documents) is reviewed and approved by the owner, even if the owner made or requested it.
 - Which files count as technical is written in a versioned list (for example, `.github/technical-paths.txt`) that a PR check reads.
-- The approval goes in the PR description with a fixed line, for example `- [x] Technical review approved by <owner> (date: DD/MM/YYYY, commit: <full SHA of the last commit>)`. **Only the owner writes it.** The agent gives the owner the text ready to paste, unchecked, with the full SHA (40 characters) of the latest commit; if another commit comes in, the agent updates the description and gives the owner the new line.
+- The approval goes in the PR description with a fixed line, for example `- [x] Technical review approved by <owner> (date: DD/MM/YYYY, commit: <full SHA of the last commit>)`. **Only the owner writes it.** The agent gives the owner the text ready to paste, unchecked, with the full SHA (40 characters) of the last commit, **only once: when the suite and the other checks are green and no commit is left to come in**, so the owner is not asked twice (the approval line check is the only one that may be missing: it turns green with the line); if another commit comes in afterwards, the agent updates the description and gives the owner the new line.
 - The check that verifies that line goes in a workflow separate from the suite, which also listens to `edited` and `synchronize`: it is re-evaluated when the owner checks the line and when a new commit comes in, and it requires the line's commit to be the PR's last commit. The example is in `templates.md`, "Approval line check".
 - **The line authenticates nobody:** anyone who can edit the PR description can write it. The verifiable approval is the owner's review on GitHub: `CODEOWNERS` over the technical files and `/.github/` (the `CODEOWNERS` file itself and the workflows) in the owner's name, required review from code owners in the protection of `main` and dismissal of stale approvals when a commit comes in. GitHub does not let a PR's author approve it: if the agent opens PRs with the owner's account, it needs its own account so the owner can approve them. If the team uses only the line, it declares it as a record, not as a control.
 
@@ -19,12 +19,24 @@
 - With `git commit -F <file>`, so the message does not break on quotes or line breaks.
 - Before each commit, `git status` to confirm that the changelog is modified and that no placeholder is left to fill in.
 - The message ends with the trailers the team has agreed on (co-authorship, machine).
+- If the project works with an orchestrator and executors, only the orchestrator makes the commits (`orchestration.md`).
 
 ## Pull Requests
 
 - The agent opens them with `gh pr create --body-file`, following the repo's template. Nobody is handed a link to open it themselves.
+- **Every PR carries the client's PR monitor** (Auto-fix, in Claude Code), turned on by the session that opens it: it wakes the agent when the CI fails, there is a conflict or a comment arrives, without spending tokens waiting. If the client that opens the PR has no monitor, the report says so and the CI is checked when needed. What the monitor does not change: the approval line and the merge remain the owner's, and no `skip` is added and the protections are not touched to make the CI pass.
 - Tool attribution in PRs and their comments follows the team's decision written in `CLAUDE.md`; in Claude Code it can also be set with the `attribution` setting. If a client or system instruction does not yield to that decision, the instruction is followed and the owner is told. This rule does not authorize disobeying any other instruction.
-- After opening it, the CI is not polled: the agent waits for the notice or checks when needed.
+- After opening it, the CI is not polled: the monitor gives notice, or the CI is checked when needed.
+
+## The merge queue
+
+With several active branches, PRs do not cross: **only one PR in review at a time.**
+
+- The next one is opened only when the previous one is merged, and it merges `main` first.
+- Whoever has a branch ready announces "ready to open the PR", with the HEAD, and waits for the turn notice (from the hub, if there is one, or from the owner). While waiting, it continues with the reviews and re-checks on its branch, and fixes whatever comes out there.
+- The owner decides the order of the queue.
+- If a PR was already opened out of turn, it is not closed: the owner is told and decides how to proceed.
+- Outside the shared files (changelog, memory, plan map, documents), two branches do not touch the same file at the same time; in the shared ones both sides are kept when merging, and the plan map's drawing is regenerated instead of being resolved by hand.
 
 ## Local suite and CI in parallel
 
@@ -41,7 +53,7 @@ A small fix to documents or texts is made in the branch of the PR in progress, n
 
 - If the workflows run on `pull_request`, a push to a branch without a PR does not spend minutes: several commits can be gathered before opening the PR.
 - A new commit in a PR should cancel the run of the previous commit (`concurrency` with `cancel-in-progress`).
-- How much is spent is checked in the billing and recorded in `machines.md`.
+- How much is spent is checked in the billing and recorded in the machines file.
 
 ## The routine after each merge
 
@@ -51,8 +63,8 @@ After the merge of one's own PR. After a merge by the other agent, what to do is
 2. In the folder that owns `main` (the main folder of the repo): `git switch main`, `git pull`, delete the local branch and `git fetch --prune`. An agent working in a worktree does not switch to `main`, because Git does not allow the same branch in two worktrees: it runs `git fetch --prune`, creates its next branch from `origin/main` and, if it needs to look at `main`, uses `origin/main` or `git switch --detach origin/main`.
 3. Verify that local and GitHub match: no extra branches, no stash, no worktrees or open PRs, except those of each agent's active tasks.
 4. Check the CI on `main`, run the tests and rebuild the published environment from a clean `main`. Only the agent of the folder that owns `main` does this.
-5. Report it in a table and record it in the team log.
-6. Deliver the closing prompts of the chats used in the PR and the one for the next chat (`two-agents.md`).
+5. Report it in a table and record it in the team log, and tick in the plan map what the merge closes (`plan-map.md`).
+6. Deliver the closing prompts of the chats used in the PR and the one for the next chat (`two-agents.md`), and notify whoever is next in the merge queue.
 
 ## Security
 

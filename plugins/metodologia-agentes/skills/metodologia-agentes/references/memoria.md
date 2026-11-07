@@ -13,6 +13,7 @@ La memoria local de un agente se queda en un computador. El repositorio viaja co
 | `MEMORIA/entorno_equipos.md` | Cómo está montado cada equipo: versiones, rutas, puertos y los trucos que hacen falta. |
 | `MEMORIA/registro_respuestas.md` | Las respuestas del dueño, textuales (`decisiones.md`). |
 | `CHANGELOG.md` | Todo cambio, por pequeño que sea. |
+| El mapa del plan | El plan por bloques, con casillas que se marcan en el mismo commit que hace cada cosa, y su dibujo generado (`mapa-del-plan.md`). |
 | Los documentos de fuente de verdad | Alcance y decisiones, requisitos, modelo de datos, diagramas. |
 
 Nunca van en el repo secretos, claves, contraseñas, tokens, archivos `.env` ni datos personales de terceros.
@@ -53,12 +54,23 @@ Si se decide usarlo: `claude plugin marketplace add thedotmack/claude-mem` y `cl
 - En un equipo nuevo, el agente le pregunta al dueño si se instala el gancho y con qué nombre corto, le muestra el script antes y lo instala solo si el dueño dice que sí.
 - Cada equipo tiene su sección en la bitácora y en el entorno.
 
+## La revisión diaria de versiones y de salud
+
+Con varios computadores y varias personas, una versión distinta en un equipo rompe lo que en otro funciona, y una herramienta que se actualiza sola puede caerse sin que nadie lo note. Por eso, al empezar el primer chat del día en cada computador, el agente revisa:
+
+- las versiones: el cliente del agente y sus plugins, el otro agente (su app y su CLI), el runtime del proyecto y las dependencias instaladas en cada worktree (el entorno virtual en Python, `node_modules` en Node) contra el archivo de dependencias fijadas, y las herramientas que el proyecto usa (por ejemplo, Docker, `gh`, `git`, Node);
+- la salud: los servicios locales (el plugin de memoria, el laboratorio, la base de datos), y si uno se cayó, cómo se levanta;
+- el repositorio: la CI de `main` y las alertas abiertas (código, secretos, dependencias).
+
+Si algo cambió, lo anota con fecha en el entorno del equipo, y en la bitácora que la revisión se hizo. Una herramienta que se actualiza sola se fija en una versión cuando el instalador lo permite; si no, se anota como riesgo.
+
 ## Cuando un chat se cierra
 
-Por límite de uso, por contexto lleno o porque se terminó la tarea:
+Por límite de uso, por contexto lleno, por un umbral (`costos.md`) o porque se terminó la tarea o el bloque:
 
-1. Memoria al día en la rama, con su entrada en el changelog.
+1. Memoria y mapa al día en la rama, con su entrada en el changelog.
 2. Commit y push, si el dueño lo pidió o el proyecto lo acordó en `CLAUDE.md`.
-3. Un prompt para el chat siguiente, en un bloque de código, que empiece por leer `CLAUDE.md` y la memoria y diga dónde quedó el trabajo.
+3. Un prompt para el chat siguiente, en un bloque de código, que diga con qué modelo y esfuerzo se abre, empiece por leer `CLAUDE.md`, la memoria y el mapa, y diga dónde quedó el trabajo.
+4. Si el proyecto tiene hub, el reporte de cierre con su esquema (`hub.md`).
 
 Nunca se deja trabajo sin commit sin anotarlo en la bitácora.

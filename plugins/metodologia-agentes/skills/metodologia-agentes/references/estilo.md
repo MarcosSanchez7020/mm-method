@@ -19,7 +19,8 @@ Todo lo que produzca cualquier agente del proyecto se escribe para que alguien l
 - Lo justo y verificable.
 - Sin elogios ("excelente pregunta"), sin repetir lo ya dicho, sin palabras infladas ("robusto", "integral", "potenciar").
 - Sin abusar de negrillas ni de viñetas.
-- Los prompts para otro agente o para un chat nuevo van en el mensaje, en un bloque de código listo para copiar. Como archivo, solo si no caben.
+- Sin acuses de recibo ni reportes de pasos: un mensaje cuando hay un hito, una decisión o un cierre, con el esquema acordado (`hub.md`).
+- Los prompts para otro agente o para un chat nuevo van en el mensaje, en un bloque de código listo para copiar, y dicen con qué modelo y esfuerzo se abre el chat. Como archivo, solo si no caben.
 - En el idioma y con el trato que haya acordado el equipo (está en `CLAUDE.md`).
 
 ## Código

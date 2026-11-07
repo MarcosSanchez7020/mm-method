@@ -14,6 +14,7 @@
 - **Las interpretaciones nuestras van aparte**, en su propia lista, marcadas como interpretación, con su fuente.
 - **Si una instrucción se puede leer de dos formas**, se pregunta antes de tocar documentos. Por ejemplo, cuánto hay que quitar, o si una regla vale para una tarea o para todas.
 - **De una.** Las decisiones se pasan apenas se tienen, sin esperar lo que solo es informativo. Lo que llegue después se cuenta aparte.
+- **Una sola lista, numerada de corrido.** Cuando hay varios chats a la vez o las decisiones se acumulan, se consolidan en una sola lista numerada de corrido para todo el proyecto (la lleva el hub, si lo hay: `hub.md`), con la recomendada en negrilla y marcadas «por confirmar» las que el agente ya aplicó por su lectura. Los números no se reutilizan. «Todas las recomendadas» es una respuesta válida: se registra textual al momento, con lo que no dijo. Lo que una decisión no responde se dice.
 - **Contra la fuente técnica**, nunca en silencio: se dice "la fuente dice esto", con la referencia exacta, y se propone la opción que la cumple.
 - **Lo que el dueño no dijo no se le atribuye.** Si una respuesta deja algo abierto, se pregunta.
 
@@ -28,6 +29,8 @@ Cada respuesta del dueño se agrega al registro (`MEMORIA/registro_respuestas.md
 Si el repositorio es público, este registro también lo es (`seguridad.md`).
 
 Si el dueño respondió con un texto que propuso el agente (un botón, una respuesta sugerida), se dice. Así nadie confunde la redacción del agente con la del dueño.
+
+Si la respuesta llega por otro chat (el hub, u otra persona que la pegó), la entrada dice por dónde llegó («lo trae el hub») y copia las palabras tal cual; la lectura del hub va aparte, marcada como suya.
 
 Por qué tan literal: semanas después, cuando un chat nuevo o el otro agente necesite saber por qué algo es así, la cita resuelve la duda sin interpretaciones.
 

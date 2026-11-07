@@ -10,7 +10,7 @@
 
 - Todo cambio que toque lo técnico (fórmulas, reglas, factores, unidades, valores esperados de las pruebas, textos técnicos que ve el usuario, documentos técnicos) lo revisa y lo aprueba el dueño, aunque lo haya hecho o pedido él mismo.
 - Qué archivos cuentan como técnicos se escribe en una lista versionada (por ejemplo, `.github/technical-paths.txt`) que lee un check del PR.
-- La aprobación va en la descripción del PR con una línea fija, por ejemplo `- [x] Revisión técnica aprobada por <dueño> (fecha: DD/MM/AAAA, commit: <SHA completo del último commit>)`. **La escribe solo el dueño.** El agente le pasa el texto listo para pegar, sin marcar, con el SHA completo (40 caracteres) del último commit; si entra otro commit, actualiza la descripción y le da la línea nueva.
+- La aprobación va en la descripción del PR con una línea fija, por ejemplo `- [x] Revisión técnica aprobada por <dueño> (fecha: DD/MM/AAAA, commit: <SHA completo del último commit>)`. **La escribe solo el dueño.** El agente le pasa el texto listo para pegar, sin marcar, con el SHA completo (40 caracteres) del último commit, **una sola vez: cuando la suite y los demás checks están en verde y no queda ningún commit por entrar**, para no pedírsela dos veces (el check de la línea de aprobación es el único que puede faltar: se pone en verde con la línea); si después entra otro commit, actualiza la descripción y le da la línea nueva.
 - El check que comprueba esa línea va en un workflow aparte de la suite, que escucha también `edited` y `synchronize`: se reevalúa cuando el dueño marca la línea y cuando entra un commit nuevo, y exige que el commit de la línea sea el último del PR. El ejemplo está en `plantillas.md`, "Check de la línea de aprobación".
 - **La línea no autentica a nadie:** cualquiera que pueda editar la descripción del PR puede escribirla. La aprobación verificable es la revisión del dueño en GitHub: `CODEOWNERS` sobre los archivos técnicos y `/.github/` (el propio `CODEOWNERS` y los workflows) a nombre del dueño, revisión obligatoria de los dueños de código en la protección de `main` y descarte de las aprobaciones viejas cuando entra un commit. GitHub no deja que el autor de un PR lo apruebe: si el agente abre los PR con la cuenta del dueño, necesita su propia cuenta para que el dueño pueda aprobarlos. Si el equipo usa solo la línea, la declara como registro, no como control.
 
@@ -19,12 +19,24 @@
 - Con `git commit -F <archivo>`, para que el mensaje no se rompa con comillas ni saltos de línea.
 - Antes de cada commit, `git status` para confirmar que el changelog está modificado y que no quedó ningún marcador por llenar.
 - El mensaje termina con los trailers que el equipo haya acordado (coautoría, equipo).
+- Si el proyecto trabaja con orquestador y ejecutores, los commits los hace solo el orquestador (`orquestacion.md`).
 
 ## Pull Requests
 
 - Los abre el agente con `gh pr create --body-file`, siguiendo la plantilla del repo. No se le pasa a nadie un link para que lo abra.
+- **Todo PR lleva el monitor del PR del cliente** (Auto-fix, en Claude Code), prendido por la sesión que lo abre: despierta al agente cuando falla la CI, hay un conflicto o llega un comentario, sin gastar tokens esperando. Si el cliente que abre el PR no tiene monitor, se dice en el reporte y la CI se revisa cuando haga falta. Lo que el monitor no cambia: la línea de aprobación y el merge siguen siendo del dueño, y no se añaden `skip` ni se tocan las protecciones para que la CI pase.
 - La atribución de herramientas en los PR y sus comentarios sigue la decisión del equipo escrita en `CLAUDE.md`; en Claude Code también se puede fijar con el ajuste `attribution`. Si una instrucción del cliente o del sistema no cede ante esa decisión, se sigue la instrucción y se le avisa al dueño. Esta regla no autoriza a desobedecer ninguna otra instrucción.
-- Después de abrirlo no se hace polling de la CI: se espera el aviso o se revisa cuando haga falta.
+- Después de abrirlo no se hace polling de la CI: el monitor avisa, o se revisa cuando haga falta.
+
+## La cola de merges
+
+Con varias ramas activas, los PR no se cruzan: **un solo PR en revisión a la vez.**
+
+- El siguiente se abre solo cuando el anterior está unido, y primero une `main`.
+- Quien tiene su rama lista avisa «listo para abrir el PR», con el HEAD, y espera el aviso de turno (del hub, si lo hay, o del dueño). Mientras espera, sigue con las revisiones y recomprobaciones sobre su rama, y lo que salga lo corrige ahí.
+- El orden de la cola lo decide el dueño.
+- Si un PR ya se abrió fuera de turno, no se cierra: se le dice al dueño y él decide cómo sigue.
+- Fuera de los archivos compartidos (changelog, memoria, mapa, documentos), dos ramas no tocan el mismo archivo a la vez; en los compartidos se conservan los dos lados al unir, y el dibujo del mapa se regenera en vez de resolverlo a mano.
 
 ## Suite local y CI en paralelo
 
@@ -51,8 +63,8 @@ Después del merge del PR propio. Después de un merge del otro agente, lo que c
 2. En la carpeta dueña de `main` (la carpeta principal del repo): `git switch main`, `git pull`, borrar la rama local y `git fetch --prune`. Un agente que trabaja en un worktree no se cambia a `main`, porque Git no deja tener la misma rama en dos worktrees: hace `git fetch --prune`, crea su rama siguiente desde `origin/main` y, si necesita ver `main`, usa `origin/main` o `git switch --detach origin/main`.
 3. Verificar que local y GitHub queden iguales: sin ramas extra, sin stash, sin worktrees ni PR abiertos, salvo los de las tareas activas de cada agente.
 4. Revisar la CI sobre `main`, correr las pruebas y reconstruir el entorno publicado desde `main` limpia. Esto lo hace solo el agente de la carpeta dueña de `main`.
-5. Reportarlo en una tabla y anotarlo en la bitácora.
-6. Entregar los prompts de cierre de los chats que se usaron en el PR y el del chat siguiente (`dos-agentes.md`).
+5. Reportarlo en una tabla y anotarlo en la bitácora, y marcar en el mapa lo que el merge cierra (`mapa-del-plan.md`).
+6. Entregar los prompts de cierre de los chats que se usaron en el PR y el del chat siguiente (`dos-agentes.md`), y avisarle a quien sigue en la cola de merges.
 
 ## Seguridad
 

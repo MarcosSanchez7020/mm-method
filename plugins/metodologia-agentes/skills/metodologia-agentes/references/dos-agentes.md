@@ -19,7 +19,10 @@ Cuando trabajan dos agentes, por ejemplo Claude Code y Codex, el riesgo no es t�
 
 ## Comunicación
 
-- **Los agentes no se hablan directo: el dueño pasa los mensajes.** Si uno necesita algo del otro, escribe el mensaje listo para pegar, en un bloque de código. La única excepción es el revisor de solo lectura.
+- **Los agentes no se hablan directo: el dueño pasa los mensajes.** Si uno necesita algo del otro, escribe el mensaje listo para pegar, en un bloque de código. Las excepciones: el revisor de solo lectura y el hub, abajo.
+- **Con hub** (`hub.md`), los chats del mismo agente se hablan por el hub, que lleva las palabras textuales del dueño; los chats del otro agente siguen recibiendo sus prompts por el dueño y no le reportan al hub.
+- **Todo prompt para un chat nuevo**, de cualquiera de los dos, dice al principio con qué modelo y con qué esfuerzo se abre, en qué carpeta y en qué rama.
+- **Los prompts para el otro agente, de una.** Apenas un prompt esté listo (una revisión, una recomprobación, un cierre, el chat siguiente), se le pasa al dueño en el mismo mensaje en que se avisa que lo que ese prompt revisa quedó listo, sin esperar a que lo pida.
 - **Ninguno da por hecho lo que el otro hizo:** lo verifica en Git y en la memoria.
 - **Las decisiones son solo del dueño.** Cada agente le pasa las suyas y anota las respuestas en el registro de su rama. Si una decisión afecta la tarea del otro, lo dice y le prepara el mensaje.
 - **A un agente que está trabajando se le puede sumar una tarea sin interrumpirlo**, con un mensaje de "steer" que agrega lo nuevo a lo que ya hace.
@@ -37,7 +40,7 @@ Cuando trabajan dos agentes, por ejemplo Claude Code y Codex, el riesgo no es t�
 
 ## PR y merge
 
-- Cada agente abre su PR y le pasa al dueño la línea de aprobación técnica con su último commit. El dueño la escribe y hace el merge. Ninguno toca el PR del otro.
+- Cada agente abre su PR cuando le toca en la cola de merges, prende al abrirlo el monitor del PR de su cliente (Auto-fix, en Claude Code) y, con la suite y los demás checks en verde (salvo el de la línea de aprobación), le pasa al dueño la línea de aprobación técnica con su último commit, una sola vez (`repositorio.md`). El dueño la escribe y hace el merge. Ninguno toca el PR del otro.
 - Después de un merge del otro agente, ninguno abandona su tarea activa:
   - el agente de la carpeta principal verifica el merge, hace `git fetch --prune` y revisa la CI de `main`; el cambio a `main` y la reconstrucción del entorno esperan a que su carpeta esté en un commit;
   - el agente que tiene una tarea en curso conserva su rama, hace `git fetch --prune` y une `origin/main` en ella (merge, nunca rebase) antes de seguir.
@@ -46,7 +49,4 @@ Cuando trabajan dos agentes, por ejemplo Claude Code y Codex, el riesgo no es t�
 
 ## Modelos por función
 
-- Planear, diseñar, coordinar y juzgar: el modelo más capaz.
-- Ejecutar (leer, programar tareas acotadas, pruebas independientes, mutación): un modelo más económico, pero suficiente.
-- **Los ejecutores no deciden.** Reciben contratos exactos: archivos, firmas, comportamiento caso por caso, qué función llamar, los casos de prueba con su valor esperado y cuándo está terminado. Lo que pida criterio vuelve al que coordina o al dueño.
-- Si una tarea de ejecución es delicada, el que coordina puede subirle el modelo y lo dice.
+Vale para los dos agentes: quien coordina y juzga puede ser un modelo barato; quien diseña, refuta y verifica usa el modelo fuerte con esfuerzo alto; quien ejecuta, uno económico pero capaz, por contrato exacto y sin decidir. Qué modelo es cada cual, para cada agente, se escribe en `CLAUDE.md`. El detalle está en `orquestacion.md`.

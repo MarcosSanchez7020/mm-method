@@ -34,7 +34,9 @@ Abre una sesión nueva. Consulta la [guía de Codex](codex.md) para las versione
 En una sesión nueva, dentro del repositorio del proyecto:
 
 ```text
-Vamos a trabajar este repo con la metodología. Antes de crear archivos, pásame en lista las decisiones que necesitas para el CLAUDE.md: quién decide qué, la palabra para programar, idioma y trato, quién revisa por defecto, qué archivos exigen mi revisión técnica, qué agentes y modelos usamos y el presupuesto de CI.
+Modelo: <modelo>. Esfuerzo: <esfuerzo>.
+
+Vamos a trabajar este repo con la metodología. Antes de crear archivos, pásame en lista las decisiones que necesitas para el CLAUDE.md: quién decide qué, la palabra para programar, idioma y trato, quién revisa el trabajo de cada agente, qué archivos exigen mi revisión técnica, qué agentes y modelos usamos (orquestador, trabajadores que piensan, ejecutores), los umbrales de contexto y de uso, si hay hub, y el presupuesto de CI.
 ```
 
 El agente responde con una lista numerada. Con tus respuestas escribe los archivos de los pasos 3 a 6 y anota tus respuestas en el registro.
@@ -45,14 +47,14 @@ El esqueleto está en `references/plantillas.md` de la skill. Las secciones que 
 
 | Sección | Qué lleva |
 |---|---|
-| Fuente de verdad | Qué documentos mandan y dónde está la fuente técnica original |
-| Lo que no se negocia | Los principios de la metodología y las reglas propias del producto |
+| Fuente de verdad | Qué documentos mandan, dónde está la fuente técnica original y el mapa del plan, si lo hay |
+| Lo que no se negocia | Los principios de la metodología (entre ellos, nadie programa sin el «programa» explícito y nadie revisa su propio trabajo) y las reglas propias del producto |
 | El equipo | Quién es dueño de qué y quién decide qué |
-| Cómo trabajar con el equipo | Palabra para programar, decisiones en lista, idioma, revisiones, modelos |
+| Cómo trabajar con el equipo | Palabra para programar, decisiones en lista, idioma, revisiones, modelos por rol, umbrales, hub |
 | Cómo se trabaja cada módulo | Los seis pasos del ciclo, ajustados al proyecto |
 | Memoria en el repo | Qué va en `MEMORIA/` y cuándo se anota |
 | Agentes | Carpetas, ramas, mensajes, archivos compartidos, PR (solo si hay dos) |
-| Repositorio | `main` protegida, revisión técnica, changelog, CI, rutina después del merge |
+| Repositorio | `main` protegida, revisión técnica, changelog, Auto-fix, cola de merges, CI, rutina después del merge |
 
 Si el proyecto ya tiene un `CLAUDE.md`, el agente propone dónde encaja cada sección y te pasa en lista lo que choca.
 
@@ -154,6 +156,8 @@ Los detalles (worktrees, `core.hooksPath`, qué hacer si ya hay un gancho, cómo
 ## 10. La primera sesión de trabajo
 
 ```text
+Modelo: <modelo>. Esfuerzo: <esfuerzo>.
+
 Lee CLAUDE.md y MEMORIA/. Después: git fetch --prune, git worktree list y git status. Vamos a planear <el módulo>: lee la fuente original y pásame lo que dice, lo que hace hoy el código y las decisiones en lista. No programes hasta que te diga "<palabra>".
 ```
 
@@ -169,3 +173,6 @@ Lee CLAUDE.md y MEMORIA/. Después: git fetch --prune, git worktree list y git s
 - [ ] `CODEOWNERS` y revisión obligatoria de los dueños de código, si la aprobación tiene que ser autenticada.
 - [ ] La CI corriendo en cada PR, con cancelación de la corrida anterior.
 - [ ] El gancho de equipo en los computadores que no son el principal.
+- [ ] Los umbrales de contexto y de uso en `CLAUDE.md`, y que todo PR lleve el monitor del PR de su cliente (Auto-fix, en Claude Code).
+- [ ] El mapa del plan, con su script de dibujo y su prueba de sincronía, cuando el trabajo tenga varios frentes a la vez.
+- [ ] El hub, con su esquema de reporte, cuando haya varios chats a la vez.

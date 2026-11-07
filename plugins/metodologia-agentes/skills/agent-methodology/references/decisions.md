@@ -14,6 +14,7 @@
 - **Our interpretations go separately**, in their own list, marked as our interpretation, with their source.
 - **If an instruction can be read two ways**, ask before touching documents. For example, how much to remove, or whether a rule applies to one task or to all of them.
 - **Right away.** Decisions are passed on as soon as they exist, without waiting for what is only informational. Whatever arrives later is reported separately.
+- **A single list, numbered consecutively.** When there are several chats at once or decisions pile up, they are consolidated into a single list numbered consecutively for the whole project (kept by the hub, if there is one: `hub.md`), with the recommended option in bold and those the agent already applied by its own reading marked "to be confirmed". Numbers are not reused. "All the recommended ones" is a valid answer: it is recorded verbatim at once, along with what it did not say. What a decision does not answer is stated.
 - **Against the technical source**, never silently: say "the source says this", with the exact reference, and propose the option that complies with it.
 - **What the owner did not say is not attributed to the owner.** If an answer leaves something open, ask.
 
@@ -28,6 +29,8 @@ Each answer from the owner is added to the record (`MEMORY/owner_answers.md`) at
 If the repository is public, this record is public too (`security.md`).
 
 If the owner answered with a text the agent proposed (a button, a suggested reply), that is stated. That way nobody confuses the agent's wording with the owner's.
+
+If the answer arrives through another chat (the hub, or another person who pasted it), the entry says how it arrived ("brought by the hub") and copies the words as spoken; the hub's reading goes separately, marked as its own.
 
 Why so literal: weeks later, when a new chat or the other agent needs to know why something is the way it is, the quote settles the question without interpretation.
 
