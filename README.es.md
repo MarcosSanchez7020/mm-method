@@ -199,7 +199,7 @@ claude --plugin-dir plugins/metodologia-agentes plugin details metodologia-agent
 
 La herramienta advierte que son estimaciones y que pueden diferir del uso real. La misma versión dio cifras distintas según la configuración de Claude Code: una carpeta de configuración nueva y vacía (`CLAUDE_CONFIG_DIR`) o la que el autor usa a diario. La causa no se ha determinado: tómalas como un rango, no como una cifra exacta.
 
-Con la 1.0.0, el mismo día, dos corridas del mismo comando dieron ~643 y ~456 tokens fijos, y ~1.900 y ~1.300 por activación. Ninguna de estas cifras mide el consumo en Codex. La 2.0.0 no se ha medido: su `SKILL.md` es más largo y tiene tres referencias más, así que las cifras por activación deberían ser mayores.
+Con la 1.0.0, el mismo día, dos corridas del mismo comando dieron ~643 y ~456 tokens fijos, y ~1.900 y ~1.300 por activación. Ninguna de estas cifras mide el consumo en Codex. Con la 2.0.0, el 07/11/2026, con Claude Code 2.1.296 y la configuración habitual del autor, el mismo comando dio ~863 tokens fijos (~430 por descripción) y ~3.200 (inglés) y ~3.300 (español) por activación: el `SKILL.md` es más largo y hay tres referencias más.
 
 ## Límites
 

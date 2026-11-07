@@ -199,7 +199,7 @@ claude --plugin-dir plugins/metodologia-agentes plugin details metodologia-agent
 
 The tool warns that these are estimates and may differ from actual usage. The same version gave different figures depending on the Claude Code configuration: a new, empty configuration directory (`CLAUDE_CONFIG_DIR`) or the one the author uses every day. The cause has not been determined: take them as a range, not as an exact figure.
 
-With 1.0.0, on the same day, two runs of the same command gave ~643 and ~456 always-on tokens, and ~1,900 and ~1,300 per activation. None of these figures measures Codex usage. 2.0.0 has not been measured: its `SKILL.md` is longer and it has three more references, so the per-activation figures should be higher.
+With 1.0.0, on the same day, two runs of the same command gave ~643 and ~456 always-on tokens, and ~1,900 and ~1,300 per activation. None of these figures measures Codex usage. With 2.0.0, on 07/11/2026, with Claude Code 2.1.296 and the author's usual configuration, the same command gave ~863 always-on tokens (~430 per description) and ~3,200 (English) and ~3,300 (Spanish) per activation: the `SKILL.md` is longer and there are three more references.
 
 ## Limits
 
