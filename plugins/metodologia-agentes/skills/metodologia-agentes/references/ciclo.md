@@ -53,7 +53,7 @@ Un módulo es una pieza que el dueño decide como unidad: una revisión, una reg
 3. Si hay cola de merges, avisar «listo para abrir el PR» con el HEAD y esperar el turno; al llegar, volver a unir `origin/main` (`repositorio.md`).
 4. Al arrancar la suite completa local, push y PR, para que la suite local y la CI corran al mismo tiempo. Al abrir el PR, prender el monitor del PR del cliente (Auto-fix, en Claude Code).
 5. El PR declara la validación en curso y no marca las pruebas como aprobadas hasta tener el resultado. Después se actualiza su descripción con los dos resultados (`repositorio.md`).
-6. Con la CI en verde y sin commits pendientes, se le pide al dueño la línea de aprobación, una sola vez. La aprobación técnica y el merge son solo del dueño.
+6. Con la suite y los demás checks en verde (salvo el de la línea de aprobación) y sin commits pendientes, se le pide al dueño la línea de aprobación, una sola vez. La aprobación técnica y el merge son solo del dueño.
 
 ## Por qué este orden
 

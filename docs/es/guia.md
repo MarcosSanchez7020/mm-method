@@ -137,7 +137,7 @@ flowchart TD
 3. **Programar**, solo con el «programa» explícito del dueño para esa tarea, en cualquier frente; un plan escrito no es programar. El agente verifica a mano con los números de los documentos y un caso completo por la cadena real, y lanza pruebas independientes, mutación y la página de laboratorio. Con orquestador y ejecutores ([sección 9](#9-el-mapa-el-hub-y-la-orquestación)), el chat principal no escribe el código.
 4. **Laboratorio**: una página local que llama al código real, para que el dueño vea casos sin esperar a los revisores.
 5. **Corregir y cerrar** lo confirmado. Si una prueba contradice una corrección, gana la decisión escrita, y la fuente técnica gana sobre todo. La revisión va en tandas hasta «sin hallazgos».
-6. **Subir:** integrar `main`, esperar el turno en la cola de merges, arrancar la suite local y abrir el PR al mismo tiempo, con el monitor del PR prendido, para que la local y la CI corran juntas. Con la CI en verde, pedir la línea de aprobación una sola vez.
+6. **Subir:** integrar `main`, esperar el turno en la cola de merges, arrancar la suite local y abrir el PR al mismo tiempo, con el monitor del PR prendido, para que la local y la CI corran juntas. Con la suite y los demás checks en verde (salvo el de la línea de aprobación), pedir la línea una sola vez.
 
 El orden importa: planear antes evita código para una regla que iba a cambiar, y escribir lo decidido antes deja algo contra qué probar.
 
@@ -212,7 +212,7 @@ Con el «programa» dado, el chat principal orquesta y no hace el trabajo: coord
 ## 10. Repositorio, PR y CI
 
 - **`main` protegida:** solo por PR, con los checks obligatorios en verde y con merge, no squash.
-- **Revisión técnica del dueño** para los archivos de una lista versionada. La línea de aprobación en el PR la escribe solo el dueño, con la fecha y el último commit; el agente se la pide una sola vez, con la CI en verde y sin commits pendientes. Esa línea es un registro y no autentica a nadie; la aprobación verificable es la revisión obligatoria de `CODEOWNERS` en la protección de `main`.
+- **Revisión técnica del dueño** para los archivos de una lista versionada. La línea de aprobación en el PR la escribe solo el dueño, con la fecha y el último commit; el agente se la pide una sola vez, con la suite y los demás checks en verde (el de la línea es el único que puede faltar) y sin commits pendientes. Esa línea es un registro y no autentica a nadie; la aprobación verificable es la revisión obligatoria de `CODEOWNERS` en la protección de `main`.
 - **Todo PR lleva el monitor del PR del cliente** (Auto-fix, en Claude Code), prendido por la sesión que lo abre: avisa de fallos de CI, conflictos y comentarios, sin polling. Si el cliente no tiene monitor, se dice y la CI se revisa cuando haga falta.
 - **Cola de merges:** un solo PR en revisión a la vez. El siguiente se abre cuando el anterior está unido y `main` integrada; quien está listo avisa con su HEAD y espera el turno.
 - **Changelog para todo.** Un commit sin su entrada en el changelog no se hace.

@@ -34,6 +34,8 @@ Start a new session. See the [Codex guide](codex.md) for tested versions and lim
 In a new session, inside the project repository:
 
 ```text
+Model: <model>. Effort: <effort>.
+
 We are going to work this repo with the methodology. Before creating files, give me as a list the decisions you need for the CLAUDE.md: who decides what, the go word, language and tone, who reviews each agent's work, which files require my technical review, which agents and models we use (orchestrator, thinking workers, executors), the context and usage thresholds, whether there is a hub, and the CI budget.
 ```
 
@@ -154,6 +156,8 @@ The details (worktrees, `core.hooksPath`, what to do if a hook already exists, h
 ## 10. The first work session
 
 ```text
+Model: <model>. Effort: <effort>.
+
 Read CLAUDE.md and MEMORY/. Then: git fetch --prune, git worktree list and git status. We are going to plan <the module>: read the original source and give me what it says, what the code does today and the decisions as a list. Do not write code until I say "<word>".
 ```
 

@@ -57,7 +57,7 @@ Any team rule that must always hold is written in this file, with its changelog 
 
 ## Repository
 - Never directly on `main`; `main` protected; merge, not squash.
-- Owner's technical review: files in `<list>`; only the owner writes the approval line, and he is asked for it only once, with CI green.
+- Owner's technical review: files in `<list>`; only the owner writes the approval line, and is asked for it only once, with the suite and the other checks green.
 - Changelog for everything; commits with `git commit -F`.
 - Every PR carries the client's PR monitor (<Auto-fix in Claude Code; what the other client has>), turned on by the session that opens it.
 - Merge queue: only one PR in review at a time; the turn is announced by <the hub or the owner>.

@@ -40,7 +40,7 @@ When two agents work together, for example Claude Code and Codex, the risk is no
 
 ## PR and merge
 
-- Each agent opens its own PR when its turn comes in the merge queue, turns on the client's PR monitor when opening it (Auto-fix, in Claude Code) and, with CI green, gives the owner the technical approval line with its last commit, only once (`repository.md`). The owner writes it and does the merge. Neither touches the other's PR.
+- Each agent opens its own PR when its turn comes in the merge queue, turns on the client's PR monitor when opening it (Auto-fix, in Claude Code) and, with the suite and the other checks green (except the approval line check), gives the owner the technical approval line with its last commit, only once (`repository.md`). The owner writes it and does the merge. Neither touches the other's PR.
 - After a merge by the other agent, neither abandons its active task:
   - the agent of the main folder verifies the merge, runs `git fetch --prune` and checks the CI of `main`; the switch to `main` and the rebuild of the environment wait until its folder is at a commit;
   - the agent with a task in progress keeps its branch, runs `git fetch --prune` and merges `origin/main` into it (merge, never rebase) before continuing.

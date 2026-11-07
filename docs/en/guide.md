@@ -137,7 +137,7 @@ flowchart TD
 3. **Code**, only with the owner's explicit "go" for that task, on any front; a written plan is not coding. The agent verifies by hand with the numbers from the documents and one full case through the real chain, and launches independent tests, mutation and the lab page. With an orchestrator and executors ([section 9](#9-the-map-the-hub-and-orchestration)), the main chat does not write the code.
 4. **Lab**: a local page that calls the real code, so the owner can see cases without waiting for the reviewers.
 5. **Fix and close** what was confirmed. If a test contradicts a fix, the written decision wins, and the technical source wins over everything. The review goes in rounds until "no findings".
-6. **Push:** integrate `main`, wait for the turn in the merge queue, start the local suite and open the PR at the same time, with the PR's monitor on, so the local suite and the CI run together. With the CI green, ask for the approval line once.
+6. **Push:** integrate `main`, wait for the turn in the merge queue, start the local suite and open the PR at the same time, with the PR's monitor on, so the local suite and the CI run together. With the suite and the other checks green (except the approval line check), ask for the line once.
 
 The order matters: planning first avoids code for a rule that was going to change, and writing down what was decided first leaves something to test against.
 
@@ -212,7 +212,7 @@ Once the "go" is given, the main chat orchestrates and does not do the work: it 
 ## 10. Repository, PRs and CI
 
 - **Protected `main`:** only through a PR, with the required checks green and with merge, not squash.
-- **The owner's technical review** for the files in a versioned list. The approval line in the PR is written only by the owner, with the date and the last commit; the agent asks for it once, with the CI green and no pending commits. That line is a record and authenticates nobody; the verifiable approval is the required `CODEOWNERS` review in the protection of `main`.
+- **The owner's technical review** for the files in a versioned list. The approval line in the PR is written only by the owner, with the date and the last commit; the agent asks for it once, with the suite and the other checks green (the line's check is the only one that may be missing) and no pending commits. That line is a record and authenticates nobody; the verifiable approval is the required `CODEOWNERS` review in the protection of `main`.
 - **Every PR carries the client's PR monitor** (Auto-fix, in Claude Code), turned on by the session that opens it: it warns of CI failures, conflicts and comments, without polling. If the client has no monitor, that is said and the CI is checked when needed.
 - **Merge queue:** only one PR in review at a time. The next is opened when the previous is merged and `main` integrated; whoever is ready announces it with its HEAD and waits for its turn.
 - **Changelog for everything.** A commit without its changelog entry is not made.

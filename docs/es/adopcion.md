@@ -34,6 +34,8 @@ Abre una sesión nueva. Consulta la [guía de Codex](codex.md) para las versione
 En una sesión nueva, dentro del repositorio del proyecto:
 
 ```text
+Modelo: <modelo>. Esfuerzo: <esfuerzo>.
+
 Vamos a trabajar este repo con la metodología. Antes de crear archivos, pásame en lista las decisiones que necesitas para el CLAUDE.md: quién decide qué, la palabra para programar, idioma y trato, quién revisa el trabajo de cada agente, qué archivos exigen mi revisión técnica, qué agentes y modelos usamos (orquestador, trabajadores que piensan, ejecutores), los umbrales de contexto y de uso, si hay hub, y el presupuesto de CI.
 ```
 
@@ -154,6 +156,8 @@ Los detalles (worktrees, `core.hooksPath`, qué hacer si ya hay un gancho, cómo
 ## 10. La primera sesión de trabajo
 
 ```text
+Modelo: <modelo>. Esfuerzo: <esfuerzo>.
+
 Lee CLAUDE.md y MEMORIA/. Después: git fetch --prune, git worktree list y git status. Vamos a planear <el módulo>: lee la fuente original y pásame lo que dice, lo que hace hoy el código y las decisiones en lista. No programes hasta que te diga "<palabra>".
 ```
 

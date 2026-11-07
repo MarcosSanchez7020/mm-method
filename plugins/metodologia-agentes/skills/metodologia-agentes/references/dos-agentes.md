@@ -40,7 +40,7 @@ Cuando trabajan dos agentes, por ejemplo Claude Code y Codex, el riesgo no es t�
 
 ## PR y merge
 
-- Cada agente abre su PR cuando le toca en la cola de merges, prende al abrirlo el monitor del PR de su cliente (Auto-fix, en Claude Code) y, con la CI en verde, le pasa al dueño la línea de aprobación técnica con su último commit, una sola vez (`repositorio.md`). El dueño la escribe y hace el merge. Ninguno toca el PR del otro.
+- Cada agente abre su PR cuando le toca en la cola de merges, prende al abrirlo el monitor del PR de su cliente (Auto-fix, en Claude Code) y, con la suite y los demás checks en verde (salvo el de la línea de aprobación), le pasa al dueño la línea de aprobación técnica con su último commit, una sola vez (`repositorio.md`). El dueño la escribe y hace el merge. Ninguno toca el PR del otro.
 - Después de un merge del otro agente, ninguno abandona su tarea activa:
   - el agente de la carpeta principal verifica el merge, hace `git fetch --prune` y revisa la CI de `main`; el cambio a `main` y la reconstrucción del entorno esperan a que su carpeta esté en un commit;
   - el agente que tiene una tarea en curso conserva su rama, hace `git fetch --prune` y une `origin/main` en ella (merge, nunca rebase) antes de seguir.

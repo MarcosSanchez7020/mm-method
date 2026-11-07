@@ -57,7 +57,7 @@ Toda regla del equipo que deba valer siempre se escribe en este archivo, con su 
 
 ## Repositorio
 - Nunca directo en `main`; `main` protegida; merge, no squash.
-- Revisión técnica del dueño: archivos en `<lista>`; la línea de aprobación la escribe solo él, y se le pide una sola vez, con la CI en verde.
+- Revisión técnica del dueño: archivos en `<lista>`; la línea de aprobación la escribe solo él, y se le pide una sola vez, con la suite y los demás checks en verde.
 - Changelog para todo; commits con `git commit -F`.
 - Todo PR lleva el monitor del PR del cliente (<Auto-fix en Claude Code; qué tiene el otro cliente>), prendido por la sesión que lo abre.
 - Cola de merges: un solo PR en revisión a la vez; el turno lo avisa <el hub o el dueño>.

@@ -53,7 +53,7 @@ A module is a piece the owner decides on as a unit: a check, a rule, a product f
 3. If there is a merge queue, announce "ready to open the PR" with the HEAD and wait for the turn; when it arrives, merge `origin/main` again (`repository.md`).
 4. When the full local suite starts, push and PR, so the local suite and the CI run at the same time. When the PR is opened, turn on the client's PR monitor (Auto-fix, in Claude Code).
 5. The PR declares the validation in progress and does not mark the tests as passed until there is a result. Afterwards its description is updated with both results (`repository.md`).
-6. With CI green and no pending commits, the owner is asked for the approval line, only once. The technical approval and the merge belong only to the owner.
+6. With the suite and the other checks green (except the approval line check) and no pending commits, the owner is asked for the approval line, only once. The technical approval and the merge belong only to the owner.
 
 ## Why this order
 
