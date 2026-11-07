@@ -13,13 +13,14 @@ An agent's local memory stays on one computer. The repository travels with Git t
 | `MEMORY/machines.md` | How each machine is set up: versions, paths, ports and the tricks that are needed. |
 | `MEMORY/owner_answers.md` | The owner's answers, verbatim (`decisions.md`). |
 | `CHANGELOG.md` | Every change, however small. |
+| The plan map | The plan by blocks, with checkboxes that are ticked in the same commit that does each thing, and its generated drawing (`plan-map.md`). |
 | The source-of-truth documents | Scope and decisions, requirements, data model, diagrams. |
 
 Secrets, keys, passwords, tokens, `.env` files and third parties' personal data never go in the repo.
 
 ## Rules
 
-- **Write it down at the moment**: each owner answer to `owner_answers.md`, each commit, push or PR to the team log, what is new about a machine to `machines.md`. At the latest, before each commit.
+- **Write it down at the moment**: each owner answer to the verbatim record, each commit, push or PR to the team log, what is new about a machine to the machines file. At the latest, before each commit.
 - **Memory travels with each branch.** At the start, the agent runs `git fetch` and reads the memory of `main` and of its own branch. What happens after a branch's last commit (the push, the PR, the merge) is recorded in the next branch.
 - **Local memory only points to the repo.** If a computer has something in its local memory that is not in the repo, in the first session on that machine it is shown to the owner and only what belongs to this project is moved to the repo, without secrets or personal data and without treating anything as confirmed that is not.
 - **Memory tools are support.** If a memory plugin conflicts with what is written in the repo, the repo wins.
@@ -51,14 +52,25 @@ If you decide to use it: `claude plugin marketplace add thedotmack/claude-mem` a
   - in the changelog, "(Person, Agent; <machine>)";
   - in PRs, "Made from: <machine>".
 - On a new machine, the agent asks the owner whether to install the hook and with what short name, shows the script first and installs it only if the owner says yes.
-- Each machine has its own section in the team log and in `machines.md`.
+- Each machine has its own section in the team log and in the machines file.
+
+## The daily check of versions and health
+
+With several computers and several people, a different version on one machine breaks what works on another, and a tool that updates itself can go down without anyone noticing. That is why, at the start of the first chat of the day on each computer, the agent checks:
+
+- the versions: the agent's client and its plugins, the other agent (its app and its CLI), the project's runtime and the dependencies installed in each worktree (the virtual environment in Python, `node_modules` in Node) against the pinned dependencies file, and the tools the project uses (for example, Docker, `gh`, `git`, Node);
+- the health: the local services (the memory plugin, the lab, the database), and if one went down, how to bring it up;
+- the repository: the CI of `main` and the open alerts (code, secrets, dependencies).
+
+If something changed, it records it with the date in the machine's entry in the machines file, and in the team log that the check was done. A tool that updates itself is pinned to a version when the installer allows it; if not, it is recorded as a risk.
 
 ## When a chat is closed
 
-Because of a usage limit, a full context or because the task is finished:
+Because of a usage limit, a full context, a threshold (`costs.md`) or because the task or the block is finished:
 
-1. Memory up to date on the branch, with its changelog entry.
+1. Memory and plan map up to date on the branch, with its changelog entry.
 2. Commit and push, if the owner asked for it or the project agreed on it in `CLAUDE.md`.
-3. A prompt for the next chat, in a code block, that starts by reading `CLAUDE.md` and the memory and says where the work stands.
+3. A prompt for the next chat, in a code block, that says which model and effort it is opened with, starts by reading `CLAUDE.md`, the memory and the plan map, and says where the work stands.
+4. If the project has a hub, the closing report with its schema (`hub.md`).
 
 Uncommitted work is never left without noting it in the team log.

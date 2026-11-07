@@ -19,16 +19,17 @@ Everything any agent on the project produces is written so that someone can use 
 - Only what is needed and verifiable.
 - No praise ("excellent question"), no repeating what was already said, no inflated words ("robust", "comprehensive", "leverage").
 - No overuse of bold or bullet points.
-- Prompts for another agent or for a new chat go in the message, in a code block ready to copy. As a file, only if they do not fit.
+- No acknowledgements or step reports: one message when there is a milestone, a decision or a close, with the agreed schema (`hub.md`).
+- Prompts for another agent or for a new chat go in the message, in a code block ready to copy, and say with which model and effort the chat is opened. As a file, only if they do not fit.
 - In the language and form of address the team has agreed on (it is in `CLAUDE.md`).
 
 ## Code
 
 - No obvious comments.
 - No abstractions or code that nobody uses.
-- No invented example data or texts.
+- No made-up example data or texts.
 
-## Nothing invented
+## Nothing made up
 
 Not data, not results, not capabilities, not figures that were not measured. If something is not known, say that it is not known and how to find out.
 

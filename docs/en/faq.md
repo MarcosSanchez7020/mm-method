@@ -2,7 +2,7 @@
 
 ## Does it work without a second agent?
 
-Yes. Everything in the methodology works with Claude Code or Codex as the only agent. With Codex, include `AGENTS.md` even when there is no second agent. The `two-agents.md` reference is only read when there are two agents in the same repository.
+Yes. Everything in the methodology works with Claude Code or Codex as the only agent. With Codex, include `AGENTS.md` even when there is no second agent. The `two-agents.md` reference is only read when there are two agents in the same repository. What a single agent loses is independent review: since nobody reviews their own work, a new read-only chat of that agent reviews it, and it is noted that it is not entirely independent.
 
 ## Does it work if there is no separate "technical owner"?
 
@@ -10,7 +10,11 @@ Yes: the owner is whoever decides, even if it is the same person who asks for th
 
 ## Isn't it too much process?
 
-For a script that takes an afternoon, yes. The methodology is meant for work that lasts longer than one chat. The [guide, section 12](guide.md#12-small-projects-and-large-teams), says what can be cut in a small project without losing the essentials and what should not be cut.
+For a script that takes an afternoon, yes. The methodology is meant for work that lasts longer than one chat. The [guide, section 13](guide.md#13-small-projects-and-large-teams), says what can be cut in a small project without losing the essentials and what should not be cut.
+
+## What is the hub and when is it needed?
+
+One more chat, which coordinates the working chats when there are several at once: it keeps the board, gathers into a single numbered list everything the owner has to decide, and passes the chats the owner's answers in the owner's verbatim words. It is needed when the owner can no longer keep up with all the chats without decisions crossing; with one or two chats, the owner acts as the hub. It is in the `hub.md` reference and in the [guide, section 9](guide.md#9-the-map-the-hub-and-orchestration).
 
 ## Why decisions as a list and not in conversation?
 
@@ -61,4 +65,4 @@ Then restart Claude Code. The changes in each version are in the [CHANGELOG](../
 
 ## Can I adapt it?
 
-Yes, in each project's `CLAUDE.md`: that is where the go word, the language, who reviews, which models are used and the exceptions are set. The skill gives the method; the project, its values.
+Yes, in each project's `CLAUDE.md`: that is where the go word, the language, who reviews each agent's work, which models are used in each role, the context and usage thresholds, whether there is a hub and the exceptions are set. The skill gives the method; the project, its values.

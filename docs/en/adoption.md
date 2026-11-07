@@ -34,10 +34,10 @@ Start a new session. See the [Codex guide](codex.md) for tested versions and lim
 In a new session, inside the project repository:
 
 ```text
-We are going to work this repo with the methodology. Before creating files, give me as a list the decisions you need for the CLAUDE.md: who decides what, the go word, language and tone, who reviews by default, which files require my technical review, which agents and models we use and the CI budget.
+We are going to work this repo with the methodology. Before creating files, give me as a list the decisions you need for the CLAUDE.md: who decides what, the go word, language and tone, who reviews each agent's work, which files require my technical review, which agents and models we use (orchestrator, thinking workers, executors), the context and usage thresholds, whether there is a hub, and the CI budget.
 ```
 
-The agent answers with a numbered list. With your answers it writes the files of steps 3 to 6 and records your answers in the log.
+The agent answers with a numbered list. With your answers it writes the files of steps 3 to 6 and records your answers in the record.
 
 ## 3. `CLAUDE.md`
 
@@ -45,14 +45,14 @@ The skeleton is in `references/templates.md` of the skill. The sections that can
 
 | Section | What it contains |
 |---|---|
-| Source of truth | Which documents rule and where the original technical source is |
-| What is not negotiable | The principles of the methodology and the product's own rules |
+| Source of truth | Which documents rule, where the original technical source is and the plan map, if there is one |
+| What is not negotiable | The principles of the methodology (among them, nobody codes without the owner's explicit "go" and nobody reviews their own work) and the product's own rules |
 | The team | Who owns what and who decides what |
-| How to work with the team | Go word, decisions as a list, language, reviews, models |
+| How to work with the team | Go word, decisions as a list, language, reviews, models by role, thresholds, hub |
 | How each module is worked | The six steps of the cycle, adjusted to the project |
 | Memory in the repo | What goes in `MEMORY/` and when it is written |
 | Agents | Folders, branches, messages, shared files, PRs (only if there are two) |
-| Repository | Protected `main`, technical review, changelog, CI, routine after the merge |
+| Repository | Protected `main`, technical review, changelog, Auto-fix, merge queue, CI, routine after the merge |
 
 If the project already has a `CLAUDE.md`, the agent proposes where each section fits and gives you as a list what conflicts.
 
@@ -169,3 +169,6 @@ Read CLAUDE.md and MEMORY/. Then: git fetch --prune, git worktree list and git s
 - [ ] `CODEOWNERS` and required code owner review, if the approval has to be authenticated.
 - [ ] The CI running on every PR, with cancellation of the previous run.
 - [ ] The machine hook on the computers that are not the main one.
+- [ ] The context and usage thresholds in `CLAUDE.md`, and every PR carrying its client's PR monitor (Auto-fix, in Claude Code).
+- [ ] The plan map, with its drawing script and its sync test, when the work has several fronts at once.
+- [ ] The hub, with its report schema, when there are several chats at once.

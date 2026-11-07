@@ -16,21 +16,22 @@ A module is a piece the owner decides on as a unit: a check, a rule, a product f
 ## 2. Write down what was decided
 
 - The owner decides. The agent writes the decisions into the documents, in the owner's words; what the agent clarifies goes separately, to be confirmed.
-- A short review of those texts: two reviewers who are given the answer log. Who reviews is asked of the owner beforehand, unless there is a written rule (`testing-and-reviews.md`).
+- A short review of those texts, by the other agent, in a read-only chat that is given the owner's answers record and that verifies each finding itself; whoever wrote them does not review them (`testing-and-reviews.md`).
 - The calculations in the examples that end up written down are checked.
 - The agent confirms to the owner what it understood. The commit, only when the owner asks for it.
 
-## 3. Program, only with the owner's word
+## 3. Program, only with the owner's explicit "go"
 
-- The agent writes the core and checks it by hand: the numbers in the documents and in the books, and one complete case through the real chain.
+- Nobody programs anything, on any front, without the owner's word for that task. A written plan or design is not programming, and it does not authorize programming either.
+- The agent writes the core and checks it by hand: the numbers in the documents and in the books, and one complete case through the real chain. If the project works with an orchestrator and executors (`orchestration.md`), the main chat does not write the code: the executors by contract write it and a thinking worker checks it by hand.
 - Then it launches, without asking, because programming is already authorized:
   - independent testing agents, each in its own new file;
   - mutation on a copy;
-  - an agent for the test page (the lab page).
-- Adversarial reviews, on the other hand, are asked about (`testing-and-reviews.md`).
+  - an agent for the test page (the lab).
+- Adversarial reviews are done by the other agent (`testing-and-reviews.md`).
 - The agents format only their own files and do not leave temporary configuration files behind.
 
-## 4. The lab page, as soon as it exists
+## 4. The lab, as soon as it exists
 
 - A local page that calls the core's public functions, so the owner sees real cases without waiting for the reviewers.
 - It is served on the agent's port, the local link is given to the owner, and all the examples are run in the browser.
@@ -42,15 +43,17 @@ A module is a piece the owner decides on as a unit: a check, a rule, a product f
 - If an independent test contradicts a fix, the written decision wins, and the technical source wins over everything. If the decision says nothing, the test is adjusted without weakening it and that is stated. Whatever is the owner's decision is asked of the owner, as a list.
 - If a test compares the text of a message, the format is part of the decision.
 - Before removing an `xfail` that turned into XPASS, check that the test really tests something.
-- The documents move to "programmed", a short review of only what changed, and mutation repeated on the final code.
+- The documents move to "programmed", a short review of only what changed, by the other agent, and mutation repeated on the final code.
+- The review goes in rounds until "no findings": each re-check, on the exact diff since the previous round (`orchestration.md`).
 
 ## 6. Push and verify in parallel
 
-1. Changelog and README up to date; commit.
+1. Changelog, README, memory and plan map up to date; commit.
 2. Merge `origin/main` into the branch (merge, never rebase) and resolve the conflicts keeping both sides.
-3. When the full local suite starts, push and PR, so the local suite and the CI run at the same time.
-4. The PR declares the validation in progress and does not mark the tests as passed until there is a result. Afterwards its description is updated with both results (`repository.md`).
-5. The technical approval and the merge belong only to the owner.
+3. If there is a merge queue, announce "ready to open the PR" with the HEAD and wait for the turn; when it arrives, merge `origin/main` again (`repository.md`).
+4. When the full local suite starts, push and PR, so the local suite and the CI run at the same time. When the PR is opened, turn on the client's PR monitor (Auto-fix, in Claude Code).
+5. The PR declares the validation in progress and does not mark the tests as passed until there is a result. Afterwards its description is updated with both results (`repository.md`).
+6. With CI green and no pending commits, the owner is asked for the approval line, only once. The technical approval and the merge belong only to the owner.
 
 ## Why this order
 

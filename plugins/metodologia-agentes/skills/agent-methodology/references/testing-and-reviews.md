@@ -19,9 +19,9 @@ They are three different things and they do not replace one another. The tests s
   - **equivalent**: the change does not alter any observable behavior, for example in code that no path reaches or in a transformation that gives the same result for every valid input. It is declared equivalent only with written evidence: why no valid input distinguishes it, with a reference to the code. Without that evidence, it counts as a missing test.
 - Declared equivalents are listed separately in the mutation report, with their evidence, and count neither as detected nor as pending.
 
-## The lab page is not a test
+## The lab is not a test
 
-The test page calls the core's public functions and never reimplements its rules. If the lab page computes something on its own, sooner or later it drifts out of line with the core and shows results the product does not give.
+The test page calls the core's public functions and never reimplements its rules. If the lab computes something on its own, sooner or later it drifts out of line with the core and shows results the product does not give.
 
 ## Adversarial reviews
 
@@ -31,9 +31,11 @@ The test page calls the core's public functions and never reimplements its rules
   - conventions and security.
 - **One verifier per finding**, who tries to refute it. Only what survives is fixed.
 - **What another agent brings is one more finding:** it goes through the verifier and is never applied directly.
-- **Who reviews** (the main agent, the other agent or both) is asked of the owner before each review, unless the team has written a rule in `CLAUDE.md` for a phase. Text reviewers, code reviewers and verifiers all count as reviews. Independent tests, the lab page and mutation are not reviews.
-- **The other agent's reviewer** works in a new read-only chat: it reads, verifies each finding itself and does not change files, branches or configuration.
-- **Independence:** a review of an agent's code done by the same agent, or by another chat of the same model, is not fully independent. If the owner chooses it for cost, the owner is told and it is noted.
+- **Nobody reviews their own work.** The reviews of what an agent did (texts, designs and code) and the verification of its findings are done by the other agent, even if an earlier decision says otherwise. That option is not offered to the owner: when the work is the asking agent's, the question of who reviews is already answered. The rest of who reviews (for example, a person's work, or which reviews are done in a phase) is asked of the owner before each review, unless the team has written a rule in `CLAUDE.md` for a phase.
+- **What counts as a review:** text reviewers, code reviewers and the verifiers of each finding. Independent tests, the lab, mutation and mechanical validators (those that check with real commands and counts, `orchestration.md`) are not reviews: they continue even when there is a reviewer and do not replace one.
+- **The reviewer** works in a new read-only chat: it reads, verifies each finding itself and does not change files, branches or configuration. It leaves its report in its chat and stops; if the project has a hub, it does not report to the hub: the owner pastes the result wherever it is needed (`hub.md`).
+- **In rounds, until "no findings".** After fixing, a re-check prompt with the reviewer's numbering, the HEAD, the exact diff since the previous round and what was not run. The PR, and the push that opens it, only with "no findings" (`orchestration.md`).
+- **Independence:** having the other agent review work that it did itself earlier (for example, the design it now codes) is not fully independent; if the owner chooses it for cost, the owner is told and it is noted. With a single agent in the project, a new read-only chat of that agent reviews, without the memory of the chat that did the work, and it is noted that it is not independent.
 
 ## Format of a finding
 

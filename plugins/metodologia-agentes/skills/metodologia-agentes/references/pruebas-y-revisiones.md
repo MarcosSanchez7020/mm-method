@@ -31,9 +31,11 @@ La página de prueba llama a las funciones públicas del núcleo y nunca reimple
   - convenciones y seguridad.
 - **Un verificador por hallazgo**, que intenta refutarlo. Solo se corrige lo que sobrevive.
 - **Lo que trae otro agente es un hallazgo más:** pasa por el verificador y nunca se aplica directo.
-- **Quién revisa** (el agente principal, el otro agente o los dos) se le pregunta al dueño antes de cada revisión, salvo que el equipo haya escrito en `CLAUDE.md` una regla para una fase. Cuentan como revisión los revisores de textos, los de código y los verificadores. Las pruebas independientes, el laboratorio y la mutación no son revisiones.
-- **El revisor de otro agente** trabaja en un chat nuevo de solo lectura: lee, verifica él mismo cada hallazgo y no cambia archivos, ramas ni configuración.
-- **Independencia:** una revisión del código de un agente hecha por el mismo agente, o por otro chat del mismo modelo, no es del todo independiente. Si el dueño la escoge por costo, se le dice y se anota.
+- **Nadie revisa su propio trabajo.** Las revisiones de lo que hizo un agente (textos, diseños y código) y la verificación de sus hallazgos las hace el otro agente, aunque una decisión anterior diga otra cosa. Esa opción no se le ofrece al dueño: cuando el trabajo es del agente que pregunta, la pregunta de quién revisa ya está respondida. Lo demás de quién revisa (por ejemplo, el trabajo de una persona, o qué revisiones se hacen en una fase) se le pregunta al dueño antes de cada revisión, salvo que el equipo haya escrito en `CLAUDE.md` una regla para una fase.
+- **Qué cuenta como revisión:** los revisores de textos, los de código y los verificadores de cada hallazgo. Las pruebas independientes, el laboratorio, la mutación y los validadores mecánicos (los que comprueban con comandos reales y conteos, `orquestacion.md`) no son revisiones: siguen aunque haya revisor y no lo reemplazan.
+- **El revisor** trabaja en un chat nuevo de solo lectura: lee, verifica él mismo cada hallazgo y no cambia archivos, ramas ni configuración. Deja su informe en su chat y para; si el proyecto tiene hub, no le reporta al hub: el dueño pega el resultado donde haga falta (`hub.md`).
+- **En tandas, hasta «sin hallazgos».** Después de corregir, un prompt de recomprobación con la numeración del revisor, el HEAD, el diff exacto desde la tanda anterior y lo que no se corrió. El PR, y el push que lo abre, solo con «sin hallazgos» (`orquestacion.md`).
+- **Independencia:** que el otro agente revise trabajo que él mismo hizo antes (por ejemplo, el diseño que ahora programa) no es del todo independiente; si el dueño lo escoge por costo, se le dice y se anota. Con un solo agente en el proyecto, revisa un chat nuevo de solo lectura de ese agente, sin la memoria del chat que hizo el trabajo, y queda anotado que no es independiente.
 
 ## Formato de un hallazgo
 

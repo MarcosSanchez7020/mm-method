@@ -15,12 +15,17 @@ Lo que va entre `< >` lo llena el equipo. Nada de esto se rellena con datos inve
 - `<fuente técnica original>`: la norma o especificación, en su archivo original.
 - `CHANGELOG.md`: todo cambio.
 - `MEMORIA/`: bitácora por equipo, entorno de cada equipo y registro textual de las respuestas del dueño. Se lee al empezar cada sesión.
+- `<mapa del plan>`: el plan por bloques, con casillas; se lee al empezar cada sesión y se marca en el mismo commit que hace cada cosa. Su dibujo lo genera `<script>`.
 - `AGENTS.md`: para los agentes que no son Claude Code.
 
 ## Lo que no se negocia
 - Este proyecto sigue la metodología de mm-method (skill `metodologia-agentes`).
 - La fuente técnica prima sobre cualquier decisión (<dueño>, <fecha>).
 - Supuestos y limitaciones a la vista, hacia afuera y hacia adentro.
+- Nadie programa sin el «<palabra>» explícito de <dueño>, en ningún frente.
+- Nadie revisa su propio trabajo: lo revisa el otro agente, que verifica cada hallazgo; <con un solo agente, un chat nuevo de solo lectura de ese agente, anotado como no independiente>.
+- El plan se chequea siempre: cada cosa hecha se marca en el mapa en el mismo commit.
+- Las versiones y la salud del entorno se revisan todos los días, en el primer chat del día de cada equipo.
 - <Reglas propias del producto.>
 - Sin relleno.
 
@@ -31,10 +36,12 @@ Lo que va entre `< >` lo llena el equipo. Nada de esto se rellena con datos inve
 ## Cómo trabajar con el equipo
 - Idioma y trato: <…>.
 - Primero se planea, después se programa. La palabra que autoriza programar: "<palabra>".
-- Decisiones en lista numerada, con opciones con letra y la recomendada en negrilla.
-- Los prompts, en el chat, en bloques de código.
-- Revisiones: <quién por defecto; preguntar antes de cada una>.
-- Modelos: <cuál para planear, cuál para ejecutar>.
+- Decisiones en lista numerada, con opciones con letra y la recomendada en negrilla; con varios chats, una sola lista de corrido para todo el proyecto.
+- Los prompts, en el chat, en bloques de código. Todo prompt para un chat nuevo dice modelo y esfuerzo.
+- Revisiones: el trabajo de <agente A> lo revisa <agente B>, y al revés, en un chat de solo lectura que verifica cada hallazgo; <quién revisa lo demás>.
+- Modelos: orquestador <modelo>; trabajadores que piensan <modelo, esfuerzo>; ejecutores <modelo>.
+- Hub: <sí o no; quién abre los chats nuevos; esquema de reporte, menos de 15 líneas; hub espejo del otro agente>.
+- Umbrales: contexto del chat que orquesta, aviso en <n> y cierre en <n>; uso semanal de <modelo caro>, aviso en <n> % y cierre en <n> %; uso semanal total, aviso en <n> % y cierre en <n> %.
 
 ## Cómo se trabaja cada módulo
 <Los seis pasos del ciclo, ajustados al proyecto.>
@@ -50,8 +57,10 @@ Toda regla del equipo que deba valer siempre se escribe en este archivo, con su 
 
 ## Repositorio
 - Nunca directo en `main`; `main` protegida; merge, no squash.
-- Revisión técnica del dueño: archivos en `<lista>`; la línea de aprobación la escribe solo él.
+- Revisión técnica del dueño: archivos en `<lista>`; la línea de aprobación la escribe solo él, y se le pide una sola vez, con la CI en verde.
 - Changelog para todo; commits con `git commit -F`.
+- Todo PR lleva el monitor del PR del cliente (<Auto-fix en Claude Code; qué tiene el otro cliente>), prendido por la sesión que lo abre.
+- Cola de merges: un solo PR en revisión a la vez; el turno lo avisa <el hub o el dueño>.
 - Suite local y CI en paralelo; el resultado local, en la descripción del PR.
 - La rutina después de cada merge.
 ```
@@ -118,12 +127,68 @@ Dio por decidido: <…>. <Dueño>:
 - [ ] Revisión técnica aprobada por <dueño> (fecha: DD/MM/AAAA, commit: <SHA completo del último commit>)
 ```
 
+## El mapa del plan
+
+```markdown
+# Mapa del plan de <proyecto> (desde el <DD/MM/AAAA>)
+
+<Resumen general: de dónde viene el proyecto, qué se decidió y cuándo, en pocas líneas.>
+
+## 0. Cómo se usa este mapa
+<Las reglas de `mapa-del-plan.md`, ajustadas al proyecto: qué marca cada quien, el script del dibujo, la prueba de sincronía.>
+
+## 1. Los bloques, de un vistazo
+| Bloque | Qué es | Estado | Depende de | Quién |
+|---|---|---|---|---|
+| 1 | <…> | pendiente | — | <agente o persona> |
+| 2 | <…> | pendiente | Bloque 1 | <…> |
+
+## 2. Qué corre en paralelo y qué va en serie
+- <Bloques que pueden ir a la vez, y por qué.>
+- <Bloques que esperan a otro, y a cuál.>
+
+## 3. Lo que falta del proyecto y no está en este mapa
+- <Tema>: está en `<documento>`.
+
+## 4. Los bloques, uno por uno
+### Bloque 1: <nombre>
+- [ ] <Paso.>
+- [x] <Paso.> (<quién>, <DD/MM/AAAA>, `<commit>` o <evidencia>)
+- [ ] <Paso del dueño: aprobar, unir, responder.>
+
+**Queda abierto:** <lo que este bloque deja pendiente.>
+
+## 5. Registro de chequeo
+- <DD/MM/AAAA> (<quién>): <qué se marcó, con el commit>.
+```
+
+## Reporte de un chat de trabajo al hub
+
+```text
+REPORTE <chat> → hub, <DD/MM/AAAA HH:MM>
+Bloque y rama: <bloque del mapa>, `<rama>`, HEAD `<commit>`
+Hecho: <un hito por línea, con su commit o evidencia>
+Decisiones que necesito: <la pregunta, con sus opciones y la recomendada; el número lo pone el hub>
+Bloqueado por: <qué y de quién, o «nada»>
+Sigue: <el paso siguiente, o «cierro», con el prompt del chat siguiente aparte>
+Uso: <contexto y uso semanal, solo si se acerca a un umbral>
+```
+
+## Encabezado del prompt para el hub espejo del otro agente
+
+```text
+PARA EL HUB DE <agente>: este prompt no lo ejecutas tú. Crea con él un chat nuevo de <agente>, con el modo que diga el encargo (solo lectura si es una revisión), y no hagas nada más. El chat deja su informe en su propio chat y para; no reporta a ningún hub.
+
+Chat nuevo de <agente>, <modelo>, esfuerzo <esfuerzo>, en <carpeta>, rama <rama>, HEAD <commit>.
+<El encargo.>
+```
+
 ## Prompt para el chat siguiente
 
 ```text
-Chat nuevo de <agente> en <carpeta>, <equipo>.
+Chat nuevo de <agente> en <carpeta>, rama <rama>, <equipo>. Modelo: <modelo>. Esfuerzo: <esfuerzo>. Bloque <n> del mapa.
 
-ANTES DE NADA: lee CLAUDE.md y MEMORIA/ de origin/main y de origin/<rama>. Después: git fetch --prune, git worktree list y git status.
+ANTES DE NADA: lee CLAUDE.md, MEMORIA/ y el mapa del plan de origin/main y de origin/<rama>. Después: git fetch --prune, git worktree list y git status.
 
 DÓNDE QUEDÓ
 - <Lo hecho, con commits y PR.>

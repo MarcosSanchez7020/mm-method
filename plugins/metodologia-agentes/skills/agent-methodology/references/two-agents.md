@@ -19,9 +19,12 @@ When two agents work together, for example Claude Code and Codex, the risk is no
 
 ## Communication
 
-- **The agents do not talk to each other directly: the owner passes the messages.** If one needs something from the other, it writes the message ready to paste, in a code block. The only exception is the read-only reviewer.
+- **The agents do not talk to each other directly: the owner passes the messages.** If one needs something from the other, it writes the message ready to paste, in a code block. The exceptions: the read-only reviewer and the hub, below.
+- **With a hub** (`hub.md`), the chats of the same agent talk to each other through the hub, which carries the owner's verbatim words; the chats of the other agent keep receiving their prompts through the owner and do not report to the hub.
+- **Every prompt for a new chat**, for either agent, says at the start which model and which effort it is opened with, in which folder and on which branch.
+- **Prompts for the other agent, right away.** As soon as a prompt is ready (a review, a re-check, a closing, the next chat), it is given to the owner in the same message that announces that what the prompt reviews is ready, without waiting to be asked.
 - **Neither assumes what the other did:** it verifies in Git and in the memory.
-- **Decisions belong only to the owner.** Each agent passes its own to the owner and records the answers in `owner_answers.md` on its branch. If a decision affects the other agent's task, it says so and prepares the message for the owner.
+- **Decisions belong only to the owner.** Each agent passes its own to the owner and records the answers in the record on its branch. If a decision affects the other agent's task, it says so and prepares the message for the other agent.
 - **A task can be added to an agent that is already working without interrupting it**, with a "steer" message that adds the new work to what it is already doing.
 
 ## Shared files
@@ -37,7 +40,7 @@ When two agents work together, for example Claude Code and Codex, the risk is no
 
 ## PR and merge
 
-- Each agent opens its own PR and gives the owner the technical approval line with its last commit. The owner writes it and does the merge. Neither touches the other's PR.
+- Each agent opens its own PR when its turn comes in the merge queue, turns on the client's PR monitor when opening it (Auto-fix, in Claude Code) and, with CI green, gives the owner the technical approval line with its last commit, only once (`repository.md`). The owner writes it and does the merge. Neither touches the other's PR.
 - After a merge by the other agent, neither abandons its active task:
   - the agent of the main folder verifies the merge, runs `git fetch --prune` and checks the CI of `main`; the switch to `main` and the rebuild of the environment wait until its folder is at a commit;
   - the agent with a task in progress keeps its branch, runs `git fetch --prune` and merges `origin/main` into it (merge, never rebase) before continuing.
@@ -46,7 +49,4 @@ When two agents work together, for example Claude Code and Codex, the risk is no
 
 ## Models by function
 
-- Planning, designing, coordinating and judging: the most capable model.
-- Executing (reading, programming bounded tasks, independent tests, mutation): a cheaper model, but a sufficient one.
-- **Executors do not decide.** They receive exact contracts: files, signatures, behavior case by case, which function to call, the test cases with their expected value, and when the task is finished. Anything that calls for judgment goes back to the coordinator or to the owner.
-- If an execution task is delicate, the coordinator can raise the model and says so.
+This applies to both agents: whoever coordinates and judges can be a cheap model; whoever designs, refutes and verifies uses the strong model with high effort; whoever executes, an economical but capable one, by exact contract and without deciding. Which model is which, for each agent, is written in `CLAUDE.md`. The detail is in `orchestration.md`.

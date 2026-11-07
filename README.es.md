@@ -33,10 +33,11 @@ La metodología responde a cada uno con una regla concreta y con el porqué de e
 | 1 | La fuente técnica prima (la norma, la especificación) | Si el producto tiene que cumplir algo, ninguna decisión, ni del dueño ni del agente, la contradice en silencio. |
 | 2 | Supuestos y limitaciones a la vista | El usuario del producto y el dueño saben siempre qué se supuso y qué no se revisa. |
 | 3 | El dueño decide; el agente propone | Las decisiones se piden en lista numerada, con la opción recomendada en negrilla, y se registran textuales. |
-| 4 | Primero se planea, después se programa | No se escribe código del producto sin la palabra del dueño. |
-| 5 | Nada inventado | Ni datos, ni resultados, ni capacidades; los valores esperados de una prueba no se copian del código. |
-| 6 | La memoria vive en el repositorio | Viaja con Git a otros chats, computadores y agentes. |
-| 7 | Sin relleno | En la interfaz, los textos, los documentos y el código. |
+| 4 | Primero se planea, después se programa | Nadie programa, en ningún frente, sin el «programa» explícito del dueño. |
+| 5 | Nadie revisa su propio trabajo | Lo revisa el otro agente, en solo lectura, y verifica él mismo cada hallazgo. |
+| 6 | Nada inventado | Ni datos, ni resultados, ni capacidades; los valores esperados de una prueba no se copian del código. |
+| 7 | La memoria y el plan viven en el repositorio | Viajan con Git a otros chats, computadores y agentes; el plan, por bloques con casillas que se marcan en el mismo commit. |
+| 8 | Sin relleno | En la interfaz, los textos, los documentos y el código. |
 
 ## Qué trae
 
@@ -51,7 +52,7 @@ mm-method/                            catálogo de plugins (este repositorio)
 │   └── skills/
 │       ├── metodologia-agentes/       la skill en español
 │       │   ├── SKILL.md
-│       │   └── references/            10 referencias que se leen solo cuando hacen falta
+│       │   └── references/            13 referencias que se leen solo cuando hacen falta
 │       └── agent-methodology/         la misma skill en inglés
 ├── docs/es/  ·  docs/en/              la documentación
 ├── AGENTS.md  ·  CLAUDE.md
@@ -64,12 +65,15 @@ Los dos clientes leen las mismas carpetas de skills, sin copias por cliente. Las
 | Referencia | De qué trata |
 |---|---|
 | `decisiones.md` | Cómo se piden, se registran y se escriben las decisiones |
-| `memoria.md` | La memoria en el repo, el changelog, varias personas y varios computadores |
+| `memoria.md` | La memoria en el repo, el changelog, la revisión diaria, varias personas y varios computadores |
+| `mapa-del-plan.md` | El plan por bloques, con casillas que se marcan en el mismo commit y un dibujo generado del archivo |
 | `ciclo.md` | El ciclo de un módulo, de la planeación al PR |
-| `pruebas-y-revisiones.md` | Pruebas independientes, mutación y revisiones adversariales |
+| `pruebas-y-revisiones.md` | Pruebas independientes, mutación y revisiones que nunca hace quien hizo el trabajo |
 | `dos-agentes.md` | Dos agentes en el mismo repositorio |
-| `repositorio.md` | Ramas, PR, changelog, CI y la rutina después del merge |
-| `costos.md` | Contexto, uso y tamaño de los workflows |
+| `hub.md` | El hub: varios chats a la vez y un solo contacto con el dueño |
+| `orquestacion.md` | Orquestador barato, trabajadores que piensan y ejecutores por contrato |
+| `repositorio.md` | Ramas, PR con Auto-fix, cola de merges, changelog, CI y la rutina después del merge |
+| `costos.md` | Contexto, uso, umbrales y economía de tokens |
 | `estilo.md` | Sin relleno |
 | `plantillas.md` | Esqueletos de `CLAUDE.md`, la memoria, el changelog y los prompts |
 | `seguridad.md` | Secretos, protecciones, contenido de afuera, CI y servidores |
@@ -167,7 +171,8 @@ La skill se aplica cuando la pides o cuando el `CLAUDE.md` del proyecto dice que
 - "Antes de programar esto, pásame las decisiones en lista."
 - "Planea el módulo de facturación con la metodología; no programes hasta que te diga."
 - "Voy a trabajar con Codex en este mismo repo. ¿Cómo nos organizamos?"
-- "Cierra el chat: deja la memoria al día y dame el prompt para el siguiente."
+- "Tengo cuatro chats trabajando a la vez y se me cruzan las decisiones: ármame el hub."
+- "Cierra el chat: deja la memoria y el mapa al día y dame el prompt para el siguiente."
 
 Para adoptarla en un proyecto, sigue la [guía de adopción](docs/es/adopcion.md).
 
@@ -194,7 +199,7 @@ claude --plugin-dir plugins/metodologia-agentes plugin details metodologia-agent
 
 La herramienta advierte que son estimaciones y que pueden diferir del uso real. La misma versión dio cifras distintas según la configuración de Claude Code: una carpeta de configuración nueva y vacía (`CLAUDE_CONFIG_DIR`) o la que el autor usa a diario. La causa no se ha determinado: tómalas como un rango, no como una cifra exacta.
 
-Con la 1.0.0, el mismo día, dos corridas del mismo comando dieron ~643 y ~456 tokens fijos, y ~1.900 y ~1.300 por activación. Ninguna de estas cifras mide el consumo en Codex.
+Con la 1.0.0, el mismo día, dos corridas del mismo comando dieron ~643 y ~456 tokens fijos, y ~1.900 y ~1.300 por activación. Ninguna de estas cifras mide el consumo en Codex. La 2.0.0 no se ha medido: su `SKILL.md` es más largo y tiene tres referencias más, así que las cifras por activación deberían ser mayores.
 
 ## Límites
 
@@ -214,4 +219,4 @@ Con la 1.0.0, el mismo día, dos corridas del mismo comando dieron ~643 y ~456 t
 
 ## Versión y licencia
 
-Versión 1.2.1 (ver [CHANGELOG](CHANGELOG.md)). Licencia: MIT ([LICENSE](LICENSE)).
+Versión 2.0.0 (ver [CHANGELOG](CHANGELOG.md)). Licencia: MIT ([LICENSE](LICENSE)).
