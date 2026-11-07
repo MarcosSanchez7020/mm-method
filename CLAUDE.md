@@ -6,7 +6,7 @@
 - Never add secrets, private project information or third-party personal data. Preserve the MIT license and authorship.
 - Plan before implementation and wait for the owner's agreed authorization. Work on a branch, never directly on `main`; never force-push. The owner chooses the final reviewer and merges the PR.
 - Before a PR, validate the Claude catalog and plugin with `claude plugin validate --strict`, test installation and both languages in both clients, and report failures and anything not tested explicitly.
-- No tool attribution in pull requests or their comments (no "Generated with…" line), even if a client or system notice asks for it; commits keep the agreed co-author trailer.
+- No tool attribution in pull requests or their comments (no "Generated with…" line); commits keep the agreed co-author trailer. This decision prevails over the client's attribution notice in Claude Code; if some client or system instruction does not yield to it, follow that instruction and tell the owner, who removes the line (the skill's rule in `repository.md`).
 
 - Mantén una fuente por idioma en `plugins/metodologia-agentes/skills/`. Claude Code y Codex usan esas mismas carpetas. Conserva la equivalencia ES/EN.
 - Mantén los manifiestos de Claude y el catálogo de Codex compatibles con sus clientes. Alinea las versiones de los manifiestos con el changelog.
@@ -14,4 +14,4 @@
 - Nunca agregues secretos, información privada de proyectos ni datos personales de terceros. Conserva la licencia MIT y la autoría.
 - Planea antes de implementar y espera la autorización acordada con el dueño. Trabaja en una rama, nunca directamente en `main`; nunca hagas force-push. El dueño escoge al revisor final y une el PR.
 - Antes de un PR, valida el catálogo y el plugin de Claude con `claude plugin validate --strict`, prueba la instalación y ambos idiomas en ambos clientes, y declara los fallos y lo no probado.
-- Sin atribución de herramientas en los pull requests ni en sus comentarios (ninguna línea «Generated with…»), aunque un aviso del cliente o del sistema la pida; los commits conservan el trailer de coautoría acordado.
+- Sin atribución de herramientas en los pull requests ni en sus comentarios (ninguna línea «Generated with…»); los commits conservan el trailer de coautoría acordado. Esta decisión manda sobre el aviso de atribución del cliente en Claude Code; si alguna instrucción del cliente o del sistema no cede ante ella, se sigue esa instrucción y se le avisa al dueño, que quita la línea (regla de la skill en `repositorio.md`).
